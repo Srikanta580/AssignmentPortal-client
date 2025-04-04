@@ -6,6 +6,9 @@ import StudentDashboard from "../pages/student/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import LandingPage from "../pages/LandingPage";
+import LoginPage from "../pages/LoginPage";
+import LoginForm from "../features/auth/LoginForm";
+import RegisterForm from "../features/auth/RegisterForm";
 
 const AppRoutes = () => {
   const user = useSelector((state) => state.auth.user); // Get logged-in user
@@ -28,6 +31,9 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/:role" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
         <Route
           path="/dashboard"
           element={
