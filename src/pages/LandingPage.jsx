@@ -12,33 +12,27 @@ const Header = () => (
       <nav className="hidden md:flex space-x-8">
         <a
           href="#features"
-          className="text-[#001219] hover:text-[#0A9396] transition"
+          className="text-dark hover:text-secondary transition"
         >
           Features
         </a>
         <a
           href="#how-it-works"
-          className="text-[#001219] hover:text-[#0A9396] transition"
+          className="text-dark hover:text-secondary transition"
         >
           How It Works
         </a>
-        <a
-          href="#alumni"
-          className="text-[#001219] hover:text-[#0A9396] transition"
-        >
+        <a href="#alumni" className="text-dark hover:text-secondary transition">
           Alumni Connect
         </a>
-        <a
-          href="#faq"
-          className="text-[#001219] hover:text-[#0A9396] transition"
-        >
+        <a href="#faq" className="text-dark hover:text-secondary transition">
           FAQ
         </a>
       </nav>
       <div className="flex space-x-4">
         <Link
           to="/login"
-          className="bg-[#94D2BD] hover:bg-[#0A9396] hover:text-white text-[#001219] px-4 py-2 rounded-lg transition"
+          className="bg-accent hover:bg-secondary hover:text-white text-dark px-4 py-2 rounded-lg transition"
         >
           Log In
         </Link>
@@ -52,18 +46,18 @@ const Hero = () => (
   <section className="bg-[#E9D8A6] py-20 relative overflow-hidden">
     {/* Decorative hexagon pattern */}
     <div className="absolute inset-0 opacity-10">
-      <div className="absolute -left-16 top-20 w-64 h-64 bg-[#005F73] rounded-full"></div>
-      <div className="absolute right-40 bottom-10 w-40 h-40 bg-[#0A9396] rounded-full"></div>
+      <div className="absolute -left-16 top-20 w-64 h-64 bg-primary rounded-full"></div>
+      <div className="absolute right-40 bottom-10 w-40 h-40 bg-secondary rounded-full"></div>
       <div className="absolute left-1/3 -bottom-20 w-80 h-80 bg-[#EE9B00] rounded-full"></div>
     </div>
 
     <div className="container mx-auto px-4 relative z-10">
       <div className="flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 mb-8 md:mb-0">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#001219] mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-dark mb-4">
             Elevate Your Academic Experience
           </h1>
-          <p className="text-lg text-[#001219] opacity-80 mb-8">
+          <p className="text-lg text-dark opacity-80 mb-8">
             A modern platform designed by students, for students – manage
             assignments, collaborate with peers, and build your professional
             portfolio.
@@ -72,13 +66,13 @@ const Hero = () => (
             <button className="bg-[#EE9B00] hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-lg transition">
               Get Started
             </button>
-            <button className="bg-[#005F73] hover:bg-[#003844] text-white px-6 py-3 rounded-lg text-lg transition">
+            <button className="bg-primary hover:bg-[#003844] text-white px-6 py-3 rounded-lg text-lg transition">
               Take a Tour
             </button>
           </div>
         </div>
         <div className="md:w-1/2 relative">
-          <div className="absolute -right-4 -bottom-4 w-full h-full bg-[#0A9396] rounded-lg"></div>
+          <div className="absolute -right-4 -bottom-4 w-full h-full bg-secondary rounded-lg"></div>
           <img
             src="/assets/dashboard.jpg"
             alt="Dashboard preview"
@@ -92,10 +86,10 @@ const Hero = () => (
 
 // Feature Card Component
 const FeatureCard = ({ icon, title, description }) => (
-  <div className="bg-[#94D2BD] p-6 rounded-xl shadow-md border border-[#0A9396] hover:shadow-lg transition transform hover:-translate-y-1">
+  <div className="bg-accent p-6 rounded-xl shadow-md border border-secondary hover:shadow-lg transition transform hover:-translate-y-1">
     <div className="text-[#EE9B00] mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold mb-2 text-[#001219]">{title}</h3>
-    <p className="text-[#001219] opacity-75">{description}</p>
+    <h3 className="text-xl font-semibold mb-2 text-dark">{title}</h3>
+    <p className="text-dark opacity-75">{description}</p>
   </div>
 );
 
@@ -103,32 +97,32 @@ const FeatureCard = ({ icon, title, description }) => (
 const Features = () => {
   // Sample icons (would be replaced with actual icons)
   const clipboardIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       📋
     </div>
   );
   const usersIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       👥
     </div>
   );
   const chartIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       📊
     </div>
   );
   const calendarIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       📅
     </div>
   );
   const badgeIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       🏆
     </div>
   );
   const lockIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-[#005F73] text-xl">
+    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
       🔒
     </div>
   );
@@ -137,10 +131,10 @@ const Features = () => {
     <section id="features" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#005F73] mb-4">
+          <h2 className="text-3xl font-bold text-primary mb-4">
             Powerful Features
           </h2>
-          <p className="text-[#001219] opacity-75 max-w-2xl mx-auto">
+          <p className="text-dark opacity-75 max-w-2xl mx-auto">
             Our platform offers everything you need to excel in your academic
             career and build a professional portfolio.
           </p>
@@ -151,10 +145,10 @@ const Features = () => {
           <div className="bg-[#E9D8A6] p-8 rounded-xl shadow-md flex flex-col md:flex-row items-center">
             <div className="md:w-1/3 mb-6 md:mb-0">
               {clipboardIcon}
-              <h3 className="text-2xl font-bold mt-4 text-[#001219]">
+              <h3 className="text-2xl font-bold mt-4 text-dark">
                 Assignment Management
               </h3>
-              <p className="text-[#001219] opacity-75 mt-2">
+              <p className="text-dark opacity-75 mt-2">
                 Our flagship feature that lets you organize assignments by
                 course, due date, and priority. Never miss a deadline again.
               </p>
@@ -163,7 +157,7 @@ const Features = () => {
               <img
                 src="/assets/assignment-dashboard.png"
                 alt="Assignment Dashboard"
-                className="w-full h-[35rem] rounded-lg shadow-md border-2 border-[#0A9396]"
+                className="w-full h-[35rem] rounded-lg shadow-md border-2 border-secondary"
               />
             </div>
           </div>
@@ -231,7 +225,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section id="how-it-works" className="py-16 bg-[#005F73]">
+    <section id="how-it-works" className="py-16 bg-primary">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-white mb-4">How It Works</h2>
@@ -247,14 +241,14 @@ const HowItWorks = () => {
               key={index}
               className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden shadow-lg"
             >
-              <div className="md:w-1/4 bg-[#0A9396] text-white p-6 flex items-center justify-center">
+              <div className="md:w-1/4 bg-secondary text-white p-6 flex items-center justify-center">
                 <span className="text-5xl font-bold">{step.number}</span>
               </div>
               <div className="md:w-3/4 p-6">
-                <h3 className="text-xl font-semibold mb-2 text-[#001219]">
+                <h3 className="text-xl font-semibold mb-2 text-dark">
                   {step.title}
                 </h3>
-                <p className="text-[#001219] opacity-75">{step.description}</p>
+                <p className="text-dark opacity-75">{step.description}</p>
               </div>
             </div>
           ))}
@@ -273,7 +267,7 @@ const AlumniProjectCard = ({
   description,
   image,
 }) => (
-  <div className="bg-[#94D2BD] rounded-lg shadow-md overflow-hidden transform transition hover:scale-105">
+  <div className="bg-accent rounded-lg shadow-md overflow-hidden transform transition hover:scale-105">
     <div className="relative">
       <img
         src={image}
@@ -286,12 +280,12 @@ const AlumniProjectCard = ({
     </div>
     <div className="p-6">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="font-semibold text-lg text-[#001219]">{name}</h3>
-        <span className="text-sm text-[#001219] opacity-75">{major}</span>
+        <h3 className="font-semibold text-lg text-dark">{name}</h3>
+        <span className="text-sm text-dark opacity-75">{major}</span>
       </div>
-      <h4 className="text-[#005F73] font-medium mb-2">{projectTitle}</h4>
-      <p className="text-[#001219] opacity-75 text-sm mb-4">{description}</p>
-      <button className="text-[#005F73] hover:text-[#003844] text-sm font-medium flex items-center">
+      <h4 className="text-primary font-medium mb-2">{projectTitle}</h4>
+      <p className="text-dark opacity-75 text-sm mb-4">{description}</p>
+      <button className="text-primary hover:text-[#003844] text-sm font-medium flex items-center">
         View Project
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -381,15 +375,15 @@ const ConnectAlumni = () => {
   return (
     <section id="alumni" className="py-16 relative bg-[#E9D8A6]">
       {/* Decorative element */}
-      <div className="absolute left-0 top-0 w-32 h-32 bg-[#0A9396] opacity-20 rounded-br-full"></div>
-      <div className="absolute right-0 bottom-0 w-32 h-32 bg-[#005F73] opacity-20 rounded-tl-full"></div>
+      <div className="absolute left-0 top-0 w-32 h-32 bg-secondary opacity-20 rounded-br-full"></div>
+      <div className="absolute right-0 bottom-0 w-32 h-32 bg-primary opacity-20 rounded-tl-full"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#005F73] mb-4">
+          <h2 className="text-3xl font-bold text-primary mb-4">
             Connect Alumni
           </h2>
-          <p className="text-[#001219] opacity-75 max-w-2xl mx-auto">
+          <p className="text-dark opacity-75 max-w-2xl mx-auto">
             Explore outstanding projects from our alumni and get inspired for
             your own academic journey.
           </p>
@@ -453,10 +447,10 @@ const FAQ = () => {
     <section id="faq" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#005F73] mb-4">
+          <h2 className="text-3xl font-bold text-primary mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-[#001219] opacity-75 max-w-2xl mx-auto">
+          <p className="text-dark opacity-75 max-w-2xl mx-auto">
             Find answers to common questions about our platform and how it can
             benefit your academic journey.
           </p>
@@ -468,8 +462,8 @@ const FAQ = () => {
               <button
                 className={`flex justify-between items-center w-full text-left p-4 rounded-lg font-medium ${
                   openIndex === index
-                    ? "bg-[#005F73] text-white"
-                    : "bg-[#94D2BD] text-[#001219] hover:bg-[#0A9396] hover:text-white"
+                    ? "bg-primary text-white"
+                    : "bg-accent text-dark hover:bg-secondary hover:text-white"
                 } transition`}
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
@@ -491,7 +485,7 @@ const FAQ = () => {
                 </svg>
               </button>
               {openIndex === index && (
-                <div className="mt-1 p-4 bg-[#E9D8A6] rounded-lg text-[#001219]">
+                <div className="mt-1 p-4 bg-[#E9D8A6] rounded-lg text-dark">
                   {faq.answer}
                 </div>
               )}
@@ -505,9 +499,9 @@ const FAQ = () => {
 
 // CTA Section with Diagonal Design
 const CTA = () => (
-  <section className="py-16 bg-[#005F73] relative overflow-hidden">
+  <section className="py-16 bg-primary relative overflow-hidden">
     {/* Diagonal decorative elements */}
-    <div className="absolute -left-16 -top-16 w-64 h-64 bg-[#0A9396] opacity-30 transform rotate-45"></div>
+    <div className="absolute -left-16 -top-16 w-64 h-64 bg-secondary opacity-30 transform rotate-45"></div>
     <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-[#EE9B00] opacity-30 transform rotate-45"></div>
 
     <div className="container mx-auto px-4 text-center relative z-10">
@@ -522,7 +516,7 @@ const CTA = () => (
         <button className="bg-[#EE9B00] hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium transition">
           Sign Up Now
         </button>
-        <button className="bg-transparent hover:bg-[#0A9396] text-white border border-white px-8 py-3 rounded-lg font-medium transition">
+        <button className="bg-transparent hover:bg-secondary text-white border border-white px-8 py-3 rounded-lg font-medium transition">
           Request Demo
         </button>
       </div>
@@ -532,11 +526,11 @@ const CTA = () => (
 
 // Footer Component
 const Footer = () => (
-  <footer className="bg-[#001219] text-white py-12">
+  <footer className="bg-dark text-white py-12">
     <div className="container mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <div className="text-2xl font-bold mb-4 text-[#94D2BD]">Submit</div>
+          <div className="text-2xl font-bold mb-4 text-accent">Submit</div>
           <p className="text-white opacity-60 mb-4">
             Empowering students to excel through intelligent assignment
             management.
@@ -544,28 +538,28 @@ const Footer = () => (
           <div className="flex space-x-4">
             <a
               href="#"
-              className="bg-[#0A9396] hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
+              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
             >
               <span className="sr-only">Facebook</span>
               <div>FB</div>
             </a>
             <a
               href="#"
-              className="bg-[#0A9396] hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
+              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
             >
               <span className="sr-only">Twitter</span>
               <div>TW</div>
             </a>
             <a
               href="#"
-              className="bg-[#0A9396] hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
+              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
             >
               <span className="sr-only">Instagram</span>
               <div>IG</div>
             </a>
             <a
               href="#"
-              className="bg-[#0A9396] hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
+              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
             >
               <span className="sr-only">LinkedIn</span>
               <div>LI</div>
@@ -573,9 +567,7 @@ const Footer = () => (
           </div>
         </div>
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-[#94D2BD]">
-            Features
-          </h3>
+          <h3 className="text-lg font-semibold mb-4 text-accent">Features</h3>
           <ul className="space-y-2">
             <li>
               <a
@@ -612,9 +604,7 @@ const Footer = () => (
           </ul>
         </div>
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-[#94D2BD]">
-            Resources
-          </h3>
+          <h3 className="text-lg font-semibold mb-4 text-accent">Resources</h3>
           <ul className="space-y-2">
             <li>
               <a
@@ -651,7 +641,7 @@ const Footer = () => (
           </ul>
         </div>
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-[#94D2BD]">Company</h3>
+          <h3 className="text-lg font-semibold mb-4 text-accent">Company</h3>
           <ul className="space-y-2">
             <li>
               <a
@@ -688,7 +678,7 @@ const Footer = () => (
           </ul>
         </div>
       </div>
-      <div className="border-t border-[#0A9396] opacity-30 mt-12 pt-8 text-center text-white opacity-60 text-sm">
+      <div className="border-t border-secondary opacity-30 mt-12 pt-8 text-center text-white opacity-60 text-sm">
         &copy; {new Date().getFullYear()} Submit. All rights reserved.
       </div>
     </div>

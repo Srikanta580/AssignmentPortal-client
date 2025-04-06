@@ -22,15 +22,15 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#001219] to-[#0A9396]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dark to-secondary">
       <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-[#005F73]">
+        <h2 className="text-2xl font-bold text-center text-primary">
           Student Registration
         </h2>
 
         <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <div>
-            <label className="block font-medium text-[#001219]">
+            <label className="block font-medium text-dark">
               University Roll No
             </label>
             <input
@@ -38,53 +38,53 @@ const RegisterForm = () => {
               name="rollNo"
               value={formData.rollNo}
               onChange={handleChange}
-              className="w-full p-2 border border-[#0A9396] rounded-lg focus:ring-2 focus:ring-[#94D2BD] outline-none"
+              className="w-full p-2 border border-secondary rounded-lg focus:ring-2 focus:ring-accent outline-none"
               placeholder="Enter your Roll No"
               required
             />
           </div>
 
           <div>
-            <label className="block font-medium text-[#001219]">Name</label>
+            <label className="block font-medium text-dark">Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-2 border border-[#0A9396] rounded-lg focus:ring-2 focus:ring-[#94D2BD] outline-none"
+              className="w-full p-2 border border-secondary rounded-lg focus:ring-2 focus:ring-accent outline-none"
               placeholder="Enter your Full Name"
               required
             />
           </div>
 
           <div>
-            <label className="block font-medium text-[#001219]">Email</label>
+            <label className="block font-medium text-dark">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border border-[#0A9396] rounded-lg focus:ring-2 focus:ring-[#94D2BD] outline-none"
+              className="w-full p-2 border border-secondary rounded-lg focus:ring-2 focus:ring-accent outline-none"
               placeholder="Enter your Email"
               required
             />
           </div>
 
           <div>
-            <label className="block font-medium text-[#001219]">Phone</label>
+            <label className="block font-medium text-dark">Phone</label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full p-2 border border-[#0A9396] rounded-lg focus:ring-2 focus:ring-[#94D2BD] outline-none"
+              className="w-full p-2 border border-secondary rounded-lg focus:ring-2 focus:ring-accent outline-none"
               placeholder="Enter your Phone Number"
               required
             />
           </div>
 
           <div>
-            <label className="block font-medium text-[#001219]">
+            <label className="block font-medium text-dark">
               Admission Year
             </label>
             <input
@@ -92,7 +92,7 @@ const RegisterForm = () => {
               name="admissionYear"
               value={formData.admissionYear}
               onChange={handleChange}
-              className="w-full p-2 border border-[#0A9396] rounded-lg focus:ring-2 focus:ring-[#94D2BD] outline-none"
+              className="w-full p-2 border border-secondary rounded-lg focus:ring-2 focus:ring-accent outline-none"
               placeholder="Enter your Admission Year"
               required
             />
@@ -100,7 +100,7 @@ const RegisterForm = () => {
 
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-[#005F73] text-white font-semibold hover:bg-[#0A9396] transition-all duration-300"
+            className="w-full py-2 rounded-lg bg-primary text-white font-semibold hover:bg-secondary transition-all duration-300"
           >
             Register
           </button>

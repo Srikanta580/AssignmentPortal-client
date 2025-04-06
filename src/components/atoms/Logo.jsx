@@ -18,7 +18,7 @@ function Logo({ size }) {
 
   return (
     <div
-      className={`text-[#005F73] font-bold ${logoTextSize} flex items-center justify-center gap-x-1.5`}
+      className={`text-primary font-bold ${logoTextSize} flex items-center justify-center gap-x-1.5`}
     >
       <img
         src="/assets/logo.png"
