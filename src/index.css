@@ -7,3 +7,52 @@
   --color-light: #e9ecef;
   --color-dark: #001219;
 }
+
+@layer utilities {
+  .grid-two-cols {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+  }
+
+  .grid-three-cols {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+  }
+
+  .grid-four-cols {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-4;
+  }
+}
+
+@layer components {
+  /* the outer wrapper */
+  .card {
+    @apply bg-light rounded-lg shadow-md p-6;
+  }
+
+  /* the header row inside each card */
+  .card-header {
+    @apply flex justify-between items-center mb-4;
+  }
+
+  /* the title in the header */
+  .card-title {
+    @apply text-xl font-semibold text-dark;
+  }
+
+  /* the list area */
+  .card-list {
+    @apply space-y-4;
+  }
+
+  /* each item row */
+  .card-item {
+    @apply flex justify-between pb-2 border-b border-accent;
+  }
+  .card-item-start {
+    @apply flex items-start pb-2 border-b border-accent;
+  }
+
+  /* "View" button */
+  .card-btn {
+    @apply px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm hover:bg-primary/20 transition;
+  }
+}

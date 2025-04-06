@@ -24,27 +24,20 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth.user);
 
-  // State for mobile sidebar toggle
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Handle Logout
   const handleLogout = () => {
     dispatch(logout());
   };
 
-  // Close sidebar when route changes on mobile
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
 
-  // Close sidebar when screen size increases
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsMobileOpen(false);
-      }
+      if (window.innerWidth >= 1024) setIsMobileOpen(false);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -58,12 +51,12 @@ const Sidebar = () => {
         href: "/dashboard/student/assignments",
       },
       {
-        name: "Project",
+        name: "Minor Project",
         icon: BookOpen,
         href: "/dashboard/student/minor-project",
       },
       {
-        name: "Project",
+        name: "Major Project",
         icon: BookOpen,
         href: "/dashboard/student/major-project",
       },
@@ -111,31 +104,29 @@ const Sidebar = () => {
 
   const currentNavigation = navigation[role] || navigation.student;
 
-  // Mobile toggle button
   const MobileToggle = () => (
     <button
       onClick={() => setIsMobileOpen(!isMobileOpen)}
-      className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-md bg-gray-800 text-white"
+      className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-md bg-primary text-light"
       aria-label="Toggle menu"
     >
       {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
     </button>
   );
 
-  // Sidebar content
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      <div className="p-4 flex items-center justify-start border-b border-gray-700">
-        <Logo size="small" />{" "}
+      <div className="p-4 flex items-center justify-start border-b border-secondary">
+        <Logo size="small" />
       </div>
 
-      <div className="p-2 border-b border-gray-700">
+      <div className="p-2 border-b border-secondary">
         <select
-          className="w-full bg-gray-700 text-white py-2 px-3 rounded"
+          className="w-full bg-dark text-light py-2 px-3 rounded"
           value={role}
         >
-          <option selected value={role}>
-            {role.charAt(0).toUpperCase() + role.slice(1, role.length)} View
+          <option value={role}>
+            {role.charAt(0).toUpperCase() + role.slice(1)} View
           </option>
         </select>
       </div>
@@ -146,9 +137,15 @@ const Sidebar = () => {
             <li key={item.name} className="px-2 py-1">
               <Link
                 to={item.href}
-                className={`flex items-center px-3 py-2 rounded-md hover:bg-gray-700 ${
-                  location.pathname === item.href ? "bg-gray-700" : ""
-                }`}
+                className={`
+                  flex items-center px-3 py-2 rounded-md
+                  hover:bg-secondary hover:text-light
+                  ${
+                    location.pathname === item.href
+                      ? "bg-secondary text-light"
+                      : "text-light"
+                  }
+                `}
               >
                 <item.icon className="w-5 h-5 mr-3" />
                 <span>{item.name}</span>
@@ -158,9 +155,9 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-secondary">
         <button
-          className="flex items-center text-gray-300 hover:text-white w-full"
+          className="flex items-center text-light hover:text-accent w-full"
           onClick={handleLogout}
         >
           <LogOut className="w-5 h-5 mr-3" />
@@ -172,27 +169,25 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Toggle Button */}
       <MobileToggle />
 
-      {/* Mobile Sidebar Overlay */}
       {isMobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-opacity-50 z-30"
+          className="lg:hidden fixed inset-0 bg-dark bg-opacity-50 z-30"
           onClick={() => setIsMobileOpen(false)}
-        ></div>
+        />
       )}
 
-      {/* Desktop Sidebar - Always visible on lg+ screens */}
-      <div className="hidden lg:flex bg-gray-800 text-white w-72 flex-col h-full">
+      <div className="hidden lg:flex bg-dark text-light w-72 flex-col h-full">
         <SidebarContent />
       </div>
 
-      {/* Mobile Sidebar - Visible when toggled */}
       <div
-        className={`lg:hidden fixed inset-y-0 left-0 transform ${
-          isMobileOpen ? "translate-x-0" : "-translate-x-full"
-        } w-64 bg-gray-800 text-white z-30 transition-transform duration-300 ease-in-out h-full`}
+        className={`
+          lg:hidden fixed inset-y-0 left-0 transform
+          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+          w-64 bg-dark text-light z-30 transition-transform duration-300 ease-in-out h-full
+        `}
       >
         <SidebarContent />
       </div>
