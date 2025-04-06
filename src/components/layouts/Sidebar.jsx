@@ -19,6 +19,66 @@ import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 
+const navigation = {
+  student: [
+    { name: "Home", icon: Home, href: "/dashboard/student" },
+    {
+      name: "Assignments",
+      icon: FileText,
+      href: "/dashboard/student/assignments",
+    },
+    {
+      name: "Minor Project",
+      icon: BookOpen,
+      href: "/dashboard/student/minor-project",
+    },
+    {
+      name: "Major Project",
+      icon: BookOpen,
+      href: "/dashboard/student/major-project",
+    },
+    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
+    {
+      name: "Messages",
+      icon: MessageSquare,
+      href: "/dashboard/student/messages",
+    },
+    { name: "Profile", icon: User, href: "/dashboard/student/profile" },
+  ],
+  faculty: [
+    { name: "Home", icon: Home, href: "/dashboard/faculty" },
+    { name: "My Classes", icon: Users, href: "/dashboard/faculty/classes" },
+    {
+      name: "Assignments",
+      icon: FileText,
+      href: "/dashboard/faculty/assignments",
+    },
+    { name: "Calendar", icon: Calendar, href: "/dashboard/faculty/calendar" },
+    {
+      name: "Notices",
+      icon: MessageSquare,
+      href: "/dashboard/faculty/notices",
+    },
+    { name: "Profile", icon: User, href: "/dashboard/faculty/profile" },
+  ],
+  admin: [
+    { name: "Home", icon: Home, href: "/dashboard/admin" },
+    { name: "Users", icon: Users, href: "/dashboard/admin/users" },
+    { name: "Courses", icon: BookOpen, href: "/dashboard/admin/courses" },
+    {
+      name: "Analytics",
+      icon: BarChart2,
+      href: "/dashboard/admin/analytics",
+    },
+    { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
+    {
+      name: "Notifications",
+      icon: Bell,
+      href: "/dashboard/admin/notifications",
+    },
+  ],
+};
+
 const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -41,66 +101,6 @@ const Sidebar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const navigation = {
-    student: [
-      { name: "Home", icon: Home, href: "/dashboard/student" },
-      {
-        name: "Assignments",
-        icon: FileText,
-        href: "/dashboard/student/assignments",
-      },
-      {
-        name: "Minor Project",
-        icon: BookOpen,
-        href: "/dashboard/student/minor-project",
-      },
-      {
-        name: "Major Project",
-        icon: BookOpen,
-        href: "/dashboard/student/major-project",
-      },
-      { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
-      {
-        name: "Messages",
-        icon: MessageSquare,
-        href: "/dashboard/student/messages",
-      },
-      { name: "Profile", icon: User, href: "/dashboard/student/profile" },
-    ],
-    faculty: [
-      { name: "Home", icon: Home, href: "/dashboard/faculty" },
-      { name: "My Classes", icon: Users, href: "/dashboard/faculty/classes" },
-      {
-        name: "Assignments",
-        icon: FileText,
-        href: "/dashboard/faculty/assignments",
-      },
-      { name: "Calendar", icon: Calendar, href: "/dashboard/faculty/calendar" },
-      {
-        name: "Notices",
-        icon: MessageSquare,
-        href: "/dashboard/faculty/notices",
-      },
-      { name: "Profile", icon: User, href: "/dashboard/faculty/profile" },
-    ],
-    admin: [
-      { name: "Home", icon: Home, href: "/dashboard/admin" },
-      { name: "Users", icon: Users, href: "/dashboard/admin/users" },
-      { name: "Courses", icon: BookOpen, href: "/dashboard/admin/courses" },
-      {
-        name: "Analytics",
-        icon: BarChart2,
-        href: "/dashboard/admin/analytics",
-      },
-      { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
-      {
-        name: "Notifications",
-        icon: Bell,
-        href: "/dashboard/admin/notifications",
-      },
-    ],
-  };
 
   const currentNavigation = navigation[role] || navigation.student;
 
