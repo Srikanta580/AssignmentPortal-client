@@ -1,31 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DashboardLayout from "../layouts/DashboardLayout";
-import AdminDashboard from "../pages/admin/Dashboard";
-import FacultyDashboard from "../pages/faculty/Dashboard";
-import StudentDashboard from "../pages/student/Dashboard";
+import DashboardLayout from "../components/layouts/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
+import AdminRoutes from "./AdminRoutes";
+import FacultyRoutes from "./FacultyRoutes";
+import StudentRoutes from "./StudentRoutes";
 
 const AppRoutes = () => {
   const user = useSelector((state) => state.auth.user); // Get logged-in user
-
-  // Dynamically set dashboard component based on role
-  const getDashboardComponent = () => {
-    switch (user?.role) {
-      case "admin":
-        return <AdminDashboard />;
-      case "faculty":
-        return <FacultyDashboard />;
-      case "student":
-        return <StudentDashboard />;
-      default:
-        return <h1>Unauthorized</h1>;
-    }
-  };
 
   return (
     <Router>
@@ -42,7 +28,16 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         >
-          <Route index element={getDashboardComponent()} />
+          {user?.role === "admin" && (
+            <Route path="admin/*" element={<AdminRoutes />} />
+          )}
+          {user?.role === "faculty" && (
+            <Route path="faculty/*" element={<FacultyRoutes />} />
+          )}
+          {user?.role === "student" && (
+            <Route path="student/*" element={<StudentRoutes />} />
+          )}
+          <Route path="*" element={<h1>Unauthorized or Page Not Found</h1>} />
         </Route>
       </Routes>
     </Router>

@@ -5,6 +5,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux state
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
+  console.log(user, isAuthenticated);
+
   if (!isAuthenticated || !allowedRoles.includes(user?.role)) {
     return <Navigate to="/login" />;
   }
