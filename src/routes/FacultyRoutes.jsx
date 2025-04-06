@@ -1,6 +1,7 @@
 // AdminRoutes.jsx
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import FacultyDashboard from "../pages/faculty/Dashboard";
+import AssignmentLayout from "../components/layouts/AssignmentLayout";
 import AssignmentPage from "../pages/faculty/Assignments";
 import ClassesPage from "../pages/faculty/Classes";
 import NoticesPage from "../pages/faculty/Notices";
@@ -10,7 +11,10 @@ import ProfilePage from "../pages/faculty/Profile";
 const FacultyRoutes = () => (
   <Routes>
     <Route index element={<FacultyDashboard />} />
-    <Route path="assignments" element={<AssignmentPage />} />
+    <Route path="assignments" element={<AssignmentLayout />}>
+      <Route index element={<Navigate to="class" replace />} />
+      <Route path=":type" element={<AssignmentPage />} />
+    </Route>
     <Route path="classes" element={<ClassesPage />} />
     <Route path="calendar" element={<CalendarPage />} />
     <Route path="notices" element={<NoticesPage />} />
