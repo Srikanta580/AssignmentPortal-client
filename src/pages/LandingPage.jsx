@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../components/atoms/Logo";
 
 // Header Component
 const Header = () => (
   <header className="bg-white shadow-sm">
     <div className="container mx-auto px-4 py-4 flex justify-between items-center">
       <div className="flex items-center">
-        <div className="text-[#005F73] font-bold text-2xl">EduAssign</div>
+        <Logo size="regular" />
       </div>
       <nav className="hidden md:flex space-x-8">
         <a
@@ -535,9 +536,7 @@ const Footer = () => (
     <div className="container mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <div className="text-2xl font-bold mb-4 text-[#94D2BD]">
-            EduAssign
-          </div>
+          <div className="text-2xl font-bold mb-4 text-[#94D2BD]">Submit</div>
           <p className="text-white opacity-60 mb-4">
             Empowering students to excel through intelligent assignment
             management.
@@ -690,7 +689,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t border-[#0A9396] opacity-30 mt-12 pt-8 text-center text-white opacity-60 text-sm">
-        &copy; {new Date().getFullYear()} EduAssign. All rights reserved.
+        &copy; {new Date().getFullYear()} Submit. All rights reserved.
       </div>
     </div>
   </footer>

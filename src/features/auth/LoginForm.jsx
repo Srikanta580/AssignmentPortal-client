@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import roleIcons from "../../components/icons/roleIcons";
+import { loginSuccess } from "./authSlice";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const { role } = useParams(); // Role from URL param
+  const dispatch = useDispatch();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +19,8 @@ const LoginForm = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(`Logging in as ${roleTitle} with ID: ${userId}`);
+    dispatch(loginSuccess({ role: formattedRole }));
+    navigate(`/dashboard/${formattedRole}`);
   };
 
   return (

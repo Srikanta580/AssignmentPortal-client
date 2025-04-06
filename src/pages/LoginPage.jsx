@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import roleIcons from "../components/icons/roleIcons";
+import Logo from "../components/atoms/Logo";
 
 const RoleButton = ({ role, icon, route, isActive }) => {
   return (
     <Link
-      to={route}
+      to={isActive && route}
       className={`flex flex-col items-center justify-center w-24 h-24 md:w-28 md:h-28 
           rounded-full border-2 transition-all duration-300 ease-in-out 
           ${
@@ -12,7 +13,6 @@ const RoleButton = ({ role, icon, route, isActive }) => {
               ? "border-primary bg-white hover:shadow-lg hover:-translate-y-1"
               : "border-gray-400 bg-gray-100 opacity-50 cursor-not-allowed"
           }`}
-      disabled={!isActive}
     >
       {icon}
       <span
@@ -36,7 +36,10 @@ const roles = [
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="absolute top-8 left-10">
+        <Logo size="regular" />
+      </div>
       <div className="flex flex-col items-center gap-6">
         <h1 className="text-2xl font-bold text-gray-800">Select Your Role</h1>
 
