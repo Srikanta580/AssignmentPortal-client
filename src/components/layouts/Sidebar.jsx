@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   BookOpen,
   Users,
@@ -14,6 +14,8 @@ import {
   MessageSquare,
   Menu,
   X,
+  NotebookTabs,
+  Code,
 } from "lucide-react";
 import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,20 +31,20 @@ const navigation = {
     },
     {
       name: "Minor Project",
-      icon: BookOpen,
+      icon: Code,
       href: "/dashboard/student/minor-project",
     },
     {
       name: "Major Project",
-      icon: BookOpen,
+      icon: Code,
       href: "/dashboard/student/major-project",
     },
-    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
     {
-      name: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/student/messages",
+      name: "Notes",
+      icon: NotebookTabs,
+      href: "/dashboard/student/notes",
     },
+    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
     { name: "Profile", icon: User, href: "/dashboard/student/profile" },
   ],
   faculty: [
@@ -135,21 +137,22 @@ const Sidebar = () => {
         <ul>
           {currentNavigation.map((item) => (
             <li key={item.name} className="px-2 py-1">
-              <Link
+              <NavLink
                 to={item.href}
-                className={`
+                end={
+                  item.href === "/dashboard/student" ||
+                  item.href === "/dashboard/admin" ||
+                  item.href === "/dashboard/faculty"
+                }
+                className={({ isActive }) => `
                   flex items-center px-3 py-2 rounded-md
                   hover:bg-secondary hover:text-light
-                  ${
-                    location.pathname === item.href
-                      ? "bg-secondary text-light"
-                      : "text-light"
-                  }
+                  ${isActive ? "bg-secondary text-light" : "text-light"}
                 `}
               >
                 <item.icon className="w-5 h-5 mr-3" />
                 <span>{item.name}</span>
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
