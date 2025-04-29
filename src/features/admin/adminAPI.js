@@ -6,7 +6,8 @@ export const fetchStudents = createAsyncThunk(
   "admin/fetchStudents",
   async (_, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/students");
+      const res = await apiClient.get("/admin/getStudents");
+      // console.log("Fetched students:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -20,7 +21,7 @@ export const addStudent = createAsyncThunk(
   "admin/addStudent",
   async (studentData, thunkAPI) => {
     try {
-      const res = await apiClient.post("/admin/students", studentData);
+      const res = await apiClient.post("/admin/addStudent", studentData);
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -63,7 +64,8 @@ export const fetchFaculties = createAsyncThunk(
   "admin/fetchFaculties",
   async (_, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/faculties");
+      const res = await apiClient.get("/admin/getFaculties");
+      // console.log("Fetched faculties:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -77,7 +79,7 @@ export const addFaculty = createAsyncThunk(
   "admin/addFaculty",
   async (facultyData, thunkAPI) => {
     try {
-      const res = await apiClient.post("/admin/faculties", facultyData);
+      const res = await apiClient.post("/admin/addFaculty", facultyData);
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
