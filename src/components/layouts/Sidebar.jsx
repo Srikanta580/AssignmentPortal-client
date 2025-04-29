@@ -72,8 +72,8 @@ const navigation = {
   admin: [
     { name: "Home", icon: Home, href: "/dashboard/admin" },
     { name: "Users", icon: Users, href: "/dashboard/admin/users" },
-    { name: "Classes", icon: GraduationCap, href: "/dashboard/admin/classes" },
     { name: "Forms", icon: FolderMinus, href: "/dashboard/admin/forms" },
+    { name: "Classes", icon: GraduationCap, href: "/dashboard/admin/classes" },
     { name: "Subjects", icon: BookOpen, href: "/dashboard/admin/subjects" },
     {
       name: "Analytics",

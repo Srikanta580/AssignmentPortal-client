@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { generateForm } from "./adminAPI";
 
-// Dummy async calls (you'll replace with actual API later)
 export const fetchForms = createAsyncThunk("forms/fetchForms", async () => {
   return [
     { id: "1", title: "Student Feedback Form", createdAt: "2025-04-25" },
@@ -21,6 +21,7 @@ export const fetchFormResponses = createAsyncThunk(
 const formsSlice = createSlice({
   name: "forms",
   initialState: {
+    form: null,
     forms: [],
     responses: {},
     loading: false,
@@ -28,22 +29,25 @@ const formsSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchForms.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchForms.fulfilled, (state, action) => {
-        state.loading = false;
-        state.forms = action.payload;
-      })
-      .addCase(fetchForms.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(fetchFormResponses.fulfilled, (state, action) => {
-        const [formId, responses] = action.meta.arg;
-        state.responses[formId] = action.payload;
-      });
+    // Utility to handle pending/fulfilled/rejected
+    const addCommonCases = (thunk) => {
+      builder
+        .addCase(thunk.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(thunk.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        });
+    };
+
+    // FORM GENERATION
+    addCommonCases(generateForm);
+    builder.addCase(generateForm.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.form = payload;
+    });
   },
 });
 

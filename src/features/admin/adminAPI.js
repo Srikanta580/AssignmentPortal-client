@@ -189,7 +189,23 @@ export const addSubject = createAsyncThunk(
   }
 );
 
-// 4. NOTICE MANAGEMENT
+// 4. FORM MANAGEMENT
+export const generateForm = createAsyncThunk(
+  "admin/generateForm",
+  async (prompt, thunkAPI) => {
+    console.log(prompt);
+    try {
+      const res = await apiClient.post("/admin/form/generate", { prompt });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Server is busy! Retry later."
+      );
+    }
+  }
+);
+
+// 5. NOTICE MANAGEMENT
 export const fetchNotices = createAsyncThunk(
   "admin/fetchNotices",
   async (_, thunkAPI) => {
