@@ -44,9 +44,9 @@ const adminSlice = createSlice({
           state.status = "loading";
           state.error = null;
         })
-        .addCase(thunk.fulfilled, (state) => {
-          state.status = "succeeded";
-        })
+        // .addCase(thunk.fulfilled, (state) => {
+        //   state.status = "succeeded";
+        // })
         .addCase(thunk.rejected, (state, action) => {
           state.status = "failed";
           state.error = action.payload;
