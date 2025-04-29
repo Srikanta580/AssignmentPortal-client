@@ -49,7 +49,7 @@ export const deleteStudent = createAsyncThunk(
   "admin/deleteStudent",
   async (id, thunkAPI) => {
     try {
-      await apiClient.delete(`/admin/students/${id}`);
+      await apiClient.delete(`/admin/deleteStudent/${id}`);
       return id;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -107,7 +107,7 @@ export const deleteFaculty = createAsyncThunk(
   "admin/deleteFaculty",
   async (id, thunkAPI) => {
     try {
-      await apiClient.delete(`/admin/faculties/${id}`);
+      await apiClient.delete(`/admin/deleteFaculty/${id}`);
       return id;
     } catch (err) {
       return thunkAPI.rejectWithValue(

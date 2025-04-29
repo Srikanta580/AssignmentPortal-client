@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle } from "lucide-react";
 import IconMap from "../../components/icons/formIcons";
-import { addStudent, addFaculty, fetchStudents, fetchFaculties } from "../../features/admin/adminAPI";
+import { addStudent, addFaculty, fetchStudents, fetchFaculties, deleteFaculty, deleteStudent } from "../../features/admin/adminAPI";
 import { useDispatch, useSelector } from "react-redux";
 const fieldConfig = {
   Faculty: [
@@ -49,13 +49,13 @@ const UsersPage = () => {
 
 
 
-  const { students,faculties, status, error } = useSelector((state) => state?.admin);
+  const { students, faculties, status, error } = useSelector((state) => state?.admin);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("Fetching students ...");
-    dispatch(fetchStudents());
+    dispatch(fetchStudents(),fetchFaculties());
     console.log("Fetching faculties ...");
     dispatch(fetchFaculties());
   }, [dispatch]);
@@ -110,7 +110,7 @@ const UsersPage = () => {
               >
                 <option value="">Default</option>
                 <option value="name">Name</option>
-                
+
               </select>
             </div>
 
@@ -121,11 +121,11 @@ const UsersPage = () => {
               </button>
             </div>
           </div>
-          
+
           <table className="min-w-full table-auto">
             <thead className="bg-light">
               <tr>
-                {["First Name", "Last Name", "Password", "Email", "Phone"].map((col) => (
+                {["First Name", "Last Name", "Password", "Email", "Phone", "Actions"].map((col) => (
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
                       <span className="font-medium">{col}</span>
@@ -145,8 +145,19 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{faculty.firstName}</td>
                   <td className="px-4 py-2">{faculty.lastName}</td>
                   <td className="px-4 py-2">{faculty.password}</td>
-                  <td className="px-4 py-2">{faculty.email}</td> 
+                  <td className="px-4 py-2">{faculty.email}</td>
                   <td className="px-4 py-2">{faculty.phone}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      onClick={() => {
+                        console.log("Deleting faculty with ID:", faculty.id);
+                        dispatch(deleteFaculty(faculty.id)); // Dispatch the delete action
+                      } }
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -209,7 +220,7 @@ const UsersPage = () => {
           <table className="min-w-full table-auto">
             <thead className="bg-light">
               <tr>
-                {["First Name", "Last Name", "Roll No.", "Admission Year", "Semester", "Email", "Password", "Phone"].map((col) => (
+                {["First Name", "Last Name", "Roll No.", "Admission Year", "Semester", "Email", "Password", "Phone", "Actions"].map((col) => (
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
                       <span className="font-medium">{col}</span>
@@ -234,6 +245,17 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{student.email}</td>
                   <td className="px-4 py-2">{student.password}</td>
                   <td className="px-4 py-2">{student.phone}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      onClick={() => { 
+                        console.log("Deleting student with ID:", student.id);
+                        dispatch(deleteStudent(student.id));// Dispatch the delete action
+                      } }
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
