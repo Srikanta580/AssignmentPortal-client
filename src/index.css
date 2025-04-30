@@ -40,6 +40,10 @@ body {
   .grid-four-cols {
     @apply grid grid-cols-1 md:grid-cols-4 gap-4;
   }
+
+  .btn {
+    @apply flex items-center gap-2 py-2 px-4 rounded-lg text-white transition-all transform hover:scale-105;
+  }
 }
 
 @layer components {
@@ -74,5 +78,148 @@ body {
   /* "View" button */
   .card-btn {
     @apply px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm hover:bg-primary/20 transition;
+  }
+
+  .calendar-container {
+    @apply font-[var(--font-poppins)] bg-white rounded-lg shadow-md p-5 max-w-[1200px] mx-auto;
+  }
+
+  .calendar-body {
+    @apply flex flex-col mt-5 lg:flex-row;
+  }
+
+  .calendar-header {
+    @apply flex justify-between items-center pb-[15px] border-b border-[var(--color-light)];
+  }
+
+  .calendar-title {
+    @apply text-2xl font-semibold text-[var(--color-primary)];
+  }
+
+  .calendar-nav {
+    @apply flex items-center gap-[10px];
+  }
+
+  .btn {
+    @apply bg-transparent border border-[var(--color-secondary)] text-[var(--color-secondary)] 
+        py-[6px] px-3 rounded cursor-pointer font-[var(--font-poppins)] transition-all duration-300;
+  }
+
+  .btn:hover {
+    @apply bg-[var(--color-secondary)] text-white;
+  }
+
+  .btn-primary {
+    @apply bg-[var(--color-primary)] text-white border-none;
+  }
+
+  .btn-primary:hover {
+    @apply bg-[#004c5c];
+  }
+
+  .calendar-grid {
+    @apply flex-[3] grid grid-cols-7 gap-[1px] bg-[var(--color-light)] border border-[var(--color-light)] h-[600px];
+  }
+
+  .calendar-day-header {
+    @apply bg-[var(--color-primary)] text-white text-center py-[10px] font-medium;
+  }
+
+  .calendar-day {
+    @apply bg-white min-h-[80px] p-[5px] cursor-pointer relative;
+  }
+
+  .calendar-day:hover {
+    @apply bg-[var(--color-light)];
+  }
+
+  .calendar-day.other-month {
+    @apply bg-gray-100 text-gray-400;
+  }
+
+  .calendar-day.selected {
+    @apply bg-[var(--color-accent)] text-[var(--color-dark)];
+  }
+
+  .calendar-day.today {
+    @apply border-2 border-[var(--color-secondary)];
+  }
+
+  .day-number {
+    @apply font-medium mb-[5px];
+  }
+
+  .event-dot {
+    @apply h-2 w-2 rounded-full bg-[var(--color-secondary)] inline-block mr-[3px];
+  }
+
+  .events-list {
+    @apply flex-1 px-5 max-h-[600px] overflow-y-auto;
+  }
+
+  .event-item {
+    @apply p-[10px] mb-[10px] border-l-4 border-[var(--color-secondary)] bg-[rgba(10,147,150,0.1)] rounded-r;
+  }
+
+  .event-item h4 {
+    @apply m-0 mb-[5px] text-[var(--color-dark)];
+  }
+
+  .event-item p {
+    @apply m-0 text-sm text-gray-700;
+  }
+
+  .event-item .event-time {
+    @apply font-medium text-[var(--color-primary)];
+  }
+
+  .event-item .event-actions {
+    @apply mt-2 flex gap-[10px];
+  }
+
+  .event-form {
+    @apply fixed inset-0 bg-black flex justify-center items-center z-[1000];
+  }
+
+  .event-form-content {
+    @apply bg-white p-6 rounded-lg w-[90%] max-w-[500px];
+  }
+
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-group label {
+    @apply block mb-[5px] font-medium text-[var(--color-dark)];
+  }
+
+  .form-control {
+    @apply w-full py-2 px-3 font-[var(--font-poppins)] border border-gray-300 rounded;
+  }
+
+  .form-actions {
+    @apply flex justify-end gap-[10px] mt-5;
+  }
+
+  .view-selector {
+    @apply flex gap-[5px] mr-4;
+  }
+
+  .view-btn {
+    @apply bg-transparent border border-[var(--color-primary)] text-[var(--color-primary)] 
+        py-1 px-[10px] rounded cursor-pointer;
+  }
+
+  .view-btn.active {
+    @apply bg-[var(--color-primary)] text-white;
+  }
+
+  /* Faculty and student specific styles */
+  .faculty-event {
+    @apply border-l-[var(--color-primary)];
+  }
+
+  .student-event {
+    @apply border-l-[var(--color-accent)];
   }
 }

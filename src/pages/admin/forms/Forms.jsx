@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchForms } from "../../../features/admin/formSlice";
 import { Link } from "react-router-dom";
 import FormCard from "../../../components/forms/FormCard";
+import { PlusIcon } from "lucide-react";
 
 const FormsPage = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const FormsPage = () => {
           hover:scale-105 hover:shadow-pink-500/50 transition-transform duration-300
           animate-pulse hover:animate-none"
         >
+          <PlusIcon />
           Create Form
         </Link>
       </div>
