@@ -1,5 +1,5 @@
 // UsersPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { PlusCircle } from "lucide-react";
 import IconMap from "../../components/icons/formIcons";
 import {
@@ -7,6 +7,8 @@ import {
   addFaculty,
   fetchStudents,
   fetchFaculties,
+  deleteFaculty,
+  deleteStudent,
 } from "../../features/admin/adminAPI";
 import { useDispatch, useSelector } from "react-redux";
 const fieldConfig = {
@@ -56,16 +58,63 @@ const UsersPage = () => {
     });
   };
 
-  const { students, faculties } = useSelector((state) => state?.admin);
+  const {
+    students,
+    faculties,
+    currentStudentPage,
+    totalStudentPages,
+    currentFacultyPage,
+    totalFacultyPages,
+    status,
+    error,
+  } = useSelector((state) => state?.admin);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("Fetching students ...");
-    dispatch(fetchStudents());
+    dispatch(fetchStudents({ page: currentStudentPage, size: 10 }));
     console.log("Fetching faculties ...");
-    dispatch(fetchFaculties());
-  }, [dispatch]);
+    dispatch(fetchFaculties({ page: currentFacultyPage, size: 10 }));
+  }, [dispatch, currentStudentPage, currentFacultyPage]);
+
+  // const [page, setPage] = useState(1);
+  const studentObserver = useRef();
+  const facultyObserver = useRef();
+
+  const lastStudentRef = useCallback(
+    (node) => {
+      if (status === "loading") return;
+      if (studentObserver.current) studentObserver.current.disconnect();
+      studentObserver.current = new IntersectionObserver((entries) => {
+        if (
+          entries[0].isIntersecting &&
+          currentStudentPage + 1 < totalStudentPages
+        ) {
+          dispatch(fetchStudents({ page: currentStudentPage + 1, size: 10 }));
+        }
+      });
+      if (node) studentObserver.current.observe(node);
+    },
+    [status, currentStudentPage, totalStudentPages, dispatch]
+  );
+
+  const lastFacultyRef = useCallback(
+    (node) => {
+      if (status === "loading") return;
+      if (facultyObserver.current) facultyObserver.current.disconnect();
+      facultyObserver.current = new IntersectionObserver((entries) => {
+        if (
+          entries[0].isIntersecting &&
+          currentFacultyPage + 1 < totalFacultyPages
+        ) {
+          dispatch(fetchFaculties({ page: currentFacultyPage + 1, size: 10 }));
+        }
+      });
+      if (node) facultyObserver.current.observe(node);
+    },
+    [status, currentFacultyPage, totalFacultyPages, dispatch]
+  );
 
   //addStudent and addFaculty are async actions that return a promise
   const handleSubmit = async (e) => {
@@ -111,20 +160,6 @@ const UsersPage = () => {
               />
             </div>
 
-            {/* Sort by */}
-            <div className="flex flex-col w-full sm:w-52">
-              <label className="mb-1 text-sm font-medium text-dark">
-                Sort by Roll No
-              </label>
-              <select
-                className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
-                defaultValue=""
-              >
-                <option value="">Default</option>
-                <option value="name">Name</option>
-              </select>
-            </div>
-
             {/* Optional: More Filters Button */}
             <div className="flex items-end">
               <button className="bg-primary text-white px-4 py-2 rounded text-sm hover:bg-primary-dark">
@@ -136,34 +171,58 @@ const UsersPage = () => {
           <table className="min-w-full table-auto">
             <thead className="bg-light">
               <tr>
-                {["First Name", "Last Name", "Password", "Email", "Phone"].map(
-                  (col) => (
-                    <th key={col} className="px-4 py-2 text-left text-dark">
-                      <div className="flex flex-col">
-                        <span className="font-medium">{col}</span>
-                        {/* <input
+                {[
+                  "First Name",
+                  "Last Name",
+                  "Password",
+                  "Email",
+                  "Phone",
+                  "Actions",
+                ].map((col) => (
+                  <th key={col} className="px-4 py-2 text-left text-dark">
+                    <div className="flex flex-col">
+                      <span className="font-medium">{col}</span>
+                      {/* <input
                         type="text"
                         placeholder={`Filter ${col}`}
                         className="mt-1 p-1 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
                       /> */}
-                      </div>
-                    </th>
-                  )
-                )}
+                    </div>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-light">
               {faculties.map((faculty, index) => (
-                <tr key={index} className="hover:bg-light/50">
+                <tr
+                  key={faculty.id}
+                  ref={faculties.length === index + 1 ? lastFacultyRef : null}
+                  className="hover:bg-light/50"
+                >
                   <td className="px-4 py-2">{faculty.firstName}</td>
                   <td className="px-4 py-2">{faculty.lastName}</td>
                   <td className="px-4 py-2">{faculty.password}</td>
                   <td className="px-4 py-2">{faculty.email}</td>
                   <td className="px-4 py-2">{faculty.phone}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      onClick={() => {
+                        console.log("Deleting faculty with ID:", faculty.id);
+                        dispatch(deleteFaculty(faculty.id)); // Dispatch the delete action
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {status === "loading" && (
+            <div className="p-4 text-center">Loading more...</div>
+          )}
+          {error && <div className="p-4 text-red-500 text-center">{error}</div>}
         </div>
       );
     } else if (activeTab === "Student") {
@@ -200,24 +259,6 @@ const UsersPage = () => {
                 ))}
               </select>
             </div>
-
-            {/* Sort by */}
-            <div className="flex flex-col w-full sm:w-52">
-              <label className="mb-1 text-sm font-medium text-dark">
-                Sort by Roll No
-              </label>
-              <select
-                className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
-                defaultValue=""
-              >
-                <option value="">Default</option>
-                <option value="name">Name</option>
-                <option value="rollNo">Roll No</option>
-                <option value="admissionYear">Admission Year</option>
-                <option value="semester">Semester</option>
-              </select>
-            </div>
-
             {/* Optional: More Filters Button */}
             <div className="flex items-end">
               <button className="bg-primary text-white px-4 py-2 rounded text-sm hover:bg-primary-dark">
@@ -238,6 +279,7 @@ const UsersPage = () => {
                   "Email",
                   "Password",
                   "Phone",
+                  "Actions",
                 ].map((col) => (
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
@@ -254,7 +296,11 @@ const UsersPage = () => {
             </thead>
             <tbody className="divide-y divide-light">
               {students.map((student, index) => (
-                <tr key={index} className="hover:bg-light/50">
+                <tr
+                  key={student.id}
+                  ref={students.length === index + 1 ? lastStudentRef : null}
+                  className="hover:bg-light/50"
+                >
                   <td className="px-4 py-2">{student.firstName}</td>
                   <td className="px-4 py-2">{student.lastName}</td>
                   <td className="px-4 py-2">{student.rollNo}</td>
@@ -263,10 +309,25 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{student.email}</td>
                   <td className="px-4 py-2">{student.password}</td>
                   <td className="px-4 py-2">{student.phone}</td>
+                  <td className="px-4 py-2">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      onClick={() => {
+                        console.log("Deleting student with ID:", student.id);
+                        dispatch(deleteStudent(student.id)); // Dispatch the delete action
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {status === "loading" && (
+            <div className="p-4 text-center">Loading more...</div>
+          )}
+          {error && <div className="p-4 text-red-500 text-center">{error}</div>}
         </div>
       );
     } else {

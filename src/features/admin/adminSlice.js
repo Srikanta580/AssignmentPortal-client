@@ -23,6 +23,12 @@ const initialState = {
   classes: [],
   subjects: [],
   notices: [],
+  currentStudentPage: 0,
+  currentFacultyPage: 0,
+  totalStudentPages: 0,
+  totalFacultyPages: 0,
+  hasMoreStudents: true,
+  hasMoreFaculties: true,
   status: "idle",
   error: null,
 };
@@ -55,9 +61,22 @@ const adminSlice = createSlice({
 
     // STUDENTS
     addCommonCases(fetchStudents);
+
     builder.addCase(fetchStudents.fulfilled, (state, { payload }) => {
-      state.students = payload;
+      const { students, currentStudentPage, totalStudentPages } = payload;
+    
+      // Ensure unique entries in the students array
+      const existingIds = new Set(state.students.map((student) => student.id));
+      const uniqueStudents = students.filter((student) => !existingIds.has(student.id));
+    
+      state.students = [...state.students, ...uniqueStudents];
+      state.currentStudentPage = currentStudentPage;
+      state.totalStudentPages = totalStudentPages;
+      state.hasMoreStudents = currentStudentPage + 1 < totalStudentPages;
+    
+      state.status = "succeeded";
     });
+   
     addCommonCases(addStudent);
     builder.addCase(addStudent.fulfilled, (state, { payload }) => {
       state.students.push(payload);
@@ -75,8 +94,19 @@ const adminSlice = createSlice({
     // FACULTIES
     addCommonCases(fetchFaculties);
     builder.addCase(fetchFaculties.fulfilled, (state, { payload }) => {
-      state.faculties = payload;
+      const { faculties, currentFacultyPage, totalFacultyPages } = payload;
+      // Ensure unique entries in the faculties array
+      const existingIds = new Set(state.faculties.map((faculty) => faculty.id));
+      const uniqueFaculties = faculties.filter((faculty) => !existingIds.has(faculty.id));
+
+      state.faculties = [...state.faculties, ...uniqueFaculties];
+      state.currentFacultyPage = currentFacultyPage;
+      state.totalFacultyPages = totalFacultyPages;
+      state.hasMoreFaculties = currentFacultyPage + 1 < totalFacultyPages;
+
+      state.status = "succeeded";
     });
+    
     addCommonCases(addFaculty);
     builder.addCase(addFaculty.fulfilled, (state, { payload }) => {
       state.faculties.push(payload);
