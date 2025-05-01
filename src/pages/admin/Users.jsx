@@ -2,7 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle } from "lucide-react";
 import IconMap from "../../components/icons/formIcons";
-import { addStudent, addFaculty, fetchStudents, fetchFaculties } from "../../features/admin/adminAPI";
+import {
+  addStudent,
+  addFaculty,
+  fetchStudents,
+  fetchFaculties,
+} from "../../features/admin/adminAPI";
 import { useDispatch, useSelector } from "react-redux";
 const fieldConfig = {
   Faculty: [
@@ -16,14 +21,18 @@ const fieldConfig = {
     { name: "firstName", label: "First Name", type: "text", icon: "user" },
     { name: "lastName", label: "Last Name", type: "text", icon: "user-plus" },
     { name: "rollNo", label: "Roll No.", type: "text", icon: "hash" },
-    { name: "admissionYear", label: "Admission Year", type: "number", icon: "calendar" },
+    {
+      name: "admissionYear",
+      label: "Admission Year",
+      type: "number",
+      icon: "calendar",
+    },
     { name: "semester", label: "Semester", type: "text", icon: "book" },
     { name: "email", label: "Email", type: "email", icon: "mail" },
     { name: "password", label: "Password", type: "password", icon: "lock" },
     { name: "phone", label: "Phone", type: "tel", icon: "phone" },
   ],
 };
-
 
 const UsersPage = () => {
   const tabs = ["Faculty", "Student", "Alumni", "Guest"];
@@ -47,9 +56,7 @@ const UsersPage = () => {
     });
   };
 
-
-
-  const { students,faculties, status, error } = useSelector((state) => state?.admin);
+  const { students, faculties } = useSelector((state) => state?.admin);
 
   const dispatch = useDispatch();
 
@@ -59,7 +66,6 @@ const UsersPage = () => {
     console.log("Fetching faculties ...");
     dispatch(fetchFaculties());
   }, [dispatch]);
-
 
   //addStudent and addFaculty are async actions that return a promise
   const handleSubmit = async (e) => {
@@ -76,14 +82,16 @@ const UsersPage = () => {
         console.log(`${formType} added successfully:`, resultAction.payload);
         closeModal();
       } else {
-        console.error(`Add ${formType.toLowerCase()} failed:`, resultAction.payload);
+        console.error(
+          `Add ${formType.toLowerCase()} failed:`,
+          resultAction.payload
+        );
         alert(`Error: ${resultAction.payload}`);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
     }
   };
-
 
   const renderTable = () => {
     if (activeTab === "Faculty") {
@@ -93,7 +101,9 @@ const UsersPage = () => {
           <div className="flex flex-wrap gap-6 p-4 bg-light border-b rounded-md">
             {/* Search by Name  */}
             <div className="flex flex-col w-full sm:w-60">
-              <label className="mb-1 text-sm font-medium text-dark">Search by Name</label>
+              <label className="mb-1 text-sm font-medium text-dark">
+                Search by Name
+              </label>
               <input
                 type="text"
                 placeholder="Enter name"
@@ -103,14 +113,15 @@ const UsersPage = () => {
 
             {/* Sort by */}
             <div className="flex flex-col w-full sm:w-52">
-              <label className="mb-1 text-sm font-medium text-dark">Sort by Roll No</label>
+              <label className="mb-1 text-sm font-medium text-dark">
+                Sort by Roll No
+              </label>
               <select
                 className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
                 defaultValue=""
               >
                 <option value="">Default</option>
                 <option value="name">Name</option>
-                
               </select>
             </div>
 
@@ -121,22 +132,24 @@ const UsersPage = () => {
               </button>
             </div>
           </div>
-          
+
           <table className="min-w-full table-auto">
             <thead className="bg-light">
               <tr>
-                {["First Name", "Last Name", "Password", "Email", "Phone"].map((col) => (
-                  <th key={col} className="px-4 py-2 text-left text-dark">
-                    <div className="flex flex-col">
-                      <span className="font-medium">{col}</span>
-                      {/* <input
+                {["First Name", "Last Name", "Password", "Email", "Phone"].map(
+                  (col) => (
+                    <th key={col} className="px-4 py-2 text-left text-dark">
+                      <div className="flex flex-col">
+                        <span className="font-medium">{col}</span>
+                        {/* <input
                         type="text"
                         placeholder={`Filter ${col}`}
                         className="mt-1 p-1 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
                       /> */}
-                    </div>
-                  </th>
-                ))}
+                      </div>
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-light">
@@ -145,7 +158,7 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{faculty.firstName}</td>
                   <td className="px-4 py-2">{faculty.lastName}</td>
                   <td className="px-4 py-2">{faculty.password}</td>
-                  <td className="px-4 py-2">{faculty.email}</td> 
+                  <td className="px-4 py-2">{faculty.email}</td>
                   <td className="px-4 py-2">{faculty.phone}</td>
                 </tr>
               ))}
@@ -160,7 +173,9 @@ const UsersPage = () => {
           <div className="flex flex-wrap gap-6 p-4 bg-light border-b rounded-md">
             {/* Search by Name  */}
             <div className="flex flex-col w-full sm:w-60">
-              <label className="mb-1 text-sm font-medium text-dark">Search by Name</label>
+              <label className="mb-1 text-sm font-medium text-dark">
+                Search by Name
+              </label>
               <input
                 type="text"
                 placeholder="Enter name"
@@ -170,21 +185,27 @@ const UsersPage = () => {
 
             {/* Semester Filter */}
             <div className="flex flex-col w-full sm:w-48">
-              <label className="mb-1 text-sm font-medium text-dark">Filter by Semester</label>
+              <label className="mb-1 text-sm font-medium text-dark">
+                Filter by Semester
+              </label>
               <select
                 className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
                 defaultValue=""
               >
                 <option value="">All</option>
                 {[...Array(6)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>Semester {i + 1}</option>
+                  <option key={i + 1} value={i + 1}>
+                    Semester {i + 1}
+                  </option>
                 ))}
               </select>
             </div>
 
             {/* Sort by */}
             <div className="flex flex-col w-full sm:w-52">
-              <label className="mb-1 text-sm font-medium text-dark">Sort by Roll No</label>
+              <label className="mb-1 text-sm font-medium text-dark">
+                Sort by Roll No
+              </label>
               <select
                 className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
                 defaultValue=""
@@ -205,11 +226,19 @@ const UsersPage = () => {
             </div>
           </div>
 
-
           <table className="min-w-full table-auto">
             <thead className="bg-light">
               <tr>
-                {["First Name", "Last Name", "Roll No.", "Admission Year", "Semester", "Email", "Password", "Phone"].map((col) => (
+                {[
+                  "First Name",
+                  "Last Name",
+                  "Roll No.",
+                  "Admission Year",
+                  "Semester",
+                  "Email",
+                  "Password",
+                  "Phone",
+                ].map((col) => (
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
                       <span className="font-medium">{col}</span>
@@ -264,13 +293,15 @@ const UsersPage = () => {
               disabled={isDisabled}
               className={`
                 px-4 py-2 rounded-lg font-semibold transition
-                ${isActive
-                  ? "bg-secondary text-white"
-                  : "bg-light text-dark hover:bg-secondary/30"
+                ${
+                  isActive
+                    ? "bg-secondary text-white"
+                    : "bg-light text-dark hover:bg-secondary/30"
                 }
-                ${isDisabled
-                  ? "opacity-50 cursor-not-allowed"
-                  : "cursor-pointer"
+                ${
+                  isDisabled
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
                 }
               `}
             >
@@ -341,10 +372,11 @@ const UsersPage = () => {
                   return (
                     <div
                       key={field.name}
-                      className={`relative transition-all duration-300 ${focusedField === field.name
-                        ? "transform -translate-y-1"
-                        : ""
-                        }`}
+                      className={`relative transition-all duration-300 ${
+                        focusedField === field.name
+                          ? "transform -translate-y-1"
+                          : ""
+                      }`}
                     >
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                         <Icon />
@@ -358,10 +390,11 @@ const UsersPage = () => {
                         onFocus={() => setFocusedField(field.name)}
                         onBlur={() => setFocusedField(null)}
                         placeholder={field.label}
-                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name
-                          ? "border-primary shadow-md"
-                          : "border-gray-300"
-                          } focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
+                          focusedField === field.name
+                            ? "border-primary shadow-md"
+                            : "border-gray-300"
+                        } focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
                       />
                     </div>
                   );

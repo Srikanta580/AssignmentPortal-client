@@ -4,6 +4,7 @@ import StudentDashboard from "../pages/student/Dashboard";
 import AssignmentLayout from "../components/layouts/AssignmentLayout";
 import AssignmentPage from "../pages/student/Assignments";
 import ProjectPage from "../pages/student/ProjectPage";
+import CalendarPage from "../pages/student/Calendar";
 
 const StudentRoutes = () => (
   <Routes>
@@ -13,8 +14,8 @@ const StudentRoutes = () => (
       <Route path=":type" element={<AssignmentPage />} />
     </Route>
     <Route path="minor-project" element={<ProjectPage />} />
-    {/* <Route path="assignments" element={<AssignmentPage />} />
     <Route path="calendar" element={<CalendarPage />} />
+    {/* <Route path="assignments" element={<AssignmentPage />} />
     <Route path="notices" element={<NoticesPage />} />
     <Route path="profile" element={<ProfilePage />} /> */}
   </Routes>
