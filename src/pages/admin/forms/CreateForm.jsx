@@ -15,6 +15,7 @@ import {
   SaveAll,
   Trash2,
   MoveLeftIcon,
+  ArrowLeft,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateForm } from "../../../features/admin/adminAPI";
@@ -271,14 +272,12 @@ const CreateForm = () => {
       <div className="w-full text-dark" style={{ color: "var(--color-dark)" }}>
         {/* Header */}
         <div className="flex justify-between items-center pb-4">
-          <div className="flex items-center gap-x-3">
-            <MoveLeftIcon
-              onClick={() => navigate(-1)}
-              size={30}
-              cursor="pointer"
-            />
-            <h1 className="text-2xl font-bold text-primary">Create Form</h1>
-          </div>
+          <ArrowLeft
+            onClick={() => navigate(-1)}
+            size={30}
+            cursor="pointer"
+            className="bg-none hover:bg-gray-50 size-9 p-2 rounded-full"
+          />
           {generatedForm && (
             <div className="flex gap-x-4">
               <button onClick={handleLivePreview} className="btn bg-secondary">

@@ -1,11 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFormResponses } from "../../../features/admin/formSlice";
+import { ArrowLeft, MoveLeftIcon } from "lucide-react";
 
 const FormResponses = () => {
   const { formId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { responses } = useSelector((state) => state.forms);
 
   useEffect(() => {
@@ -66,7 +68,12 @@ const FormResponses = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <h1 className="text-2xl font-bold">Form Responses</h1>
+      <ArrowLeft
+        onClick={() => navigate(-1)}
+        size={30}
+        cursor="pointer"
+        className="bg-none hover:bg-gray-50 size-9 p-2 rounded-full"
+      />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left side: Responses Table (70% width) */}

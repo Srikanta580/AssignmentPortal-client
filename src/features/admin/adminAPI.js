@@ -205,6 +205,20 @@ export const generateForm = createAsyncThunk(
   }
 );
 
+export const fetchForms = createAsyncThunk(
+  "admin/fetchForms",
+  async (_, thunkAPI) => {
+    try {
+      const res = await apiClient.get("/admin/form");
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Fetch forms failed"
+      );
+    }
+  }
+);
+
 // 5. NOTICE MANAGEMENT
 export const fetchNotices = createAsyncThunk(
   "admin/fetchNotices",

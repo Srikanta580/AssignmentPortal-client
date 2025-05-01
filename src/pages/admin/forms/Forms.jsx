@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchForms } from "../../../features/admin/formSlice";
+import { fetchForms } from "../../../features/admin/adminAPI";
 import { Link } from "react-router-dom";
 import FormCard from "../../../components/forms/FormCard";
 import { PlusIcon } from "lucide-react";

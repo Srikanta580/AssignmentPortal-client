@@ -1,12 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { generateForm } from "./adminAPI";
-
-export const fetchForms = createAsyncThunk("forms/fetchForms", async () => {
-  return [
-    { id: "1", title: "Student Feedback Form", createdAt: "2025-04-25" },
-    { id: "2", title: "Faculty Appraisal Form", createdAt: "2025-04-20" },
-  ];
-});
+import { fetchForms, generateForm } from "./adminAPI";
 
 export const fetchFormResponses = createAsyncThunk(
   "forms/fetchResponses",
@@ -42,6 +35,7 @@ const formsSlice = createSlice({
     error: null,
   },
   reducers: {
+    // Form fields management
     editFormTitle: (state, action) => {
       state.form.title = action.payload;
     },
@@ -53,6 +47,7 @@ const formsSlice = createSlice({
         (qs) => qs.id !== action.payload
       );
     },
+    // Form customization
     setThemeColor: (state, action) => {
       state.form.themeColor = action.payload;
     },
@@ -80,6 +75,8 @@ const formsSlice = createSlice({
     setFormBranding: (state, action) => {
       state.form.branding = action.payload;
     },
+    // Form actions
+
     resetForm: (state) => {
       state.form = initialState;
     },
