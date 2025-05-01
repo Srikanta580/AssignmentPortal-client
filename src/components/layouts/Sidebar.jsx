@@ -22,6 +22,7 @@ import {
 import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import { resetForm } from "../../features/admin/formSlice";
 
 const navigation = {
   student: [
@@ -98,6 +99,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(resetForm());
   };
 
   useEffect(() => {

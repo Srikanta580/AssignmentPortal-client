@@ -18,7 +18,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateForm } from "../../../features/admin/adminAPI";
+import { generateForm, saveForm } from "../../../features/admin/adminAPI";
 import {
   editInputField,
   editFormTitle,
@@ -72,7 +72,15 @@ const CreateForm = () => {
   };
 
   // Handle save form
-  const handleSave = () => {
+  const handleSave = async () => {
+    await dispatch(
+      saveForm({
+        title: form.title,
+        config: {
+          ...form,
+        },
+      })
+    );
     setFormSaved(true);
   };
 
@@ -272,12 +280,15 @@ const CreateForm = () => {
       <div className="w-full text-dark" style={{ color: "var(--color-dark)" }}>
         {/* Header */}
         <div className="flex justify-between items-center pb-4">
-          <ArrowLeft
-            onClick={() => navigate(-1)}
-            size={30}
-            cursor="pointer"
-            className="bg-none hover:bg-gray-50 size-9 p-2 rounded-full"
-          />
+          <div className="flex items-center gap-x-2 font-medium">
+            <ArrowLeft
+              onClick={() => navigate(-1)}
+              size={30}
+              cursor="pointer"
+              className="bg-none hover:bg-gray-50 size-9 p-2 rounded-full"
+            />
+            Back
+          </div>
           {generatedForm && (
             <div className="flex gap-x-4">
               <button onClick={handleLivePreview} className="btn bg-secondary">
@@ -294,8 +305,11 @@ const CreateForm = () => {
               >
                 <Share2 size={18} /> Share
               </button>
-              <button onClick={handleSave} className="btn bg-primary">
-                <SaveAll size={18} /> Save
+              <button
+                onClick={handleSave}
+                className={`btn ${loading ? "bg-neutral-500" : "bg-primary"}`}
+              >
+                <SaveAll size={18} /> {loading ? "Saving..." : "Save"}
               </button>
               <button
                 onClick={handleReset}

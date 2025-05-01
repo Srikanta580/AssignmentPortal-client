@@ -7,7 +7,7 @@ import ShareModal from "../modals/ShareModal";
 const FormCard = ({ form }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isShareOpen, setShareOpen] = useState(false);
-  const currentUrl = window.location.href;
+  const currentUrl = `http://localhost:5173/form/${form.id}`;
   const handleExport = (e) => {
     e.stopPropagation();
     // Dummy export logic

@@ -195,7 +195,7 @@ export const generateForm = createAsyncThunk(
   async (prompt, thunkAPI) => {
     console.log(prompt);
     try {
-      const res = await apiClient.post("/admin/form/generate", { prompt });
+      const res = await apiClient.post("/form/generate", { prompt });
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -209,11 +209,25 @@ export const fetchForms = createAsyncThunk(
   "admin/fetchForms",
   async (_, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/form");
+      const res = await apiClient.get("/form");
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data || "Fetch forms failed"
+      );
+    }
+  }
+);
+
+export const saveForm = createAsyncThunk(
+  "admin/saveForm",
+  async (form, thunkAPI) => {
+    try {
+      const res = await apiClient.post("/form", form);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Form saving failed"
       );
     }
   }

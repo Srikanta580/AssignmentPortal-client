@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchForms, generateForm } from "./adminAPI";
+import { fetchForms, generateForm, saveForm } from "./adminAPI";
+import apiClient from "../../services/apiClient";
 
 export const fetchFormResponses = createAsyncThunk(
   "forms/fetchResponses",
@@ -8,6 +9,21 @@ export const fetchFormResponses = createAsyncThunk(
       { id: "r1", answers: ["Good", "Yes", "No"] },
       { id: "r2", answers: ["Average", "No", "Yes"] },
     ];
+  }
+);
+
+export const fetchForm = createAsyncThunk(
+  "form/fetchForm",
+  async (formId, thunkAPI) => {
+    try {
+      const res = await apiClient.get(`/form/${formId}`);
+      console.log(res.data);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Fetch forms failed"
+      );
+    }
   }
 );
 
@@ -29,6 +45,7 @@ const formsSlice = createSlice({
   name: "forms",
   initialState: {
     form: initialState,
+    submissionForm: initialState,
     forms: [],
     responses: {},
     loading: false,
@@ -103,10 +120,26 @@ const formsSlice = createSlice({
     });
 
     // FORM MANAGEMENT
-    addCommonCases(fetchForms);
+    addCommonCases(saveForm);
+    builder.addCase(saveForm.fulfilled, (state) => {
+      state.loading = false;
+    }),
+      addCommonCases(fetchForms);
     builder.addCase(fetchForms.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.forms = payload;
+    });
+    addCommonCases(fetchForm);
+    builder.addCase(fetchForm.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      const parsedData = JSON.parse(payload.configJson);
+      state.submissionForm = {
+        id: payload.id,
+        title: payload.title,
+        description: payload.description,
+        createdAt: payload.createdAt,
+        ...parsedData,
+      };
     });
   },
 });
