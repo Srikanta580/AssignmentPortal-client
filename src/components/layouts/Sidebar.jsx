@@ -16,10 +16,13 @@ import {
   X,
   NotebookTabs,
   Code,
+  GraduationCap,
+  FolderMinus,
 } from "lucide-react";
 import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
+import { resetForm } from "../../features/admin/formSlice";
 
 const navigation = {
   student: [
@@ -30,6 +33,12 @@ const navigation = {
       href: "/dashboard/student/assignments",
     },
     {
+      name: "Notes",
+      icon: NotebookTabs,
+      href: "/dashboard/student/notes",
+    },
+    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
+    {
       name: "Minor Project",
       icon: Code,
       href: "/dashboard/student/minor-project",
@@ -39,17 +48,15 @@ const navigation = {
       icon: Code,
       href: "/dashboard/student/major-project",
     },
-    {
-      name: "Notes",
-      icon: NotebookTabs,
-      href: "/dashboard/student/notes",
-    },
-    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
     { name: "Profile", icon: User, href: "/dashboard/student/profile" },
   ],
   faculty: [
     { name: "Home", icon: Home, href: "/dashboard/faculty" },
-    { name: "My Classes", icon: Users, href: "/dashboard/faculty/classes" },
+    {
+      name: "My Classes",
+      icon: GraduationCap,
+      href: "/dashboard/faculty/classes",
+    },
     {
       name: "Assignments",
       icon: FileText,
@@ -66,18 +73,20 @@ const navigation = {
   admin: [
     { name: "Home", icon: Home, href: "/dashboard/admin" },
     { name: "Users", icon: Users, href: "/dashboard/admin/users" },
-    { name: "Courses", icon: BookOpen, href: "/dashboard/admin/courses" },
+    { name: "Forms", icon: FolderMinus, href: "/dashboard/admin/forms" },
+    { name: "Classes", icon: GraduationCap, href: "/dashboard/admin/classes" },
+    { name: "Subjects", icon: BookOpen, href: "/dashboard/admin/subjects" },
     {
       name: "Analytics",
       icon: BarChart2,
       href: "/dashboard/admin/analytics",
     },
-    { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
     {
       name: "Notifications",
       icon: Bell,
       href: "/dashboard/admin/notifications",
     },
+    { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
   ],
 };
 
@@ -90,6 +99,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(resetForm());
   };
 
   useEffect(() => {

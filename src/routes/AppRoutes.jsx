@@ -10,6 +10,8 @@ import AdminRoutes from "./AdminRoutes";
 import FacultyRoutes from "./FacultyRoutes";
 import StudentRoutes from "./StudentRoutes";
 import CodeAnalyzer from "../pages/CodeAnalyzer";
+import FormPreview from "../pages/admin/forms/FormPreview";
+import FormSubmissionPage from "../pages/FormSubmissionPage";
 
 const AppRoutes = () => {
   const user = useSelector((state) => state.auth.user); // Get logged-in user
@@ -41,6 +43,8 @@ const AppRoutes = () => {
           <Route path="*" element={<h1>Unauthorized or Page Not Found</h1>} />
         </Route>
         <Route path="/codeanalyzer" element={<CodeAnalyzer />} />
+        <Route path="/form-preview" element={<FormPreview />} />
+        <Route path="/form/:formId" element={<FormSubmissionPage />} />
       </Routes>
     </Router>
   );

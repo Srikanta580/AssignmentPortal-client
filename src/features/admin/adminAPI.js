@@ -189,7 +189,51 @@ export const addSubject = createAsyncThunk(
   }
 );
 
-// 4. NOTICE MANAGEMENT
+// 4. FORM MANAGEMENT
+export const generateForm = createAsyncThunk(
+  "admin/generateForm",
+  async (prompt, thunkAPI) => {
+    console.log(prompt);
+    try {
+      const res = await apiClient.post("/form/generate", { prompt });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Server is busy! Retry later."
+      );
+    }
+  }
+);
+
+export const fetchForms = createAsyncThunk(
+  "admin/fetchForms",
+  async (_, thunkAPI) => {
+    try {
+      const res = await apiClient.get("/form");
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Fetch forms failed"
+      );
+    }
+  }
+);
+
+export const saveForm = createAsyncThunk(
+  "admin/saveForm",
+  async (form, thunkAPI) => {
+    try {
+      const res = await apiClient.post("/form", form);
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Form saving failed"
+      );
+    }
+  }
+);
+
+// 5. NOTICE MANAGEMENT
 export const fetchNotices = createAsyncThunk(
   "admin/fetchNotices",
   async (_, thunkAPI) => {
