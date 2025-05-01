@@ -4,9 +4,9 @@ import apiClient from "../../services/apiClient";
 // 1. STUDENT CRUD
 export const fetchStudents = createAsyncThunk(
   "admin/fetchStudents",
-  async (_, thunkAPI) => {
+  async ({ page, size }, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/getStudents");
+      const res = await apiClient.get(`/admin/getStudents?page=${page}&size=${size}`);
       // console.log("Fetched students:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
@@ -62,9 +62,9 @@ export const deleteStudent = createAsyncThunk(
 // 1. FACULTY CRUD
 export const fetchFaculties = createAsyncThunk(
   "admin/fetchFaculties",
-  async (_, thunkAPI) => {
+  async ({ page, size }, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/getFaculties");
+      const res = await apiClient.get(`/admin/getFaculties?page=${page}&size=${size}`);
       // console.log("Fetched faculties:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
