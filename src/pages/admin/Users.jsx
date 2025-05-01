@@ -43,6 +43,7 @@ const UsersPage = () => {
   const [formType, setFormType] = useState("Faculty");
   const [formData, setFormData] = useState({});
   const [focusedField, setFocusedField] = useState(null);
+  const [semesterFilter, setSemesterFilter] = useState("");
 
   const openModal = () => {
     setFormType("Faculty");
@@ -50,6 +51,9 @@ const UsersPage = () => {
     setShowModal(true);
   };
   const closeModal = () => setShowModal(false);
+  const studentObserver = useRef();
+  const facultyObserver = useRef();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -68,19 +72,22 @@ const UsersPage = () => {
     status,
     error,
   } = useSelector((state) => state?.admin);
-
-  const dispatch = useDispatch();
+  const handleSemesterFilterChange = (e) => {
+    setSemesterFilter(e.target.value);
+  };
+  
+  const filteredStudents = semesterFilter
+    ? students.filter((student) => student.semester === semesterFilter)
+    : students;
+  
 
   useEffect(() => {
     console.log("Fetching students ...");
-    dispatch(fetchStudents({ page: currentStudentPage, size: 10 }));
+    dispatch(fetchStudents({ page: 0, size: 10 }));
     console.log("Fetching faculties ...");
-    dispatch(fetchFaculties({ page: currentFacultyPage, size: 10 }));
-  }, [dispatch, currentStudentPage, currentFacultyPage]);
+    dispatch(fetchFaculties({ page: 0, size: 10 }));
+  }, [dispatch]);
 
-  // const [page, setPage] = useState(1);
-  const studentObserver = useRef();
-  const facultyObserver = useRef();
 
   const lastStudentRef = useCallback(
     (node) => {
@@ -249,7 +256,8 @@ const UsersPage = () => {
               </label>
               <select
                 className="p-2 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
-                defaultValue=""
+                value={semesterFilter}
+                onChange={handleSemesterFilterChange}
               >
                 <option value="">All</option>
                 {[...Array(6)].map((_, i) => (
@@ -295,7 +303,7 @@ const UsersPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-light">
-              {students.map((student, index) => (
+              {filteredStudents.map((student, index) => (
                 <tr
                   key={student.id}
                   ref={students.length === index + 1 ? lastStudentRef : null}
