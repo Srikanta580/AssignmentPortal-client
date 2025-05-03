@@ -51,8 +51,8 @@ const UsersPage = () => {
     setShowModal(true);
   };
   const closeModal = () => setShowModal(false);
-  const studentObserver = useRef();
-  const facultyObserver = useRef();
+  // const studentObserver = useRef();
+  // const facultyObserver = useRef();
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -69,61 +69,136 @@ const UsersPage = () => {
     totalStudentPages,
     currentFacultyPage,
     totalFacultyPages,
-    status,
-    error,
   } = useSelector((state) => state?.admin);
   const handleSemesterFilterChange = (e) => {
     setSemesterFilter(e.target.value);
   };
-  
-  const filteredStudents = semesterFilter
-    ? students.filter((student) => student.semester === semesterFilter)
-    : students;
-  
+
+
 
   useEffect(() => {
-    console.log("Fetching students ...");
-    dispatch(fetchStudents({ page: 0, size: 10 }));
-    console.log("Fetching faculties ...");
-    dispatch(fetchFaculties({ page: 0, size: 10 }));
-  }, [dispatch]);
+    if (activeTab === "Student") {
+      dispatch(fetchStudents({ page: 0, semester: semesterFilter }));
+      console.log("Fetching students...");
+    } else if (activeTab === "Faculty") {
+      dispatch(fetchFaculties({ page: 0 }));
+      console.log("Fetching faculties...");
+    }
+  }, [dispatch, activeTab, semesterFilter]);
 
 
-  const lastStudentRef = useCallback(
-    (node) => {
-      if (status === "loading") return;
-      if (studentObserver.current) studentObserver.current.disconnect();
-      studentObserver.current = new IntersectionObserver((entries) => {
-        if (
-          entries[0].isIntersecting &&
-          currentStudentPage + 1 < totalStudentPages
-        ) {
-          dispatch(fetchStudents({ page: currentStudentPage + 1, size: 10 }));
+  const renderPagination = (currentPage, totalPages) => {
+    const maxPageNumbers = 3; // You can adjust this based on how many numbers you want to show
+  
+    const generatePageNumbers = () => {
+      let start = Math.max(0, currentPage - Math.floor(maxPageNumbers / 2));
+      let end = Math.min(totalPages, currentPage + Math.ceil(maxPageNumbers / 2));
+  
+      if (end - start < maxPageNumbers) {
+        if (start === 0) {
+          end = Math.min(totalPages, start + maxPageNumbers);
+        } else {
+          start = Math.max(0, end - maxPageNumbers);
         }
-      });
-      if (node) studentObserver.current.observe(node);
-    },
-    [status, currentStudentPage, totalStudentPages, dispatch]
-  );
+      }
+  
+      const pages = [];
+      for (let i = start; i < end; i++) {
+        pages.push(i);
+      }
+  
+      return pages;
+    };
+  
+    const pagesToShow = generatePageNumbers();
+  
+    return (
+      <div className="flex justify-center items-center gap-2 mt-4">
+        {currentPage > 0 && (
+          <button
+            onClick={() =>
+              activeTab === "Student"
+                ? dispatch(fetchStudents({ page: currentPage - 1, semester: semesterFilter}))
+                : dispatch(fetchFaculties({ page: currentPage - 1 }))
+            }
+            className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+          >
+            Previous
+          </button>
+        )}
+  
+        {pagesToShow[0] > 0 && (
+          <>
+            <button
+              onClick={() =>
+                activeTab === "Student"
+                  ? dispatch(fetchStudents({ page, semester: semesterFilter }))
+                  : dispatch(fetchFaculties({ page}))
+              }
+              className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+            >
+              1
+            </button>
+            {pagesToShow[0] > 1 && (
+              <span className="px-3 py-1 text-primary">...</span>
+            )}
+          </>
+        )}
+  
+        {pagesToShow.map((page) => (
+          <button
+            key={page}
+            onClick={() =>
+              activeTab === "Student"
+                ? dispatch(fetchStudents({ page, semester: semesterFilter }))
+                : dispatch(fetchFaculties({ page }))
+            }
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === page
+                ? "bg-primary text-white"
+                : "bg-light text-primary"
+            }`}
+          >
+            {page + 1}
+          </button>
+        ))}
+  
+        {pagesToShow[pagesToShow.length - 1] < totalPages - 1 && (
+          <>
+            {pagesToShow[pagesToShow.length - 1] < totalPages - 2 && (
+              <span className="px-3 py-1 text-primary">...</span>
+            )}
+            <button
+              onClick={() =>
+                activeTab === "Student"
+                  ? dispatch(fetchStudents({ page: totalPages - 1 , semester: semesterFilter}))
+                  : dispatch(fetchFaculties({ page: totalPages - 1 }))
+              }
+              className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+  
+        {currentPage < totalPages - 1 && (
+          <button
+            onClick={() =>
+              activeTab === "Student"
+                ? dispatch(fetchStudents({ page: currentPage + 1, semester: semesterFilter }))
+                : dispatch(fetchFaculties({ page: currentPage + 1 }))
+            }
+            className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+          >
+            Next
+          </button>
+        )}
+      </div>
+    );
+  };
+  
+  
 
-  const lastFacultyRef = useCallback(
-    (node) => {
-      if (status === "loading") return;
-      if (facultyObserver.current) facultyObserver.current.disconnect();
-      facultyObserver.current = new IntersectionObserver((entries) => {
-        if (
-          entries[0].isIntersecting &&
-          currentFacultyPage + 1 < totalFacultyPages
-        ) {
-          dispatch(fetchFaculties({ page: currentFacultyPage + 1, size: 10 }));
-        }
-      });
-      if (node) facultyObserver.current.observe(node);
-    },
-    [status, currentFacultyPage, totalFacultyPages, dispatch]
-  );
-
-  //addStudent and addFaculty are async actions that return a promise
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Adding", formType, formData);
@@ -169,7 +244,7 @@ const UsersPage = () => {
 
             {/* Optional: More Filters Button */}
             <div className="flex items-end">
-              <button className="bg-primary text-white px-4 py-2 rounded text-sm hover:bg-primary-dark">
+              <button className="bg-primary text-white px-4 py-2 rounded opacity-50 cursor-not-allowed text-sm hover:bg-primary-dark">
                 More Filters
               </button>
             </div>
@@ -189,21 +264,15 @@ const UsersPage = () => {
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
                       <span className="font-medium">{col}</span>
-                      {/* <input
-                        type="text"
-                        placeholder={`Filter ${col}`}
-                        className="mt-1 p-1 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
-                      /> */}
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-light">
-              {faculties.map((faculty, index) => (
+              {faculties.map((faculty) => (
                 <tr
                   key={faculty.id}
-                  ref={faculties.length === index + 1 ? lastFacultyRef : null}
                   className="hover:bg-light/50"
                 >
                   <td className="px-4 py-2">{faculty.firstName}</td>
@@ -213,7 +282,7 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{faculty.phone}</td>
                   <td className="px-4 py-2">
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded cursor-pointer"
                       onClick={() => {
                         console.log("Deleting faculty with ID:", faculty.id);
                         dispatch(deleteFaculty(faculty.id)); // Dispatch the delete action
@@ -226,10 +295,7 @@ const UsersPage = () => {
               ))}
             </tbody>
           </table>
-          {status === "loading" && (
-            <div className="p-4 text-center">Loading more...</div>
-          )}
-          {error && <div className="p-4 text-red-500 text-center">{error}</div>}
+          {activeTab === "Faculty" && renderPagination(currentFacultyPage, totalFacultyPages)}
         </div>
       );
     } else if (activeTab === "Student") {
@@ -269,7 +335,7 @@ const UsersPage = () => {
             </div>
             {/* Optional: More Filters Button */}
             <div className="flex items-end">
-              <button className="bg-primary text-white px-4 py-2 rounded text-sm hover:bg-primary-dark">
+              <button className="bg-primary text-white px-4 py-2 rounded cursor-not-allowed opacity-50 text-sm hover:bg-primary-dark" disabled>
                 More Filters
               </button>
             </div>
@@ -292,21 +358,15 @@ const UsersPage = () => {
                   <th key={col} className="px-4 py-2 text-left text-dark">
                     <div className="flex flex-col">
                       <span className="font-medium">{col}</span>
-                      {/* <input
-                        type="text"
-                        placeholder={`Filter ${col}`}
-                        className="mt-1 p-1 border border-secondary rounded text-sm focus:ring-1 focus:ring-secondary"
-                      /> */}
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-light">
-              {filteredStudents.map((student, index) => (
+              {students.map((student) => (
                 <tr
                   key={student.id}
-                  ref={students.length === index + 1 ? lastStudentRef : null}
                   className="hover:bg-light/50"
                 >
                   <td className="px-4 py-2">{student.firstName}</td>
@@ -319,7 +379,7 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{student.phone}</td>
                   <td className="px-4 py-2">
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded cursor-pointer"
                       onClick={() => {
                         console.log("Deleting student with ID:", student.id);
                         dispatch(deleteStudent(student.id)); // Dispatch the delete action
@@ -332,10 +392,7 @@ const UsersPage = () => {
               ))}
             </tbody>
           </table>
-          {status === "loading" && (
-            <div className="p-4 text-center">Loading more...</div>
-          )}
-          {error && <div className="p-4 text-red-500 text-center">{error}</div>}
+          {activeTab === "Student" && renderPagination(currentStudentPage, totalStudentPages)}
         </div>
       );
     } else {
@@ -362,15 +419,13 @@ const UsersPage = () => {
               disabled={isDisabled}
               className={`
                 px-4 py-2 rounded-lg font-semibold transition
-                ${
-                  isActive
-                    ? "bg-secondary text-white"
-                    : "bg-light text-dark hover:bg-secondary/30"
+                ${isActive
+                  ? "bg-secondary text-white"
+                  : "bg-light text-dark hover:bg-secondary/30"
                 }
-                ${
-                  isDisabled
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
+                ${isDisabled
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
                 }
               `}
             >
@@ -381,7 +436,7 @@ const UsersPage = () => {
 
         <button
           onClick={openModal}
-          className="ml-auto flex items-center px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition"
+          className="ml-auto flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
         >
           <PlusCircle className="w-5 h-5 mr-1" /> Add
         </button>
@@ -441,11 +496,10 @@ const UsersPage = () => {
                   return (
                     <div
                       key={field.name}
-                      className={`relative transition-all duration-300 ${
-                        focusedField === field.name
-                          ? "transform -translate-y-1"
-                          : ""
-                      }`}
+                      className={`relative transition-all duration-300 ${focusedField === field.name
+                        ? "transform -translate-y-1"
+                        : ""
+                        }`}
                     >
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                         <Icon />
@@ -459,11 +513,10 @@ const UsersPage = () => {
                         onFocus={() => setFocusedField(field.name)}
                         onBlur={() => setFocusedField(null)}
                         placeholder={field.label}
-                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
-                          focusedField === field.name
-                            ? "border-primary shadow-md"
-                            : "border-gray-300"
-                        } focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name
+                          ? "border-primary shadow-md"
+                          : "border-gray-300"
+                          } focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
                       />
                     </div>
                   );
@@ -475,13 +528,13 @@ const UsersPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="px-4 py-2 border border-gray-300 rounded-md cursor-pointer text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary"
+                  className="px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary"
                 >
                   Save
                 </button>

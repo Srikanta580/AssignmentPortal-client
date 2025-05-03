@@ -65,11 +65,7 @@ const adminSlice = createSlice({
     builder.addCase(fetchStudents.fulfilled, (state, { payload }) => {
       const { students, currentStudentPage, totalStudentPages } = payload;
     
-      // Ensure unique entries in the students array
-      const existingIds = new Set(state.students.map((student) => student.id));
-      const uniqueStudents = students.filter((student) => !existingIds.has(student.id));
-    
-      state.students = [...state.students, ...uniqueStudents];
+      state.students =  students;
       state.currentStudentPage = currentStudentPage;
       state.totalStudentPages = totalStudentPages;
       state.hasMoreStudents = currentStudentPage + 1 < totalStudentPages;
@@ -95,11 +91,8 @@ const adminSlice = createSlice({
     addCommonCases(fetchFaculties);
     builder.addCase(fetchFaculties.fulfilled, (state, { payload }) => {
       const { faculties, currentFacultyPage, totalFacultyPages } = payload;
-      // Ensure unique entries in the faculties array
-      const existingIds = new Set(state.faculties.map((faculty) => faculty.id));
-      const uniqueFaculties = faculties.filter((faculty) => !existingIds.has(faculty.id));
-
-      state.faculties = [...state.faculties, ...uniqueFaculties];
+      
+      state.faculties = faculties;
       state.currentFacultyPage = currentFacultyPage;
       state.totalFacultyPages = totalFacultyPages;
       state.hasMoreFaculties = currentFacultyPage + 1 < totalFacultyPages;
