@@ -2,7 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import AdminDashboard from "../pages/admin/Dashboard";
 import UsersPage from "../pages/admin/Users";
-import CoursesPage from "../pages/admin/Courses";
+import SubjectsPage from "../pages/admin/Subjects";
 import AnalyticsPage from "../pages/admin/Analytics";
 import SettingsPage from "../pages/admin/Settings";
 import NotificationsPage from "../pages/admin/Notifications";
@@ -19,7 +19,7 @@ const AdminRoutes = () => (
     <Route path="forms" element={<FormsPage />} />
     <Route path="forms/create" element={<CreateForm />} />
     <Route path="forms/:formId" element={<FormResponses />} />
-    <Route path="subjects" element={<CoursesPage />} />
+    <Route path="subjects" element={<SubjectsPage />} />
     <Route path="analytics" element={<AnalyticsPage />} />
     <Route path="settings" element={<SettingsPage />} />
     <Route path="notifications" element={<NotificationsPage />} />
