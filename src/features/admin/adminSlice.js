@@ -13,6 +13,7 @@ import {
   assignClassToFaculty,
   fetchSubjects,
   addSubject,
+  deleteSubject,
   fetchNotices,
   addNotice,
 } from "./adminAPI";
@@ -133,11 +134,16 @@ const adminSlice = createSlice({
     // SUBJECTS
     addCommonCases(fetchSubjects);
     builder.addCase(fetchSubjects.fulfilled, (state, { payload }) => {
-      state.subjects = payload;
+      state.subjects = payload; // Update the subjects state
+      state.status = "succeeded";
     });
     addCommonCases(addSubject);
     builder.addCase(addSubject.fulfilled, (state, { payload }) => {
       state.subjects.push(payload);
+    });
+    addCommonCases(deleteSubject);
+    builder.addCase(deleteSubject.fulfilled, (state, { payload }) => {
+      state.subjects = state.subjects.filter((s) => s.subjectCode !== payload);
     });
 
     // NOTICES

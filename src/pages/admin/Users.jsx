@@ -70,11 +70,10 @@ const UsersPage = () => {
     currentFacultyPage,
     totalFacultyPages,
   } = useSelector((state) => state?.admin);
+  
   const handleSemesterFilterChange = (e) => {
     setSemesterFilter(e.target.value);
   };
-
-
 
   useEffect(() => {
     if (activeTab === "Student") {

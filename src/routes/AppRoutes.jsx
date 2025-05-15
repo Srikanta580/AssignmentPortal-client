@@ -12,7 +12,7 @@ import StudentRoutes from "./StudentRoutes";
 import CodeAnalyzer from "../pages/CodeAnalyzer";
 import FormPreview from "../pages/admin/forms/FormPreview";
 import FormSubmissionPage from "../pages/FormSubmissionPage";
-
+import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
   const user = useSelector((state) => state.auth.user); // Get logged-in user
 
@@ -23,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
+        <Route path="/test" element={<Test/>} />
         <Route
           path="/dashboard"
           element={

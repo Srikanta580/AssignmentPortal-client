@@ -165,8 +165,9 @@ export const fetchSubjects = createAsyncThunk(
   "admin/fetchSubjects",
   async (_, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/subjects");
-      return res.data;
+      const res = await apiClient.get("/admin/getSubjects");
+      // console.log("Fetched subjects:", res.data); // Log the fetched data
+      return res.data.subjects || []; // Extract the subjects array
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data || "Fetch subjects failed"
@@ -179,11 +180,25 @@ export const addSubject = createAsyncThunk(
   "admin/addSubject",
   async (subjectData, thunkAPI) => {
     try {
-      const res = await apiClient.post("/admin/subjects", subjectData);
+      const res = await apiClient.post("/admin/addSubject", subjectData);
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data || "Add subject failed"
+      );
+    }
+  }
+);
+
+export const deleteSubject = createAsyncThunk(
+  "admin/deleteSubject",
+  async (subjectCode, thunkAPI) => {
+    try {
+      await apiClient.delete(`/admin/deleteSubject/${subjectCode}`);
+      return subjectCode;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Delete subject failed"
       );
     }
   }
