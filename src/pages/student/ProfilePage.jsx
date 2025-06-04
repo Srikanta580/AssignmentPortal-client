@@ -1,10 +1,10 @@
 import React from "react";
-import { FacultyProfile } from "../../components/pages/profile";
+import { StudentProfile } from "../../components/pages/profile";
 
 function ProfilePage() {
   return (
     <div>
-      <FacultyProfile />
+      <StudentProfile />
     </div>
   );
 }
