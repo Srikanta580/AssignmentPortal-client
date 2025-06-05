@@ -4,7 +4,7 @@ import apiClient from "../../services/apiClient";
 // 1. STUDENT CRUD
 export const fetchStudents = createAsyncThunk(
   "admin/fetchStudents",
-  async ({ page = 0, semester = "" }, thunkAPI) => {
+  async ({ page = 0, semester = 0 }, thunkAPI) => {
     try {
       const res = await apiClient.get(`/admin/getStudents?page=${page}&semester=${semester}`);
       // console.log("Fetched students:", res.data); // Log the fetched data
