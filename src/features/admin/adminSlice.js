@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import {
   fetchStudents,
   addStudent,
@@ -9,8 +9,7 @@ import {
   updateFaculty,
   deleteFaculty,
   fetchClasses,
-  addClass,
-  assignClassToFaculty,
+  assignClass,
   fetchSubjects,
   addSubject,
   deleteSubject,
@@ -26,10 +25,13 @@ const initialState = {
   notices: [],
   currentStudentPage: 0,
   currentFacultyPage: 0,
+  currentClassPage: 0,
   totalStudentPages: 0,
   totalFacultyPages: 0,
+  totalClassPages: 0,
   hasMoreStudents: true,
   hasMoreFaculties: true,
+  hasMoreClasses: true,
   status: "idle",
   error: null,
 };
@@ -118,17 +120,18 @@ const adminSlice = createSlice({
     // CLASSES
     addCommonCases(fetchClasses);
     builder.addCase(fetchClasses.fulfilled, (state, { payload }) => {
-      state.classes = payload;
+      const { classes, currentClassPage, totalClassPages } = payload;
+      
+      state.classes = classes;
+      state.currentClassPage = currentClassPage;
+      state.totalClassPages = totalClassPages;
+      state.hasMoreClasses = currentClassPage + 1 < totalClassPages;
+
+      state.status = "succeeded";
     });
-    addCommonCases(addClass);
-    builder.addCase(addClass.fulfilled, (state, { payload }) => {
+    addCommonCases(assignClass);
+    builder.addCase(assignClass.fulfilled, (state, { payload }) => {
       state.classes.push(payload);
-    });
-    addCommonCases(assignClassToFaculty);
-    builder.addCase(assignClassToFaculty.fulfilled, (state, { payload }) => {
-      // payload could be updated class object
-      const idx = state.classes.findIndex((c) => c.id === payload.id);
-      if (idx !== -1) state.classes[idx] = payload;
     });
 
     // SUBJECTS

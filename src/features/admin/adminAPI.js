@@ -120,9 +120,9 @@ export const deleteFaculty = createAsyncThunk(
 // 2. CLASS MANAGEMENT
 export const fetchClasses = createAsyncThunk(
   "admin/fetchClasses",
-  async (_, thunkAPI) => {
+  async ({page}, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/classes");
+      const res = await apiClient.get(`/admin/class/getAllClasses?page=${page}`);
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -132,11 +132,11 @@ export const fetchClasses = createAsyncThunk(
   }
 );
 
-export const addClass = createAsyncThunk(
-  "admin/addClass",
+export const assignClass = createAsyncThunk(
+  "admin/assignClass",
   async (classData, thunkAPI) => {
     try {
-      const res = await apiClient.post("/admin/classes", classData);
+      const res = await apiClient.post("/admin/class/assignClass", classData);
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data || "Add class failed");
