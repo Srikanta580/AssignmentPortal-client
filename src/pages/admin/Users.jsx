@@ -43,7 +43,7 @@ const UsersPage = () => {
   const [formType, setFormType] = useState("Faculty");
   const [formData, setFormData] = useState({});
   const [focusedField, setFocusedField] = useState(null);
-  const [semesterFilter, setSemesterFilter] = useState("");
+  const [semesterFilter, setSemesterFilter] = useState(0);
 
   const openModal = () => {
     setFormType("Faculty");

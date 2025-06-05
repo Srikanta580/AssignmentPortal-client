@@ -1,410 +1,326 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { PlusCircle } from "lucide-react";
 import {
-  Users,
-  BookOpen,
-  Calendar,
-  Clock,
-  Building,
-  PlusCircle,
-  Edit,
-  EyeIcon,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
-import { useSelector } from "react-redux";
-import {
-  selectDepartments,
-  selectFaculty,
-  selectSubjects,
-} from "../../features/admin/classAssignmentSlice";
+  fetchSubjects,
+  fetchFaculties,
+  fetchClasses,
+  assignClass,
+} from "../../features/admin/adminAPI";
+import { useDispatch, useSelector } from "react-redux";
 
-const Classes = () => {
-  const departments = useSelector(selectDepartments);
-  const faculty = useSelector(selectFaculty);
-  const subjects = useSelector(selectSubjects);
+const ClassesPage = () => {
+  const dispatch = useDispatch();
+  const {
+    faculties = [],
+    subjects = [],
+    classes = [],
+    currentClassPage = 0,
+    totalClassPages = 1,
+  } = useSelector((state) => state?.admin);
 
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedFaculty, setSelectedFaculty] = useState("");
-  const [selectedSemester, setSelectedSemester] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [classTime, setClassTime] = useState("");
-  const [location, setLocation] = useState("");
-  const [viewMode, setViewMode] = useState("assign"); // "assign" or "view"
-  const [expandedAssignment, setExpandedAssignment] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [formError, setFormError] = useState("");
 
-  // Filter faculty by department
-  const filteredFaculty = selectedDepartment
-    ? faculty.filter((f) => f.departmentId === selectedDepartment)
-    : [];
+  useEffect(() => {
+    dispatch(fetchFaculties({ page: 0 }));
+    dispatch(fetchSubjects());
+    dispatch(fetchClasses());
+  }, [dispatch]);
 
-  // Filter subjects by semester and department
-  const filteredSubjects =
-    selectedDepartment && selectedSemester
-      ? subjects.filter(
-          (s) =>
-            s.departmentId === selectedDepartment &&
-            s.semester === selectedSemester
-        )
-      : [];
+  const openModal = () => {
+    setFormData({});
+    setFormError("");
+    setShowModal(true);
+  };
 
-  // Sample assignments data - would come from Redux store in real app
-  const [assignments, setAssignments] = useState([
-    {
-      id: 1,
-      departmentId: "dept1",
-      departmentName: "Computer Science",
-      facultyId: "fac1",
-      facultyName: "Dr. Brown",
-      subjectId: "sub1",
-      subjectName: "CS101: Introduction to Programming",
-      semester: "1",
-      classTime: "Mon, Wed 10:00-11:30 AM",
-      location: "Building A, Room 101",
-    },
-    {
-      id: 2,
-      departmentId: "dept1",
-      departmentName: "Computer Science",
-      facultyId: "fac2",
-      facultyName: "Dr. Johnson",
-      subjectId: "sub2",
-      subjectName: "CS202: Data Structures",
-      semester: "2",
-      classTime: "Tue, Thu 2:00-3:30 PM",
-      location: "Building B, Room 205",
-    },
-    {
-      id: 3,
-      departmentId: "dept2",
-      departmentName: "Mathematics",
-      facultyId: "fac3",
-      facultyName: "Dr. Smith",
-      subjectId: "sub3",
-      subjectName: "MATH303: Linear Algebra",
-      semester: "3",
-      classTime: "Mon, Wed, Fri 1:00-2:00 PM",
-      location: "Building C, Room 310",
-    },
-  ]);
+  const closeModal = () => {
+    setFormError("");
+    setShowModal(false);
+  };
 
-  const handleAssignFaculty = () => {
-    if (
-      !selectedDepartment ||
-      !selectedFaculty ||
-      !selectedSemester ||
-      !selectedSubject ||
-      !classTime ||
-      !location
-    ) {
-      alert("Please fill in all fields");
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    setFormError(""); // Clear error when user starts typing
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { facultyId, subjectCode, semester, section, timing, location } = formData;
+
+    if (!facultyId || !subjectCode || !semester || !section || !timing || !location) {
+      setFormError("All fields are required.");
       return;
     }
 
-    const newAssignment = {
-      id: assignments.length + 1,
-      departmentId: selectedDepartment,
-      departmentName: departments.find((d) => d.id === selectedDepartment).name,
-      facultyId: selectedFaculty,
-      facultyName: faculty.find((f) => f.id === selectedFaculty).name,
-      subjectId: selectedSubject,
-      subjectName: subjects.find((s) => s.id === selectedSubject).name,
-      semester: selectedSemester,
-      classTime,
-      location,
+    const payload = {
+      ...formData,
+      facultyId: Number(facultyId),
+      semester: Number(semester),
     };
 
-    setAssignments([...assignments, newAssignment]);
-
-    // Reset form
-    setSelectedSubject("");
-    setClassTime("");
-    setLocation("");
-
-    // In a real app, would dispatch to Redux
-    // dispatch(assignFacultyToClass(newAssignment));
-  };
-
-  const toggleExpandAssignment = (id) => {
-    if (expandedAssignment === id) {
-      setExpandedAssignment(null);
-    } else {
-      setExpandedAssignment(id);
+    try {
+      const resultAction = await dispatch(assignClass(payload));
+      if (resultAction?.type.endsWith("/fulfilled")) {
+        console.log("Class assigned successfully!");
+        closeModal();
+      } else {
+        console.log("Error assigning class:", resultAction.payload);
+      }
+    } catch (error) {
+      console.log("Unexpected error:", error);
     }
   };
 
+  // Pagination for Classes
+  const renderPagination = (currentPage, totalPages) => {
+    const maxPageNumbers = 3;
+    const generatePageNumbers = () => {
+      let start = Math.max(0, currentPage - Math.floor(maxPageNumbers / 2));
+      let end = Math.min(totalPages, currentPage + Math.ceil(maxPageNumbers / 2));
+      if (end - start < maxPageNumbers) {
+        if (start === 0) {
+          end = Math.min(totalPages, start + maxPageNumbers);
+        } else {
+          start = Math.max(0, end - maxPageNumbers);
+        }
+      }
+      const pages = [];
+      for (let i = start; i < end; i++) {
+        pages.push(i);
+      }
+      return pages;
+    };
+    const pagesToShow = generatePageNumbers();
+
+    return (
+      <div className="flex justify-center items-center gap-2 mt-4">
+        {currentPage > 0 && (
+          <button
+            onClick={() => dispatch(fetchClasses({ page: currentPage - 1 }))}
+            className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+          >
+            Previous
+          </button>
+        )}
+
+        {pagesToShow[0] > 0 && (
+          <>
+            <button
+              onClick={() => dispatch(fetchClasses({ page: 0 }))}
+              className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+            >
+              1
+            </button>
+            {pagesToShow[0] > 1 && (
+              <span className="px-3 py-1 text-primary">...</span>
+            )}
+          </>
+        )}
+
+        {pagesToShow.map((page) => (
+          <button
+            key={page}
+            onClick={() => dispatch(fetchClasses({ page }))}
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === page
+                ? "bg-primary text-white"
+                : "bg-light text-primary"
+            }`}
+          >
+            {page + 1}
+          </button>
+        ))}
+
+        {pagesToShow[pagesToShow.length - 1] < totalPages - 1 && (
+          <>
+            {pagesToShow[pagesToShow.length - 1] < totalPages - 2 && (
+              <span className="px-3 py-1 text-primary">...</span>
+            )}
+            <button
+              onClick={() => dispatch(fetchClasses({ page: totalPages - 1 }))}
+              className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+
+        {currentPage < totalPages - 1 && (
+          <button
+            onClick={() => dispatch(fetchClasses({ page: currentPage + 1 }))}
+            className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
+          >
+            Next
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <div className="w-full mx-auto text-dark">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-primary">Class Management</h1>
-      </div>
+    <div className="w-full mx-auto space-y-6">
+      <h1 className="text-2xl font-bold text-primary">Classes</h1>
 
-      {/* Toggle View */}
-      <div className="flex mb-6 bg-light rounded-lg p-1">
+      <div className="flex items-center gap-4">
         <button
-          className={`flex-1 py-2 rounded-md ${
-            viewMode === "assign" ? "bg-white shadow-sm" : ""
-          }`}
-          onClick={() => setViewMode("assign")}
+          onClick={openModal}
+          className="ml-auto flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
         >
-          <PlusCircle className="w-4 h-4 inline-block mr-2" />
-          Assign Faculty
-        </button>
-        <button
-          className={`flex-1 py-2 rounded-md ${
-            viewMode === "view" ? "bg-white shadow-sm" : ""
-          }`}
-          onClick={() => setViewMode("view")}
-        >
-          <EyeIcon className="w-4 h-4 inline-block mr-2" />
-          View Assignments
+          <PlusCircle className="w-5 h-5 mr-1" /> Assign Faculty
         </button>
       </div>
 
-      {viewMode === "assign" ? (
-        <div className="grid-two-cols mb-6">
-          {/* Assignment Form */}
-          <div className="col-span-2 card">
-            <div className="card-header">
-              <h2 className="card-title">Assign Faculty to Class</h2>
-              <Users className="w-5 h-5 text-primary" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Department
-                </label>
-                <select
-                  className="w-full p-2 border rounded-md"
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                >
-                  <option value="">Select Department</option>
-                  {departments.map((dept) => (
-                    <option key={dept.id} value={dept.id}>
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Faculty
-                </label>
-                <select
-                  className="w-full p-2 border rounded-md"
-                  value={selectedFaculty}
-                  onChange={(e) => setSelectedFaculty(e.target.value)}
-                  disabled={!selectedDepartment}
-                >
-                  <option value="">Select Faculty</option>
-                  {filteredFaculty.map((fac) => (
-                    <option key={fac.id} value={fac.id}>
-                      {fac.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Semester
-                </label>
-                <select
-                  className="w-full p-2 border rounded-md"
-                  value={selectedSemester}
-                  onChange={(e) => setSelectedSemester(e.target.value)}
-                >
-                  <option value="">Select Semester</option>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                    <option key={sem} value={sem}>
-                      Semester {sem}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Subject
-                </label>
-                <select
-                  className="w-full p-2 border rounded-md"
-                  value={selectedSubject}
-                  onChange={(e) => setSelectedSubject(e.target.value)}
-                  disabled={!selectedSemester || !selectedDepartment}
-                >
-                  <option value="">Select Subject</option>
-                  {filteredSubjects.map((sub) => (
-                    <option key={sub.id} value={sub.id}>
-                      {sub.code}: {sub.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Class Time
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="e.g., Mon, Wed 10:00-11:30 AM"
-                  value={classTime}
-                  onChange={(e) => setClassTime(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Location
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md"
-                  placeholder="e.g., Building A, Room 101"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark"
-                onClick={handleAssignFaculty}
-              >
-                Assign Faculty
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="col-span-2 card">
-          <div className="card-header">
-            <h2 className="card-title">Current Faculty Assignments</h2>
-            <BookOpen className="w-5 h-5 text-primary" />
-          </div>
-
-          <div className="overflow-hidden">
-            {/* Filter Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Filter by Department
-                </label>
-                <select className="w-full p-2 border rounded-md">
-                  <option value="">All Departments</option>
-                  {departments.map((dept) => (
-                    <option key={dept.id} value={dept.id}>
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Filter by Semester
-                </label>
-                <select className="w-full p-2 border rounded-md">
-                  <option value="">All Semesters</option>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                    <option key={sem} value={sem}>
-                      Semester {sem}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Filter by Faculty
-                </label>
-                <select className="w-full p-2 border rounded-md">
-                  <option value="">All Faculty</option>
-                  {faculty.map((fac) => (
-                    <option key={fac.id} value={fac.id}>
-                      {fac.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Assignments List */}
-            <div className="card-list">
-              {assignments.map((assignment) => (
-                <div
-                  key={assignment.id}
-                  className="border rounded-lg mb-3 overflow-hidden"
-                >
-                  <div
-                    className="bg-light p-3 flex justify-between items-center cursor-pointer"
-                    onClick={() => toggleExpandAssignment(assignment.id)}
-                  >
-                    <div>
-                      <h3 className="font-medium text-dark">
-                        {assignment.subjectName}
-                      </h3>
-                      <p className="text-sm text-primary">
-                        Faculty: {assignment.facultyName}
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <Edit className="w-4 h-4 mr-3 text-primary cursor-pointer" />
-                      {expandedAssignment === assignment.id ? (
-                        <ChevronUp className="w-4 h-4 text-primary" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4 text-primary" />
-                      )}
-                    </div>
-                  </div>
-
-                  {expandedAssignment === assignment.id && (
-                    <div className="p-4 bg-white">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-primary mb-2">
-                            <Building className="w-4 h-4 inline-block mr-2" />
-                            Department: {assignment.departmentName}
-                          </p>
-                          <p className="text-sm text-primary mb-2">
-                            <BookOpen className="w-4 h-4 inline-block mr-2" />
-                            Subject: {assignment.subjectName}
-                          </p>
-                          <p className="text-sm text-primary mb-2">
-                            <Users className="w-4 h-4 inline-block mr-2" />
-                            Faculty: {assignment.facultyName}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-primary mb-2">
-                            <Calendar className="w-4 h-4 inline-block mr-2" />
-                            Semester: {assignment.semester}
-                          </p>
-                          <p className="text-sm text-primary mb-2">
-                            <Clock className="w-4 h-4 inline-block mr-2" />
-                            Time: {assignment.classTime}
-                          </p>
-                          <p className="text-sm text-primary mb-2">
-                            <Building className="w-4 h-4 inline-block mr-2" />
-                            Location: {assignment.location}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex justify-end mt-3">
-                        <button className="bg-primary text-white px-3 py-1 rounded-md text-sm hover:bg-primary-dark">
-                          Edit Assignment
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+      <div className="card overflow-x-auto">
+        <table className="min-w-full table-auto">
+          <thead className="bg-light">
+            <tr>
+              {["Faculty", "Subject", "Semester", "Section", "Time", "Location"].map((col) => (
+                <th key={col} className="px-4 py-2 text-left text-dark">
+                  <span className="font-medium">{col}</span>
+                </th>
               ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-light">
+            {classes.map((cls) => (
+              <tr key={cls.id} className="hover:bg-light/50">
+                <td className="px-4 py-2">{cls.faculty?.firstName} {cls.faculty?.lastName}</td>
+                <td className="px-4 py-2">{cls.subject?.subjectCode}: {cls.subject?.subjectName}</td>
+                <td className="px-4 py-2">{cls.semester}</td>
+                <td className="px-4 py-2">{cls.section}</td>
+                <td className="px-4 py-2">{cls.timing}</td>
+                <td className="px-4 py-2">{cls.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* Add pagination below the table */}
+        {renderPagination(currentClassPage, totalClassPages)}
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 bg-opacity-50">
+          <div className="relative bg-white rounded-lg shadow-lg w-full max-w-2xl">
+            <div className="bg-primary text-white px-6 py-4 rounded-t-lg">
+              <h2 className="text-xl font-semibold">Assign Faculty to Class</h2>
             </div>
+            <form onSubmit={handleSubmit} className="p-6">
+              {formError && (
+                <div className="mb-4 text-sm text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md">
+                  {formError}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Faculty</label>
+                  <select
+                    name="facultyId"
+                    value={formData.facultyId || ""}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Faculty</option>
+                    {faculties.map((fac) => (
+                      <option key={fac.id} value={fac.id}>
+                        {fac.firstName} {fac.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Subject</label>
+                  <select
+                    name="subjectCode"
+                    value={formData.subjectCode || ""}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Subject</option>
+                    {subjects.map((sub) => (
+                      <option key={sub.subjectCode} value={sub.subjectCode}>
+                        {sub.subjectCode}: {sub.subjectName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Semester</label>
+                  <select
+                    name="semester"
+                    value={formData.semester || ""}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Semester</option>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                      <option key={sem} value={sem}>Semester {sem}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Section</label>
+                  <select
+                    name="section"
+                    value={formData.section || ""}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Section</option>
+                    {["A", "B", "C", "D"].map((section) => (
+                      <option key={section} value={section}>{section}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Class Time</label>
+                  <input
+                    type="text"
+                    name="timing"
+                    value={formData.timing || ""}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Mon, Wed 10:00-11:30 AM"
+                    className="w-full p-2 border rounded-md"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location || ""}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Building A, Room 101"
+                    className="w-full p-2 border rounded-md"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 border border-gray-300 rounded-md cursor-pointer text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -412,4 +328,4 @@ const Classes = () => {
   );
 };
 
-export default Classes;
+export default ClassesPage;
