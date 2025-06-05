@@ -68,9 +68,16 @@ const ClassesPage = () => {
         console.log("Class assigned successfully!");
         closeModal();
       } else {
+        // Show error from API or fallback message
+        setFormError(
+          resultAction?.payload?.message ||
+          resultAction?.payload ||
+          "Failed to assign class. Please try again."
+        );
         console.log("Error assigning class:", resultAction.payload);
       }
     } catch (error) {
+      setFormError("Unexpected error occurred. Please try again.");
       console.log("Unexpected error:", error);
     }
   };

@@ -44,6 +44,7 @@ const UsersPage = () => {
   const [formData, setFormData] = useState({});
   const [focusedField, setFocusedField] = useState(null);
   const [semesterFilter, setSemesterFilter] = useState(0);
+  const [formError, setFormError] = useState(""); // <-- Add this line
 
   const openModal = () => {
     setFormType("Faculty");
@@ -60,6 +61,7 @@ const UsersPage = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setFormError(""); // Clear error when user starts typing
   };
 
   const {
@@ -200,7 +202,13 @@ const UsersPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Adding", formType, formData);
+    // Validate all fields are filled
+    const requiredFields = fieldConfig[formType].map(f => f.name);
+    const missing = requiredFields.some(field => !formData[field]);
+    if (missing) {
+      setFormError("All fields are required.");
+      return;
+    }
     try {
       let resultAction;
       if (formType === "Student") {
@@ -216,10 +224,11 @@ const UsersPage = () => {
           `Add ${formType.toLowerCase()} failed:`,
           resultAction.payload
         );
-        alert(`Error: ${resultAction.payload}`);
+        setFormError(`Error: ${resultAction.payload}`); // Show error in form
       }
     } catch (error) {
       console.error("Unexpected error:", error);
+      setFormError("Unexpected error occurred.");
     }
   };
 
@@ -455,6 +464,12 @@ const UsersPage = () => {
 
             {/* Form Content */}
             <form onSubmit={handleSubmit} className="p-6">
+              {/* Show error if any */}
+              {formError && (
+                <div className="mb-4 text-sm text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md">
+                  {formError}
+                </div>
+              )}
               {/* User Type */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
