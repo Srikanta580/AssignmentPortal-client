@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PlusCircle } from "lucide-react";
 import {
   fetchSubjects,
-  fetchFaculties,
+  fetchAllFaculties,
   fetchClasses,
   assignClass,
 } from "../../features/admin/adminAPI";
@@ -23,7 +23,7 @@ const ClassesPage = () => {
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    dispatch(fetchFaculties({ page: 0 }));
+    dispatch(fetchAllFaculties());
     dispatch(fetchSubjects());
     dispatch(fetchClasses());
   }, [dispatch]);
@@ -177,7 +177,7 @@ const ClassesPage = () => {
           onClick={openModal}
           className="ml-auto flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
         >
-          <PlusCircle className="w-5 h-5 mr-1" /> Assign Faculty
+          <PlusCircle className="w-5 h-5 mr-1" /> Assign Class
         </button>
       </div>
 

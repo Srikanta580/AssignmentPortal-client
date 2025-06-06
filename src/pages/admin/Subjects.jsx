@@ -14,6 +14,7 @@ const SubjectsPage = () => {
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [formError, setFormError] = useState(""); // <-- Add error state
 
   useEffect(() => {
     dispatch(fetchSubjects());
@@ -22,11 +23,12 @@ const SubjectsPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewSubject({ ...newSubject, [name]: value });
+    setFormError(""); // Clear error when user starts typing
   };
 
   const handleAddSubject = async () => {
     if (!newSubject.subjectCode || !newSubject.subjectName || !newSubject.semester) {
-      alert("Please fill in all fields");
+      setFormError("All fields are required.");
       return;
     }
 
@@ -36,11 +38,17 @@ const SubjectsPage = () => {
         console.log("Subject added successfully:", resultAction.payload);
         setNewSubject({ subjectCode: "", subjectName: "", semester: "" });
         setShowModal(false);
+        setFormError(""); // Clear error on success
       } else {
+        setFormError(
+          resultAction?.payload?.message ||
+          resultAction?.payload ||
+          "Failed to add subject. Please try again."
+        );
         console.error("Add subject failed:", resultAction.payload);
-        alert(`Error: ${resultAction.payload}`);
       }
     } catch (error) {
+      setFormError("Unexpected error occurred. Please try again.");
       console.error("Unexpected error:", error);
     }
   };
@@ -52,7 +60,10 @@ const SubjectsPage = () => {
       {/* Add Button */}
       <div className="flex justify-end">
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true);
+            setFormError(""); // Clear error when opening modal
+          }}
           className="flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
         >
           <PlusCircle className="w-5 h-5 mr-1" /> Add Subject
@@ -102,6 +113,12 @@ const SubjectsPage = () => {
               <h2 className="text-xl font-semibold">Add New Subject</h2>
             </div>
             <div className="p-6">
+              {/* Error message */}
+              {formError && (
+                <div className="mb-4 text-sm text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md">
+                  {formError}
+                </div>
+              )}
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Subject Code</label>
                 <input
@@ -142,7 +159,10 @@ const SubjectsPage = () => {
               </div>
               <div className="flex justify-end space-x-3">
                 <button
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    setShowModal(false);
+                    setFormError(""); // Clear error when closing modal
+                  }}
                   className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
