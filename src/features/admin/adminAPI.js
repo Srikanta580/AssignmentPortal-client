@@ -117,6 +117,20 @@ export const deleteFaculty = createAsyncThunk(
   }
 );
 
+export const fetchAllFaculties = createAsyncThunk(
+  "admin/fetchAllFaculties",
+  async (_, thunkAPI) => {
+    try {
+      const res = await apiClient.get(`/admin/getAllFaculties`);
+      return res.data.faculties; // assuming backend returns { faculties: [...] }
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Fetch all faculties failed"
+      );
+    }
+  }
+);
+
 // 2. CLASS MANAGEMENT
 export const fetchClasses = createAsyncThunk(
   "admin/fetchClasses",

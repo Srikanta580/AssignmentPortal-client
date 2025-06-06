@@ -5,6 +5,7 @@ import {
   updateStudent,
   deleteStudent,
   fetchFaculties,
+  fetchAllFaculties,
   addFaculty,
   updateFaculty,
   deleteFaculty,
@@ -67,15 +68,15 @@ const adminSlice = createSlice({
 
     builder.addCase(fetchStudents.fulfilled, (state, { payload }) => {
       const { students, currentStudentPage, totalStudentPages } = payload;
-    
-      state.students =  students;
+
+      state.students = students;
       state.currentStudentPage = currentStudentPage;
       state.totalStudentPages = totalStudentPages;
       state.hasMoreStudents = currentStudentPage + 1 < totalStudentPages;
-    
+
       state.status = "succeeded";
     });
-   
+
     addCommonCases(addStudent);
     builder.addCase(addStudent.fulfilled, (state, { payload }) => {
       state.students.push(payload);
@@ -94,7 +95,7 @@ const adminSlice = createSlice({
     addCommonCases(fetchFaculties);
     builder.addCase(fetchFaculties.fulfilled, (state, { payload }) => {
       const { faculties, currentFacultyPage, totalFacultyPages } = payload;
-      
+
       state.faculties = faculties;
       state.currentFacultyPage = currentFacultyPage;
       state.totalFacultyPages = totalFacultyPages;
@@ -102,7 +103,14 @@ const adminSlice = createSlice({
 
       state.status = "succeeded";
     });
-    
+    addCommonCases(fetchAllFaculties);
+    builder.addCase(fetchAllFaculties.fulfilled, (state, { payload }) => {
+      state.faculties = payload;
+      state.currentFacultyPage = 0;
+      state.totalFacultyPages = 1;
+      state.hasMoreFaculties = false;
+      state.status = "succeeded";
+    });
     addCommonCases(addFaculty);
     builder.addCase(addFaculty.fulfilled, (state, { payload }) => {
       state.faculties.push(payload);
@@ -121,7 +129,7 @@ const adminSlice = createSlice({
     addCommonCases(fetchClasses);
     builder.addCase(fetchClasses.fulfilled, (state, { payload }) => {
       const { classes, currentClassPage, totalClassPages } = payload;
-      
+
       state.classes = classes;
       state.currentClassPage = currentClassPage;
       state.totalClassPages = totalClassPages;
