@@ -29,7 +29,7 @@ const StudentDashboard = () => {
     <div className="w-full mx-auto text-dark space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-primary">Student Dashboard</h1>
+        <h1 className="text-2xl font-bold text-primary">Dashboard</h1>
         <div className="flex items-center space-x-2 text-primary">
           <Clock className="inline mr-1 w-4 h-4" /> Today: April 4, 2025
         </div>

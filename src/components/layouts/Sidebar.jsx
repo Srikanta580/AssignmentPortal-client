@@ -145,14 +145,9 @@ const Sidebar = () => {
       </div>
 
       <div className="p-2 border-b border-secondary">
-        <select
-          className="w-full bg-dark text-light py-2 px-3 rounded"
-          value={role}
-        >
-          <option value={role}>
-            {role.charAt(0).toUpperCase() + role.slice(1)} View
-          </option>
-        </select>
+        <p className="w-full bg-dark text-light py-2 px-3 rounded">
+          {role.charAt(0).toUpperCase() + role.slice(1)} View
+        </p>
       </div>
 
       <nav className="flex-1 pt-4 pb-4 overflow-y-auto">
