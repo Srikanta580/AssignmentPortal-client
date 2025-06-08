@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
+import { logoutUser } from "../../features/auth/authAPI";
 import { resetForm } from "../../features/admin/formSlice";
 import { BetaTag, ComingSoonTag } from "../atoms/Tag";
 
@@ -105,12 +105,12 @@ const navigation = {
 const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth.user);
+  const { role } = useSelector((state) => state.auth);
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutUser());
     dispatch(resetForm());
   };
 
