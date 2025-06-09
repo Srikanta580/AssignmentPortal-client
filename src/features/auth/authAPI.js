@@ -7,7 +7,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password, role }, thunkAPI) => {
     try {
-      const response = await apiClient.post("/api/auth/login", {
+      const response = await apiClient.post("/auth/login", {
         email,
         password,
         role,
@@ -35,7 +35,7 @@ export const logoutUser = createAsyncThunk(
       const accessToken = localStorage.getItem("accessToken");
 
       await apiClient.post(
-        "/api/auth/logout",
+        "/auth/logout",
         {},
         {
           headers: {
