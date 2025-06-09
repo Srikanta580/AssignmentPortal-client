@@ -25,7 +25,14 @@ import { logoutUser } from "../../features/auth/authAPI";
 import { resetForm } from "../../features/admin/formSlice";
 import { BetaTag, ComingSoonTag } from "../atoms/Tag";
 
-const navigation = {
+const Sidebar = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { role,user } = useSelector((state) => state.auth);
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const navigation = {
   student: [
     { name: "Home", icon: Home, href: "/dashboard/student" },
     {
@@ -48,11 +55,13 @@ const navigation = {
       name: "Minor Project",
       icon: Code,
       href: "/dashboard/student/minor-project",
+      isVisible: user?.semester == 5,
     },
     {
       name: "Major Project",
       icon: Code,
       href: "/dashboard/student/major-project",
+      isVisible: user?.semester == 6,
     },
     { name: "Profile", icon: User, href: "/dashboard/student/profile" },
   ],
@@ -102,13 +111,6 @@ const navigation = {
   ],
 };
 
-const Sidebar = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth);
-
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-
   const handleLogout = () => {
     dispatch(logoutUser());
     dispatch(resetForm());
@@ -153,7 +155,7 @@ const Sidebar = () => {
       <nav className="flex-1 pt-4 pb-4 overflow-y-auto">
         <ul>
           {currentNavigation.map((item) => (
-            <li key={item.name} className="px-2 py-1">
+            item.isVisible !== false && <li key={item.name} className="px-2 py-1">
               <NavLink
                 to={item.href}
                 end={

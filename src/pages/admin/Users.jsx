@@ -26,7 +26,7 @@ const fieldConfig = {
     {
       name: "admissionYear",
       label: "Admission Year",
-      type: "number",
+      type: "text",
       icon: "calendar",
     },
     { name: "semester", label: "Semester", type: "text", icon: "book" },
