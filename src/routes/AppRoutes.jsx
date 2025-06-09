@@ -13,6 +13,8 @@ import FormPreview from "../pages/admin/forms/FormPreview";
 import FormSubmissionPage from "../pages/FormSubmissionPage";
 import LandingPage from "../pages/LandingPage";
 import OrbitAuth from "../pages/OrbitAuth";
+import OrbitAdminDashboard from "../pages/orbit_super_admin/Dashboard";
+import UniversityAdminDashboard from "../pages/admin/UniversityAdminDashboard";
 // import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
   const { role } = useSelector((state) => state.auth); // Get logged-in user
@@ -21,8 +23,13 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/orbit-admin" element={<OrbitAdminDashboard />} />
         <Route path="/auth" element={<OrbitAuth />} />
+        <Route
+          path="/:university-orbit-id/admin"
+          element={<UniversityAdminDashboard />}
+        />
+        <Route path="/:university-orbit-id/login" element={<LoginPage />} />
         <Route path="/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         {/* <Route path="/test" element={<Test/>} /> */}
