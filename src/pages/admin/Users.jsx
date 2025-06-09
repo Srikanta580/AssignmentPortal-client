@@ -1,6 +1,7 @@
 // UsersPage.jsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { PlusCircle } from "lucide-react";
+import { AiOutlineFileExcel, AiOutlineFileText } from "react-icons/ai"; // Add this import
 import IconMap from "../../components/icons/formIcons";
 import {
   addStudent,
@@ -9,6 +10,10 @@ import {
   fetchFaculties,
   deleteFaculty,
   deleteStudent,
+  uploadFacultyExcel,
+  uploadFacultyCsv,
+  uploadStudentExcel,
+  uploadStudentCsv,
 } from "../../features/admin/adminAPI";
 import { useDispatch, useSelector } from "react-redux";
 const fieldConfig = {
@@ -23,12 +28,7 @@ const fieldConfig = {
     { name: "firstName", label: "First Name", type: "text", icon: "user" },
     { name: "lastName", label: "Last Name", type: "text", icon: "user-plus" },
     { name: "rollNo", label: "Roll No.", type: "text", icon: "hash" },
-    {
-      name: "admissionYear",
-      label: "Admission Year",
-      type: "text",
-      icon: "calendar",
-    },
+    { name: "admissionYear", label: "Admission Year", type: "text", icon: "calendar" },
     { name: "semester", label: "Semester", type: "text", icon: "book" },
     { name: "email", label: "Email", type: "email", icon: "mail" },
     { name: "password", label: "Password", type: "password", icon: "lock" },
@@ -45,9 +45,15 @@ const UsersPage = () => {
   const [focusedField, setFocusedField] = useState(null);
   const [semesterFilter, setSemesterFilter] = useState(0);
   const [formError, setFormError] = useState(""); // <-- Add this line
+  const [showFileInput, setShowFileInput] = useState(false);
+  const [fileType, setFileType] = useState(""); // e.g. "faculty-excel"
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [selectedFileName, setSelectedFileName] = useState("");
+  const fileInputRef = useRef();
 
   const openModal = () => {
-    setFormType("Faculty");
+    setFormType(activeTab); // <-- This will preset the modal to the selected tab
     setFormData({});
     setShowModal(true);
   };
@@ -65,14 +71,14 @@ const UsersPage = () => {
   };
 
   const {
-    students,
-    faculties,
+    students = [],
+    faculties = [],
     currentStudentPage,
     totalStudentPages,
     currentFacultyPage,
     totalFacultyPages,
   } = useSelector((state) => state?.admin);
-  
+
   const handleSemesterFilterChange = (e) => {
     setSemesterFilter(e.target.value);
   };
@@ -90,11 +96,11 @@ const UsersPage = () => {
 
   const renderPagination = (currentPage, totalPages) => {
     const maxPageNumbers = 3; // You can adjust this based on how many numbers you want to show
-  
+
     const generatePageNumbers = () => {
       let start = Math.max(0, currentPage - Math.floor(maxPageNumbers / 2));
       let end = Math.min(totalPages, currentPage + Math.ceil(maxPageNumbers / 2));
-  
+
       if (end - start < maxPageNumbers) {
         if (start === 0) {
           end = Math.min(totalPages, start + maxPageNumbers);
@@ -102,24 +108,24 @@ const UsersPage = () => {
           start = Math.max(0, end - maxPageNumbers);
         }
       }
-  
+
       const pages = [];
       for (let i = start; i < end; i++) {
         pages.push(i);
       }
-  
+
       return pages;
     };
-  
+
     const pagesToShow = generatePageNumbers();
-  
+
     return (
       <div className="flex justify-center items-center gap-2 mt-4">
         {currentPage > 0 && (
           <button
             onClick={() =>
               activeTab === "Student"
-                ? dispatch(fetchStudents({ page: currentPage - 1, semester: semesterFilter}))
+                ? dispatch(fetchStudents({ page: currentPage - 1, semester: semesterFilter }))
                 : dispatch(fetchFaculties({ page: currentPage - 1 }))
             }
             className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
@@ -127,14 +133,14 @@ const UsersPage = () => {
             Previous
           </button>
         )}
-  
+
         {pagesToShow[0] > 0 && (
           <>
             <button
               onClick={() =>
                 activeTab === "Student"
                   ? dispatch(fetchStudents({ page, semester: semesterFilter }))
-                  : dispatch(fetchFaculties({ page}))
+                  : dispatch(fetchFaculties({ page }))
               }
               className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
             >
@@ -145,7 +151,7 @@ const UsersPage = () => {
             )}
           </>
         )}
-  
+
         {pagesToShow.map((page) => (
           <button
             key={page}
@@ -154,16 +160,15 @@ const UsersPage = () => {
                 ? dispatch(fetchStudents({ page, semester: semesterFilter }))
                 : dispatch(fetchFaculties({ page }))
             }
-            className={`px-3 py-1 rounded cursor-pointer ${
-              currentPage === page
+            className={`px-3 py-1 rounded cursor-pointer ${currentPage === page
                 ? "bg-primary text-white"
                 : "bg-light text-primary"
-            }`}
+              }`}
           >
             {page + 1}
           </button>
         ))}
-  
+
         {pagesToShow[pagesToShow.length - 1] < totalPages - 1 && (
           <>
             {pagesToShow[pagesToShow.length - 1] < totalPages - 2 && (
@@ -172,7 +177,7 @@ const UsersPage = () => {
             <button
               onClick={() =>
                 activeTab === "Student"
-                  ? dispatch(fetchStudents({ page: totalPages - 1 , semester: semesterFilter}))
+                  ? dispatch(fetchStudents({ page: totalPages - 1, semester: semesterFilter }))
                   : dispatch(fetchFaculties({ page: totalPages - 1 }))
               }
               className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
@@ -181,7 +186,7 @@ const UsersPage = () => {
             </button>
           </>
         )}
-  
+
         {currentPage < totalPages - 1 && (
           <button
             onClick={() =>
@@ -197,8 +202,8 @@ const UsersPage = () => {
       </div>
     );
   };
-  
-  
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -230,6 +235,35 @@ const UsersPage = () => {
       console.error("Unexpected error:", error);
       setFormError("Unexpected error occurred.");
     }
+  };
+
+  const handleFileUpload = async () => {
+    const file = fileInputRef.current.files[0];
+    if (!file) {
+      setUploadError("Please select a file.");
+      return;
+    }
+    setUploading(true);
+    setUploadError("");
+    let thunk;
+    if (fileType === "faculty-excel") thunk = uploadFacultyExcel;
+    else if (fileType === "faculty-csv") thunk = uploadFacultyCsv;
+    else if (fileType === "student-excel") thunk = uploadStudentExcel;
+    else if (fileType === "student-csv") thunk = uploadStudentCsv;
+    try {
+      const resultAction = await dispatch(thunk(file));
+      if (resultAction.type.endsWith("/fulfilled")) {
+        setShowFileInput(false);
+        setSelectedFileName(""); // Reset file name
+        if (fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
+        // Optionally refresh list here
+      } else {
+        setUploadError(resultAction.payload || "Upload failed.");
+      }
+    } catch {
+      setUploadError("Upload failed.");
+    }
+    setUploading(false);
   };
 
   const renderTable = () => {
@@ -442,9 +476,51 @@ const UsersPage = () => {
           );
         })}
 
+        {/* Add using Excel */}
+        <button
+          className="flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
+          style={{ marginLeft: "auto" }}
+          onClick={() => {
+            setFileType(
+              activeTab === "Faculty"
+                ? "faculty-excel"
+                : activeTab === "Student"
+                  ? "student-excel"
+                  : ""
+            );
+            setShowFileInput(true);
+            setUploadError("");
+          }}
+          disabled={activeTab !== "Faculty" && activeTab !== "Student"}
+        >
+          <AiOutlineFileExcel className="w-5 h-5 mr-1" />
+          Excel
+        </button>
+
+        {/* Add using CSV */}
+        <button
+          className="flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
+          onClick={() => {
+            setFileType(
+              activeTab === "Faculty"
+                ? "faculty-csv"
+                : activeTab === "Student"
+                  ? "student-csv"
+                  : ""
+            );
+            setShowFileInput(true);
+            setUploadError("");
+          }}
+          disabled={activeTab !== "Faculty" && activeTab !== "Student"}
+        >
+          <AiOutlineFileText className="w-5 h-5 mr-1" />
+          CSV
+        </button>
+
+        {/* Add User */}
         <button
           onClick={openModal}
-          className="ml-auto flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
+          className="flex items-center px-3 py-2 bg-primary text-white cursor-pointer rounded-lg hover:bg-primary/80 transition"
         >
           <PlusCircle className="w-5 h-5 mr-1" /> Add
         </button>
@@ -554,6 +630,72 @@ const UsersPage = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* File Upload Modal */}
+      {showFileInput && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 bg-opacity-50">
+          <div className="relative bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold mb-4">
+              Upload {fileType.includes("faculty") ? "Faculty" : "Student"}{" "}
+              {fileType.includes("excel") ? "Excel" : "CSV"}
+            </h2>
+            <div className="mb-4 flex">
+              {/* Hidden file input */}
+              <input
+                type="file"
+                accept={fileType.includes("excel") ? ".xlsx" : ".csv"}
+                ref={fileInputRef}
+                id="file-upload"
+                className="hidden"
+                onChange={e => {
+                  setUploadError("");
+                  setSelectedFileName(e.target.files[0]?.name || "");
+                }}
+              />
+              {/* Styled label as button */}
+              <label
+                htmlFor="file-upload"
+                className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded-l cursor-pointer text-primary hover:bg-gray-100 text-sm font-medium"
+                style={{ minWidth: "110px" }}
+              >
+                <AiOutlineFileText className="w-4 h-4" />
+                Upload File
+              </label>
+              {/* File name display */}
+              <span
+                className="px-3 py-1 bg-white text-gray-700 text-sm min-w-[120px] truncate"
+                style={{ maxWidth: 180 }}
+              >
+                {selectedFileName || "No file chosen"}
+              </span>
+            </div>
+            {uploadError && (
+              <div className="mb-2 text-sm text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-md">
+                {uploadError}
+              </div>
+            )}
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={e => {
+                  setShowFileInput(false);
+                  setSelectedFileName("");
+                  setUploadError("");
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-md cursor-pointer text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleFileUpload}
+                className="px-4 py-2 bg-primary text-white rounded-md cursor-pointer hover:bg-primary"
+                disabled={uploading}
+              >
+                {uploading ? "Uploading..." : "Upload"}
+              </button>
+            </div>
           </div>
         </div>
       )}
