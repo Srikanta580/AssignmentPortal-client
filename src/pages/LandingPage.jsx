@@ -16,13 +16,22 @@ import {
   FiAward,
   FiTool,
   FiSearch,
+  FiDatabase,
+  FiLayers,
+  FiServer,
+  FiZap,
+  FiShieldOff,
+  FiCode,
+  FiHeadphones,
+  FiChevronRight,
 } from "react-icons/fi";
 import Logo from "../components/atoms/Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const [activeTab, setActiveTab] = useState("universities");
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +40,10 @@ const LandingPage = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const redirectToAuth = () => {
+    navigate("/auth");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
@@ -86,7 +99,10 @@ const LandingPage = () => {
               >
                 Sign In
               </Link>
-              <button className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all">
+              <button
+                onClick={redirectToAuth}
+                className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all"
+              >
                 Get Started
               </button>
             </div>
@@ -121,6 +137,7 @@ const LandingPage = () => {
 
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <motion.button
+                  onClick={redirectToAuth}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-8 py-4 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transition-all"
@@ -128,6 +145,7 @@ const LandingPage = () => {
                   Get Started Free
                 </motion.button>
                 <motion.button
+                  onClick={redirectToAuth}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   className="bg-white text-cyan-600 border-2 border-cyan-100 px-8 py-4 rounded-xl font-medium text-lg hover:bg-cyan-50 transition-all"
@@ -295,7 +313,7 @@ const LandingPage = () => {
                 description="All data is encrypted at rest and in transit with industry-leading protocols."
               />
               <SecurityFeature
-                icon={<FiShield className="text-3xl" />}
+                icon={<FiShieldOff className="text-3xl" />}
                 title="Compliance Certified"
                 description="Fully compliant with FERPA, GDPR, and global data protection standards."
               />
@@ -350,6 +368,9 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        {/* Pricing Section */}
+        {activeTab === "universities" && <PricingSection />}
 
         {/* Testimonials Section */}
         <section className="py-20 px-4 bg-white">
@@ -424,6 +445,7 @@ const LandingPage = () => {
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <motion.button
+                onClick={redirectToAuth}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-white text-cyan-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg"
@@ -431,6 +453,7 @@ const LandingPage = () => {
                 Start Free Trial
               </motion.button>
               <motion.button
+                onClick={redirectToAuth}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg"
@@ -599,5 +622,207 @@ const TestimonialCard = ({
     </div>
   </motion.div>
 );
+
+const PricingSection = () => {
+  const plans = [
+    {
+      name: "Shared-DB Plan",
+      tier: "Standard",
+      icon: <FiDatabase className="text-cyan-600" size={24} />,
+      price: "$499/month",
+      description:
+        "Affordable & quick setup—get started in days with full-feature access!",
+      features: [
+        { text: "Shared database (row-level isolation)", icon: <FiDatabase /> },
+        {
+          text: "Standard modules (assignments, attendance)",
+          icon: <FiLayers />,
+        },
+        { text: "Basic customization (themes, logos)", icon: <FiCode /> },
+        { text: "Fixed API rate limits", icon: <FiZap /> },
+      ],
+      cta: "Start Free Trial",
+      bestFor: "Small/medium universities",
+    },
+    {
+      name: "Dedicated Schema",
+      tier: "Professional",
+      icon: <FiServer className="text-teal-500" size={24} />,
+      price: "$1,499/month",
+      description:
+        "Your own isolated environment within our shared cloud—performance + flexibility.",
+      features: [
+        { text: "Shared DB with dedicated schema", icon: <FiServer /> },
+        { text: "Advanced modules & analytics", icon: <FiBarChart2 /> },
+        { text: "Higher performance guarantees", icon: <FiZap /> },
+        { text: "Custom module toggling", icon: <FiCode /> },
+      ],
+      cta: "Get Started",
+      bestFor: "Growing institutions",
+      popular: true,
+    },
+    {
+      name: "Dedicated Database",
+      tier: "Enterprise",
+      icon: <FiShield className="text-purple-600" size={24} />,
+      price: "Custom Pricing",
+      description:
+        "Enterprise-grade security, control, and performance—your own cloud, your way.",
+      features: [
+        { text: "Full database isolation", icon: <FiShield /> },
+        { text: "White-labeling & branding", icon: <FiCode /> },
+        { text: "99.9% uptime SLA", icon: <FiZap /> },
+        { text: "Dedicated account manager", icon: <FiHeadphones /> },
+        { text: "Compliance-ready (GDPR, etc.)", icon: <FiShield /> },
+      ],
+      cta: "Contact Sales",
+      bestFor: "Large universities & enterprises",
+    },
+  ];
+
+  const addOns = [
+    { name: "Custom Domain", price: "$99/month" },
+    { name: "Advanced Analytics", price: "$299/month" },
+    { name: "LMS/ERP Integration", price: "From $499" },
+    { name: "Custom Mobile App", price: "From $9,999" },
+    { name: "Security Audit", price: "$2,500/audit" },
+  ];
+
+  return (
+    <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Flexible Plans for Every Institution
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Scale from basic to enterprise with our architecture-driven pricing
+          </p>
+        </div>
+
+        {/* Pricing Tiers */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ y: -10 }}
+              className={`relative rounded-2xl overflow-hidden shadow-lg ${
+                plan.popular
+                  ? "border-t-4 border-cyan-500"
+                  : "border-t-4 border-transparent"
+              }`}
+            >
+              {plan.popular && (
+                <div className="absolute top-0 right-0 bg-cyan-500 text-white px-4 py-1 text-xs font-bold rounded-bl-lg">
+                  MOST POPULAR
+                </div>
+              )}
+              <div className="bg-white p-8">
+                <div className="flex items-center mb-4">
+                  <div className="mr-3 p-2 bg-cyan-50 rounded-lg">
+                    {plan.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {plan.name}
+                    </h3>
+                    <span className="text-sm text-gray-500">{plan.tier}</span>
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {plan.price}
+                  </div>
+                  <p className="text-gray-600">{plan.description}</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className="text-cyan-500 mr-2 mt-0.5">
+                        {feature.icon}
+                      </span>
+                      <span className="text-gray-700">{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className={`w-full py-3 rounded-lg font-bold ${
+                    plan.popular
+                      ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white hover:shadow-lg"
+                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                  }`}
+                >
+                  {plan.cta}
+                </button>
+                <div className="mt-3 text-sm text-gray-500 text-center">
+                  Best for: {plan.bestFor}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Add-Ons */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            Premium Add-Ons
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {addOns.map((addon, index) => (
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg p-4 text-center hover:border-cyan-300 transition-colors"
+              >
+                <div className="text-sm font-medium text-gray-900 mb-1">
+                  {addon.name}
+                </div>
+                <div className="text-xs text-gray-600">{addon.price}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-4">
+              Need custom solutions? Our team can build tailored integrations
+              for your specific needs.
+            </p>
+            <button className="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium text-cyan-600 hover:bg-cyan-50">
+              Request Custom Solution <FiChevronRight className="ml-1" />
+            </button>
+          </div>
+        </div>
+
+        {/* Upselling Path */}
+        <div className="mt-20 text-center">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            Simple Growth Path
+          </h3>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
+            <div className="flex items-center bg-cyan-50 px-4 py-2 rounded-lg">
+              <span className="text-cyan-600 font-medium">
+                1. Start with Shared-DB
+              </span>
+            </div>
+            <FiArrowRight className="text-gray-400 hidden md:block" />
+            <div className="flex items-center bg-teal-50 px-4 py-2 rounded-lg">
+              <span className="text-teal-600 font-medium">
+                2. Upgrade to Dedicated Schema
+              </span>
+            </div>
+            <FiArrowRight className="text-gray-400 hidden md:block" />
+            <div className="flex items-center bg-purple-50 px-4 py-2 rounded-lg">
+              <span className="text-purple-600 font-medium">
+                3. Graduate to Full DB
+              </span>
+            </div>
+          </div>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Begin with our affordable Standard plan and seamlessly upgrade as
+            your needs grow. We'll help you transition with zero downtime.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default LandingPage;
