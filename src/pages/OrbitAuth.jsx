@@ -39,6 +39,34 @@ const OrbitAuth = () => {
               Log in to your university admin portal
             </p>
 
+            {/* Orbit ID Login Option */}
+            <div className="mb-6 relative group">
+              <button
+                disabled
+                className="w-full flex items-center justify-center gap-3 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors cursor-not-allowed"
+              >
+                <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+                  <FiUsers className="text-gray-900" />
+                </div>
+                <span>Login with Orbit ID</span>
+              </button>
+
+              {/* Tooltip */}
+              <div className="absolute left-3/4 -translate-x-3/4 -top-8 mt-1 w-max bg-black/50 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                This feature is coming soon
+              </div>
+
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Use your Orbit account ID
+              </p>
+            </div>
+
+            <div className="flex items-center my-4">
+              <div className="flex-1 border-t border-gray-200"></div>
+              <span className="px-3 text-sm text-gray-500">OR</span>
+              <div className="flex-1 border-t border-gray-200"></div>
+            </div>
+
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

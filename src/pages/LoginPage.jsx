@@ -39,9 +39,17 @@ const LoginPage = () => {
     <div className="relative min-h-screen flex items-center justify-center bg-gray-50">
       <div className="absolute top-8 left-10">
         <Logo size="regular" />
+        {/* <h2 className="mt-2 text-lg font-semibold text-gray-700">
+          Techno Main SaltLake
+        </h2> */}
       </div>
       <div className="flex flex-col items-center gap-6">
-        <h1 className="text-2xl font-bold text-gray-800">Select Your Role</h1>
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Techno Main SaltLake
+          </h1>
+          <p className="text-lg text-gray-600">Select Your Role</p>
+        </div>
 
         <div className="grid grid-cols-3 gap-6">
           {roles.slice(0, 3).map((role) => (
