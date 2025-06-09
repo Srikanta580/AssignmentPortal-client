@@ -21,8 +21,9 @@ import {
 } from "lucide-react";
 import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
+import { logoutUser } from "../../features/auth/authAPI";
 import { resetForm } from "../../features/admin/formSlice";
+import { BetaTag, ComingSoonTag } from "../atoms/Tag";
 
 const navigation = {
   student: [
@@ -37,7 +38,12 @@ const navigation = {
       icon: NotebookTabs,
       href: "/dashboard/student/notes",
     },
-    { name: "Calendar", icon: Calendar, href: "/dashboard/student/calendar" },
+    {
+      name: "Calendar",
+      icon: Calendar,
+      href: "/dashboard/student/calendar",
+      isBeta: true,
+    },
     {
       name: "Minor Project",
       icon: Code,
@@ -62,7 +68,12 @@ const navigation = {
       icon: FileText,
       href: "/dashboard/faculty/assignments",
     },
-    { name: "Calendar", icon: Calendar, href: "/dashboard/faculty/calendar" },
+    {
+      name: "Calendar",
+      icon: Calendar,
+      href: "/dashboard/faculty/calendar",
+      isBeta: true,
+    },
     {
       name: "Notices",
       icon: MessageSquare,
@@ -80,6 +91,7 @@ const navigation = {
       name: "Analytics",
       icon: BarChart2,
       href: "/dashboard/admin/analytics",
+      isUpcoming: true,
     },
     {
       name: "Notifications",
@@ -93,12 +105,12 @@ const navigation = {
 const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { role } = useSelector((state) => state.auth.user);
+  const { role } = useSelector((state) => state.auth);
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutUser());
     dispatch(resetForm());
   };
 
@@ -133,14 +145,9 @@ const Sidebar = () => {
       </div>
 
       <div className="p-2 border-b border-secondary">
-        <select
-          className="w-full bg-dark text-light py-2 px-3 rounded"
-          value={role}
-        >
-          <option value={role}>
-            {role.charAt(0).toUpperCase() + role.slice(1)} View
-          </option>
-        </select>
+        <p className="w-full bg-dark text-light py-2 px-3 rounded">
+          {role.charAt(0).toUpperCase() + role.slice(1)} View
+        </p>
       </div>
 
       <nav className="flex-1 pt-4 pb-4 overflow-y-auto">
@@ -162,6 +169,8 @@ const Sidebar = () => {
               >
                 <item.icon className="w-5 h-5 mr-3" />
                 <span>{item.name}</span>
+                {item.isBeta && <BetaTag className="ml-2" />}
+                {item.isUpcoming && <ComingSoonTag className="ml-2" />}
               </NavLink>
             </li>
           ))}

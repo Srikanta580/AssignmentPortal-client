@@ -7,6 +7,7 @@ import {
   Users,
   CheckCircle,
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 // Sample data
 const classes = [
@@ -82,11 +83,12 @@ const schedule = [
 ];
 
 const FacultyDashboard = () => {
+  const faculty = useSelector((state) => state.auth.user);
   return (
     <div className="w-full mx-auto text-dark space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-primary">Faculty Dashboard</h1>
+        <h1 className="text-2xl font-bold text-primary">Dashboard</h1>
         <div className="flex items-center space-x-2 text-primary">
           <Clock className="inline mr-1 w-5 h-5" /> Today: April 4, 2025
         </div>
@@ -95,7 +97,7 @@ const FacultyDashboard = () => {
       {/* Welcome Card (gradient stays as-is) */}
       <div className="bg-gradient-to-r from-secondary to-primary text-white rounded-2xl p-6 shadow-lg">
         <h2 className="text-2xl font-semibold mb-2">
-          Welcome back, Dr. Johnson!
+          Welcome back, {faculty.firstName}!
         </h2>
         <p>
           You have 3 classes today and 58 assignments to grade. Office hours are

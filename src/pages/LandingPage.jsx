@@ -1,706 +1,603 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  FiArrowRight,
+  FiCheck,
+  FiLock,
+  FiShield,
+  FiUserCheck,
+  FiTrendingUp,
+  FiBriefcase,
+  FiBook,
+  FiUsers,
+  FiClipboard,
+  FiBarChart2,
+  FiFileText,
+  FiAward,
+  FiTool,
+  FiSearch,
+} from "react-icons/fi";
 import Logo from "../components/atoms/Logo";
+import { Link } from "react-router-dom";
 
-// Header Component
-const Header = () => (
-  <header className="bg-white shadow-sm">
-    <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-      <div className="flex items-center">
-        <Logo size="regular" />
-      </div>
-      <nav className="hidden md:flex space-x-8">
-        <a
-          href="#features"
-          className="text-dark hover:text-secondary transition"
-        >
-          Features
-        </a>
-        <a
-          href="#how-it-works"
-          className="text-dark hover:text-secondary transition"
-        >
-          How It Works
-        </a>
-        <a href="#alumni" className="text-dark hover:text-secondary transition">
-          Alumni Connect
-        </a>
-        <a href="#faq" className="text-dark hover:text-secondary transition">
-          FAQ
-        </a>
-      </nav>
-      <div className="flex space-x-4">
-        <Link
-          to="/login"
-          className="bg-accent hover:bg-secondary hover:text-white text-dark px-4 py-2 rounded-lg transition"
-        >
-          Log In
-        </Link>
-      </div>
-    </div>
-  </header>
-);
+const LandingPage = () => {
+  const [activeTab, setActiveTab] = useState("universities");
+  const [isScrolled, setIsScrolled] = useState(false);
 
-// Hero Component with Hexagonal Pattern
-const Hero = () => (
-  <section className="bg-[#E9D8A6] py-20 relative overflow-hidden">
-    {/* Decorative hexagon pattern */}
-    <div className="absolute inset-0 opacity-10">
-      <div className="absolute -left-16 top-20 w-64 h-64 bg-primary rounded-full"></div>
-      <div className="absolute right-40 bottom-10 w-40 h-40 bg-secondary rounded-full"></div>
-      <div className="absolute left-1/3 -bottom-20 w-80 h-80 bg-[#EE9B00] rounded-full"></div>
-    </div>
-
-    <div className="container mx-auto px-4 relative z-10">
-      <div className="flex flex-col md:flex-row items-center">
-        <div className="md:w-1/2 mb-8 md:mb-0">
-          <h1 className="text-4xl md:text-5xl font-bold text-dark mb-4">
-            Elevate Your Academic Experience
-          </h1>
-          <p className="text-lg text-dark opacity-80 mb-8">
-            A modern platform designed by students, for students – manage
-            assignments, collaborate with peers, and build your professional
-            portfolio.
-          </p>
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <button className="bg-[#EE9B00] hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-lg transition">
-              Get Started
-            </button>
-            <button className="bg-primary hover:bg-[#003844] text-white px-6 py-3 rounded-lg text-lg transition">
-              Take a Tour
-            </button>
-          </div>
-        </div>
-        <div className="md:w-1/2 relative">
-          <div className="absolute -right-4 -bottom-4 w-full h-full bg-secondary rounded-lg"></div>
-          <img
-            src="/assets/dashboard.jpg"
-            alt="Dashboard preview"
-            className="rounded-lg shadow-lg relative z-10 border-4 border-white"
-          />
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// Feature Card Component
-const FeatureCard = ({ icon, title, description }) => (
-  <div className="bg-accent p-6 rounded-xl shadow-md border border-secondary hover:shadow-lg transition transform hover:-translate-y-1">
-    <div className="text-[#EE9B00] mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold mb-2 text-dark">{title}</h3>
-    <p className="text-dark opacity-75">{description}</p>
-  </div>
-);
-
-// Features Section with Asymmetrical Layout
-const Features = () => {
-  // Sample icons (would be replaced with actual icons)
-  const clipboardIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      📋
-    </div>
-  );
-  const usersIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      👥
-    </div>
-  );
-  const chartIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      📊
-    </div>
-  );
-  const calendarIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      📅
-    </div>
-  );
-  const badgeIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      🏆
-    </div>
-  );
-  const lockIcon = (
-    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-primary text-xl">
-      🔒
-    </div>
-  );
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <section id="features" className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-4">
-            Powerful Features
-          </h2>
-          <p className="text-dark opacity-75 max-w-2xl mx-auto">
-            Our platform offers everything you need to excel in your academic
-            career and build a professional portfolio.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
+      {/* Navigation */}
+      <header
+        className={`fixed w-full z-50 transition-all duration-300 ${
+          isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <Logo size="small" />
+            </div>
 
-        {/* Asymmetrical layout with main feature at top */}
-        <div className="mb-8">
-          <div className="bg-[#E9D8A6] p-8 rounded-xl shadow-md flex flex-col md:flex-row items-center">
-            <div className="md:w-1/3 mb-6 md:mb-0">
-              {clipboardIcon}
-              <h3 className="text-2xl font-bold mt-4 text-dark">
-                Assignment Management
-              </h3>
-              <p className="text-dark opacity-75 mt-2">
-                Our flagship feature that lets you organize assignments by
-                course, due date, and priority. Never miss a deadline again.
+            <nav className="hidden md:flex space-x-8">
+              <button
+                onClick={() => setActiveTab("universities")}
+                className={`font-medium transition-colors ${
+                  activeTab === "universities"
+                    ? "text-cyan-600"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Universities
+              </button>
+              <button
+                onClick={() => setActiveTab("students")}
+                className={`font-medium transition-colors ${
+                  activeTab === "students"
+                    ? "text-cyan-600"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Students
+              </button>
+              <button
+                onClick={() => setActiveTab("employers")}
+                className={`font-medium transition-colors ${
+                  activeTab === "employers"
+                    ? "text-cyan-600"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Employers
+              </button>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/auth"
+                className="text-gray-600 font-medium hover:text-gray-900 transition-colors"
+              >
+                Sign In
+              </Link>
+              <button className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all">
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        {/* Hero Section */}
+        <section className="pt-32 pb-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center max-w-3xl mx-auto"
+            >
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                {activeTab === "universities"
+                  ? "Transform University Management"
+                  : activeTab === "students"
+                  ? "Empower Your Academic Journey"
+                  : "Discover Top Talent Efficiently"}
+              </h1>
+              <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                {activeTab === "universities"
+                  ? "A unified platform to manage administration, students, and employer partnerships seamlessly."
+                  : activeTab === "students"
+                  ? "Build your future with verified credentials, job opportunities, and career development tools."
+                  : "Streamline hiring with verified student profiles, campus recruitment, and talent matching."}
+              </p>
+
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-8 py-4 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  Get Started Free
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-white text-cyan-600 border-2 border-cyan-100 px-8 py-4 rounded-xl font-medium text-lg hover:bg-cyan-50 transition-all"
+                >
+                  Schedule a Demo
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-20 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <motion.h2
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+              >
+                {activeTab === "universities"
+                  ? "Comprehensive University Solutions"
+                  : activeTab === "students"
+                  ? "Everything Students Need to Succeed"
+                  : "Powerful Tools for Employers"}
+              </motion.h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                {activeTab === "universities"
+                  ? "Streamline operations and enhance student outcomes with our integrated platform"
+                  : activeTab === "students"
+                  ? "Access tools and opportunities to build your career from day one"
+                  : "Find, evaluate, and hire the best talent from universities nationwide"}
               </p>
             </div>
-            <div className="md:w-2/3 md:pl-12">
-              <img
-                src="/assets/assignment-dashboard.png"
-                alt="Assignment Dashboard"
-                className="w-full h-[35rem] rounded-lg shadow-md border-2 border-secondary"
-              />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {activeTab === "universities" && (
+                <>
+                  <FeatureCard
+                    icon={<FiUsers className="text-2xl" />}
+                    title="Admin & Faculty Management"
+                    description="Centralized system for managing staff, faculty, and administrative workflows."
+                  />
+                  <FeatureCard
+                    icon={<FiClipboard className="text-2xl" />}
+                    title="Assignment & Grading"
+                    description="Streamlined tools for creating, distributing, and grading assignments."
+                  />
+                  <FeatureCard
+                    icon={<FiBarChart2 className="text-2xl" />}
+                    title="Attendance & Reporting"
+                    description="Automated attendance tracking and comprehensive analytics dashboard."
+                  />
+                  <FeatureCard
+                    icon={<FiFileText className="text-2xl" />}
+                    title="Digital Forms & Surveys"
+                    description="Create custom forms and surveys for students, staff, and research."
+                  />
+                  <FeatureCard
+                    icon={<FiAward className="text-2xl" />}
+                    title="Accreditation Tools"
+                    description="Prepare for accreditation with organized documentation and reporting."
+                  />
+                  <FeatureCard
+                    icon={<FiTool className="text-2xl" />}
+                    title="Employer Partnership Hub"
+                    description="Manage industry relationships and create opportunities for students."
+                  />
+                </>
+              )}
+
+              {activeTab === "students" && (
+                <>
+                  <FeatureCard
+                    icon={<FiUserCheck className="text-2xl" />}
+                    title="Verified Digital Profile"
+                    description="Create a trusted profile with verified academic credentials."
+                  />
+                  <FeatureCard
+                    icon={<FiFileText className="text-2xl" />}
+                    title="Smart Resume Builder"
+                    description="Build professional resumes with university-verified accomplishments."
+                  />
+                  <FeatureCard
+                    icon={<FiBriefcase className="text-2xl" />}
+                    title="Internship & Job Board"
+                    description="Access exclusive opportunities from employer partners."
+                  />
+                  <FeatureCard
+                    icon={<FiTrendingUp className="text-2xl" />}
+                    title="Skill Roadmap"
+                    description="Personalized learning paths to develop in-demand skills."
+                  />
+                  <FeatureCard
+                    icon={<FiBook className="text-2xl" />}
+                    title="Digital Portfolio"
+                    showcase
+                    description="Showcase projects, research, and accomplishments to employers."
+                  />
+                  <FeatureCard
+                    icon={<FiUsers className="text-2xl" />}
+                    title="Mentorship Network"
+                    description="Connect with alumni and industry professionals for guidance."
+                  />
+                </>
+              )}
+
+              {activeTab === "employers" && (
+                <>
+                  <FeatureCard
+                    icon={<FiSearch className="text-2xl" />}
+                    title="Talent Discovery"
+                    description="Find qualified candidates with verified skills and credentials."
+                  />
+                  <FeatureCard
+                    icon={<FiUserCheck className="text-2xl" />}
+                    title="Verified Profiles"
+                    description="Access student profiles with university-verified information."
+                  />
+                  <FeatureCard
+                    icon={<FiClipboard className="text-2xl" />}
+                    title="Pre-screening Tools"
+                    description="Efficiently evaluate candidates with customizable assessments."
+                  />
+                  <FeatureCard
+                    icon={<FiTool className="text-2xl" />}
+                    title="Campus Hiring Automation"
+                    description="Streamline campus recruitment with scheduling and management tools."
+                  />
+                  <FeatureCard
+                    icon={<FiAward className="text-2xl" />}
+                    title="Employer Branding"
+                    showcase
+                    description="Showcase your company culture and opportunities to students."
+                  />
+                  <FeatureCard
+                    icon={<FiBarChart2 className="text-2xl" />}
+                    title="Analytics Dashboard"
+                    description="Track hiring metrics and candidate pipeline performance."
+                  />
+                </>
+              )}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Grid layout for remaining features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <FeatureCard
-            icon={usersIcon}
-            title="Group Collaboration"
-            description="Work seamlessly with classmates on group projects with real-time collaboration tools."
-          />
-          <FeatureCard
-            icon={chartIcon}
-            title="Progress Tracking"
-            description="Visualize your academic progress and identify areas for improvement."
-          />
-          <FeatureCard
-            icon={calendarIcon}
-            title="Smart Scheduling"
-            description="AI-powered scheduling suggestions to optimize your study time and workload."
-          />
-          <FeatureCard
-            icon={badgeIcon}
-            title="Portfolio Builder"
-            description="Showcase your best work and academic achievements in a professional portfolio."
-          />
-          <FeatureCard
-            icon={lockIcon}
-            title="Secure Submissions"
-            description="Submit assignments with confidence using our secure and reliable submission system."
-          />
-        </div>
-      </div>
-    </section>
-  );
-};
+        {/* Trust & Security Section */}
+        <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-cyan-50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Trusted by Leading Institutions
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Enterprise-grade security and compliance for sensitive
+                educational data
+              </p>
+            </div>
 
-// How It Works Section with Side Numbering
-const HowItWorks = () => {
-  const steps = [
-    {
-      number: "01",
-      title: "Create an Account",
-      description:
-        "Sign up with your college email address and set up your profile.",
-    },
-    {
-      number: "02",
-      title: "Organize Your Courses",
-      description: "Add your current courses and import your syllabus details.",
-    },
-    {
-      number: "03",
-      title: "Manage Assignments",
-      description:
-        "Track deadlines, submit work, and receive feedback all in one place.",
-    },
-    {
-      number: "04",
-      title: "Build Your Portfolio",
-      description:
-        "Showcase your best assignments and projects for future opportunities.",
-    },
-  ];
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              <SecurityFeature
+                icon={<FiLock className="text-3xl" />}
+                title="End-to-End Encryption"
+                description="All data is encrypted at rest and in transit with industry-leading protocols."
+              />
+              <SecurityFeature
+                icon={<FiShield className="text-3xl" />}
+                title="Compliance Certified"
+                description="Fully compliant with FERPA, GDPR, and global data protection standards."
+              />
+              <SecurityFeature
+                icon={<FiUserCheck className="text-3xl" />}
+                title="Identity Verification"
+                description="Multi-factor authentication and verified identity for all users."
+              />
+            </div>
 
-  return (
-    <section id="how-it-works" className="py-16 bg-primary">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">How It Works</h2>
-          <p className="text-white opacity-80 max-w-2xl mx-auto">
-            Getting started with EduAssign is easy. Follow these simple steps to
-            enhance your academic experience.
-          </p>
-        </div>
-
-        <div className="space-y-6 max-w-4xl mx-auto">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden shadow-lg"
-            >
-              <div className="md:w-1/4 bg-secondary text-white p-6 flex items-center justify-center">
-                <span className="text-5xl font-bold">{step.number}</span>
-              </div>
-              <div className="md:w-3/4 p-6">
-                <h3 className="text-xl font-semibold mb-2 text-dark">
-                  {step.title}
-                </h3>
-                <p className="text-dark opacity-75">{step.description}</p>
+            <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row items-center">
+                <div className="md:w-2/3 mb-8 md:mb-0 md:pr-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Verified Academic Credentials
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Our blockchain-verified credential system ensures academic
+                    records are tamper-proof and instantly verifiable by
+                    employers and institutions.
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-center">
+                      <FiCheck className="text-green-500 mr-2" />
+                      <span>
+                        Instant verification of degrees and certifications
+                      </span>
+                    </li>
+                    <li className="flex items-center">
+                      <FiCheck className="text-green-500 mr-2" />
+                      <span>
+                        Reduced fraud and credential misrepresentation
+                      </span>
+                    </li>
+                    <li className="flex items-center">
+                      <FiCheck className="text-green-500 mr-2" />
+                      <span>
+                        Student-controlled sharing with privacy controls
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="md:w-1/3 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-xl p-6 text-white">
+                  <div className="text-5xl font-bold mb-2">99.99%</div>
+                  <div className="text-lg">Uptime Guarantee</div>
+                  <div className="mt-4 text-sm">
+                    Enterprise-grade reliability for critical academic
+                    operations
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-20 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Success Stories
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Hear from universities, students, and employers transforming
+                education and careers
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <TestimonialCard
+                quote="Orbit reduced our administrative workload by 40% and improved student-employer connections significantly."
+                author="Dr. Sarah Johnson"
+                role="Dean of Academic Affairs"
+                organization="Stanford University"
+              />
+              <TestimonialCard
+                quote="As a computer science student, I landed my dream internship through the platform and built a portfolio that impressed employers."
+                author="Alex Martinez"
+                role="Computer Science Graduate"
+                organization="MIT"
+                highlight
+              />
+              <TestimonialCard
+                quote="Hiring through Orbit cut our campus recruitment time in half while improving candidate quality."
+                author="Michael Chen"
+                role="Talent Acquisition Director"
+                organization="Google"
+              />
+            </div>
+
+            <div className="mt-16">
+              <h3 className="text-center text-xl font-semibold text-gray-700 mb-8">
+                Trusted by leading institutions and companies
+              </h3>
+              <div className="flex flex-wrap justify-center gap-10">
+                {[
+                  "Stanford",
+                  "MIT",
+                  "Harvard",
+                  "Google",
+                  "Microsoft",
+                  "Amazon",
+                ].map((logo, index) => (
+                  <div
+                    key={index}
+                    className="text-2xl font-bold text-gray-400 opacity-80"
+                  >
+                    {logo}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-20 px-4 bg-gradient-to-r from-teal-600 to-cyan-700">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to transform your educational experience?
+            </h2>
+            <p className="text-xl text-cyan-100 mb-10 max-w-2xl mx-auto">
+              Join thousands of universities, students, and employers already
+              using Orbit
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-cyan-700 px-8 py-4 rounded-xl font-bold text-lg shadow-lg"
+              >
+                Start Free Trial
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg"
+              >
+                Schedule a Demo
+              </motion.button>
+            </div>
+
+            <p className="mt-8 text-cyan-100 text-sm">
+              No credit card required • 14-day free trial • Cancel anytime
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-gray-900 text-gray-400 py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Logo size="small" />
+              </div>
+              <p className="mb-4">
+                Connecting education to opportunity through innovative
+                technology.
+              </p>
+              <div className="flex space-x-4">
+                {[
+                  /* Social icons would go here */
+                ].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center"
+                  >
+                    {/* Social icon */}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-white font-medium mb-4">Platform</h4>
+              <ul className="space-y-2">
+                {[
+                  "Universities",
+                  "Students",
+                  "Employers",
+                  "Features",
+                  "Pricing",
+                ].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="hover:text-white transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-medium mb-4">Resources</h4>
+              <ul className="space-y-2">
+                {[
+                  "Blog",
+                  "Help Center",
+                  "Documentation",
+                  "Community",
+                  "Webinars",
+                ].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="hover:text-white transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-white font-medium mb-4">Company</h4>
+              <ul className="space-y-2">
+                {["About Us", "Careers", "Contact", "Partners", "Legal"].map(
+                  (item) => (
+                    <li key={item}>
+                      <a
+                        href="#"
+                        className="hover:text-white transition-colors"
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+            <p>© 2025 Orbit. All rights reserved.</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </footer>
+    </div>
   );
 };
 
-// Alumni Project Card Component with Angular Design
-const AlumniProjectCard = ({
-  name,
-  year,
-  major,
-  projectTitle,
-  description,
-  image,
-}) => (
-  <div className="bg-accent rounded-lg shadow-md overflow-hidden transform transition hover:scale-105">
-    <div className="relative">
-      <img
-        src={image}
-        alt={projectTitle}
-        className="w-full h-48 object-cover"
-      />
-      <div className="absolute top-0 right-0 bg-[#EE9B00] text-white px-3 py-1 rounded-bl-lg">
-        {year}
-      </div>
+// Reusable Components
+const FeatureCard = ({ icon, title, description, showcase = false }) => (
+  <motion.div
+    whileHover={{ y: -10 }}
+    className={`bg-gradient-to-b ${
+      showcase
+        ? "from-cyan-50 to-white border-t-4 border-cyan-500"
+        : "from-white to-gray-50"
+    } rounded-2xl p-6 shadow-sm hover:shadow-md transition-all`}
+  >
+    <div
+      className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${
+        showcase ? "bg-cyan-100 text-cyan-600" : "bg-gray-100 text-gray-600"
+      }`}
+    >
+      {icon}
     </div>
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="font-semibold text-lg text-dark">{name}</h3>
-        <span className="text-sm text-dark opacity-75">{major}</span>
-      </div>
-      <h4 className="text-primary font-medium mb-2">{projectTitle}</h4>
-      <p className="text-dark opacity-75 text-sm mb-4">{description}</p>
-      <button className="text-primary hover:text-[#003844] text-sm font-medium flex items-center">
-        View Project
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 ml-1"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </button>
+    <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+    <p className="text-gray-600">{description}</p>
+  </motion.div>
+);
+
+const SecurityFeature = ({ icon, title, description }) => (
+  <div className="bg-white rounded-xl p-6 shadow-sm">
+    <div className="w-14 h-14 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center mb-4">
+      {icon}
     </div>
+    <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+    <p className="text-gray-600">{description}</p>
   </div>
 );
 
-// Connect Alumni Section with Hexagonal Element
-const ConnectAlumni = () => {
-  const [showAll, setShowAll] = useState(false);
-
-  // Sample alumni projects data
-  const alumniProjects = [
-    {
-      name: "Alex Johnson",
-      year: "2023",
-      major: "Computer Science",
-      projectTitle: "AI-Powered Study Assistant",
-      description:
-        "A machine learning model that helps students optimize their study schedules based on learning patterns.",
-      image: "/api/placeholder/400/300",
-    },
-    {
-      name: "Maya Patel",
-      year: "2022",
-      major: "Graphic Design",
-      projectTitle: "Sustainable Campus Initiative",
-      description:
-        "A comprehensive branding and awareness campaign for campus sustainability efforts.",
-      image: "/api/placeholder/400/300",
-    },
-    {
-      name: "Tyler Rodriguez",
-      year: "2023",
-      major: "Engineering",
-      projectTitle: "Solar-Powered Water Purification",
-      description:
-        "A prototype for an affordable solar-powered water purification system for developing regions.",
-      image: "/api/placeholder/400/300",
-    },
-    {
-      name: "Sarah Kim",
-      year: "2021",
-      major: "Business Analytics",
-      projectTitle: "Local Business Recovery Plan",
-      description:
-        "Data-driven strategies for local businesses to recover from economic downturns.",
-      image: "/api/placeholder/400/300",
-    },
-    {
-      name: "Jordan Wilson",
-      year: "2022",
-      major: "Environmental Science",
-      projectTitle: "Campus Carbon Footprint Analysis",
-      description:
-        "A detailed analysis of the university's carbon footprint with recommendations for reduction.",
-      image: "/api/placeholder/400/300",
-    },
-    {
-      name: "Aisha Mohammed",
-      year: "2023",
-      major: "Digital Media",
-      projectTitle: "Virtual Campus Tour Experience",
-      description:
-        "An immersive virtual reality tour of the campus for prospective students.",
-      image: "/api/placeholder/400/300",
-    },
-  ];
-
-  const displayedProjects = showAll
-    ? alumniProjects
-    : alumniProjects.slice(0, 3);
-
-  return (
-    <section id="alumni" className="py-16 relative bg-[#E9D8A6]">
-      {/* Decorative element */}
-      <div className="absolute left-0 top-0 w-32 h-32 bg-secondary opacity-20 rounded-br-full"></div>
-      <div className="absolute right-0 bottom-0 w-32 h-32 bg-primary opacity-20 rounded-tl-full"></div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-4">
-            Connect Alumni
-          </h2>
-          <p className="text-dark opacity-75 max-w-2xl mx-auto">
-            Explore outstanding projects from our alumni and get inspired for
-            your own academic journey.
-          </p>
+const TestimonialCard = ({
+  quote,
+  author,
+  role,
+  organization,
+  highlight = false,
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className={`rounded-2xl p-6 ${
+      highlight
+        ? "bg-gradient-to-br from-cyan-50 to-white border-t-4 border-cyan-500"
+        : "bg-gray-50"
+    }`}
+  >
+    <div className="text-cyan-600 text-5xl mb-4">"</div>
+    <p className="text-gray-700 mb-6 text-lg">{quote}</p>
+    <div className="flex items-center">
+      <div className="w-12 h-12 rounded-full bg-gray-200 mr-4"></div>
+      <div>
+        <div className="font-bold text-gray-900">{author}</div>
+        <div className="text-gray-600">
+          {role}, {organization}
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedProjects.map((project, index) => (
-            <AlumniProjectCard key={index} {...project} />
-          ))}
-        </div>
-
-        {!showAll && alumniProjects.length > 3 && (
-          <div className="text-center mt-12">
-            <button
-              onClick={() => setShowAll(true)}
-              className="bg-[#EE9B00] hover:bg-orange-600 text-white font-medium px-8 py-3 rounded-lg shadow-md transition"
-            >
-              Load More Projects
-            </button>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-// FAQ Component with Custom Styled Accordion
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const faqs = [
-    {
-      question: "How do I join the platform?",
-      answer:
-        "You can sign up using your college email address. Once verified, you'll have access to all features of the platform.",
-    },
-    {
-      question: "Is there a mobile application available?",
-      answer:
-        "Yes, we offer mobile apps for both iOS and Android devices, allowing you to manage your assignments on the go.",
-    },
-    {
-      question:
-        "Can I integrate this with my college's learning management system?",
-      answer:
-        "We support integration with major LMS platforms including Canvas, Blackboard, and Moodle. Contact your institution's IT department for implementation details.",
-    },
-    {
-      question: "How secure is my submitted work?",
-      answer:
-        "All submissions are encrypted and stored securely. We implement industry-standard security measures to protect your intellectual property.",
-    },
-    {
-      question: "Can alumni still access their previous work?",
-      answer:
-        "Yes, alumni retain access to their portfolio and submitted work even after graduation, making it easy to showcase your achievements to potential employers.",
-    },
-  ];
-
-  return (
-    <section id="faq" className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-4">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-dark opacity-75 max-w-2xl mx-auto">
-            Find answers to common questions about our platform and how it can
-            benefit your academic journey.
-          </p>
-        </div>
-
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <div key={index} className="mb-4">
-              <button
-                className={`flex justify-between items-center w-full text-left p-4 rounded-lg font-medium ${
-                  openIndex === index
-                    ? "bg-primary text-white"
-                    : "bg-accent text-dark hover:bg-secondary hover:text-white"
-                } transition`}
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                <span>{faq.question}</span>
-                <svg
-                  className={`w-5 h-5 transform ${
-                    openIndex === index ? "rotate-180" : ""
-                  } transition-transform`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              {openIndex === index && (
-                <div className="mt-1 p-4 bg-[#E9D8A6] rounded-lg text-dark">
-                  {faq.answer}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// CTA Section with Diagonal Design
-const CTA = () => (
-  <section className="py-16 bg-primary relative overflow-hidden">
-    {/* Diagonal decorative elements */}
-    <div className="absolute -left-16 -top-16 w-64 h-64 bg-secondary opacity-30 transform rotate-45"></div>
-    <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-[#EE9B00] opacity-30 transform rotate-45"></div>
-
-    <div className="container mx-auto px-4 text-center relative z-10">
-      <h2 className="text-3xl font-bold text-white mb-4">
-        Ready to Elevate Your Academic Experience?
-      </h2>
-      <p className="text-white opacity-80 mb-8 max-w-2xl mx-auto">
-        Join thousands of students who are already benefiting from our
-        comprehensive assignment management platform.
-      </p>
-      <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-        <button className="bg-[#EE9B00] hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium transition">
-          Sign Up Now
-        </button>
-        <button className="bg-transparent hover:bg-secondary text-white border border-white px-8 py-3 rounded-lg font-medium transition">
-          Request Demo
-        </button>
       </div>
     </div>
-  </section>
+  </motion.div>
 );
-
-// Footer Component
-const Footer = () => (
-  <footer className="bg-dark text-white py-12">
-    <div className="container mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <div className="text-2xl font-bold mb-4 text-accent">Submit</div>
-          <p className="text-white opacity-60 mb-4">
-            Empowering students to excel through intelligent assignment
-            management.
-          </p>
-          <div className="flex space-x-4">
-            <a
-              href="#"
-              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
-            >
-              <span className="sr-only">Facebook</span>
-              <div>FB</div>
-            </a>
-            <a
-              href="#"
-              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
-            >
-              <span className="sr-only">Twitter</span>
-              <div>TW</div>
-            </a>
-            <a
-              href="#"
-              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
-            >
-              <span className="sr-only">Instagram</span>
-              <div>IG</div>
-            </a>
-            <a
-              href="#"
-              className="bg-secondary hover:bg-[#EE9B00] w-8 h-8 rounded-full flex items-center justify-center transition"
-            >
-              <span className="sr-only">LinkedIn</span>
-              <div>LI</div>
-            </a>
-          </div>
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-accent">Features</h3>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Assignment Management
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Group Collaboration
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Progress Tracking
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Portfolio Builder
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-accent">Resources</h3>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Help Center
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Blog
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Tutorials
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                API Documentation
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-accent">Company</h3>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                About Us
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Careers
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Privacy Policy
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-white opacity-60 hover:opacity-100 hover:text-[#EE9B00] transition"
-              >
-                Terms of Service
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="border-t border-secondary opacity-30 mt-12 pt-8 text-center text-white opacity-60 text-sm">
-        &copy; {new Date().getFullYear()} Submit. All rights reserved.
-      </div>
-    </div>
-  </footer>
-);
-
-// Main App Component
-const LandingPage = () => {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow">
-        <Hero />
-        <Features />
-        <HowItWorks />
-        <ConnectAlumni />
-        <FAQ />
-        <CTA />
-      </main>
-      <Footer />
-    </div>
-  );
-};
 
 export default LandingPage;

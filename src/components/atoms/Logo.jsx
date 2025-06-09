@@ -11,8 +11,12 @@ function Logo({ size }) {
     [size]
   );
 
-  const logoImgSize = useMemo(
-    () => (size === "large" ? "6rem" : size === "regular" ? "3rem" : "1.5rem"),
+  const logoImgWidth = useMemo(
+    () => (size === "large" ? "16rem" : size === "regular" ? "9rem" : "6rem"),
+    [size]
+  );
+  const logoImgHeight = useMemo(
+    () => (size === "large" ? "10rem" : size === "regular" ? "5rem" : "3.5rem"),
     [size]
   );
 
@@ -23,9 +27,8 @@ function Logo({ size }) {
       <img
         src="/assets/logo.png"
         alt="logo"
-        style={{ width: logoImgSize, height: logoImgSize }}
+        style={{ width: logoImgWidth, height: logoImgHeight }}
       />
-      Submit
     </div>
   );
 }

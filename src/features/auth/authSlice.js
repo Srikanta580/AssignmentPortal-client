@@ -1,26 +1,45 @@
+// src/redux/slices/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+import { login, logoutUser } from "./authAPI";
 
 const initialState = {
-  user: null, // Stores logged-in user details { id, name, role }
+  user: null,
+  role: null,
   isAuthenticated: false,
+  error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    loginSuccess: (state, action) => {
-      console.log("Called");
-      console.log(action.payload);
-      state.user = action.payload; // Set user details after login
-      state.isAuthenticated = true;
-    },
-    logout: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // LOGIN
+      .addCase(login.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.role = action.payload.role;
+        state.isAuthenticated = true;
+        state.error = null;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.user = null;
+        state.role = null;
+        state.isAuthenticated = false;
+        state.error = action.payload;
+      })
+
+      // LOGOUT
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.role = null;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
 export default authSlice.reducer;

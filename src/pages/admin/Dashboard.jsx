@@ -106,9 +106,7 @@ const AdminDashboard = () => {
   return (
     <div className="w-full mx-auto text-dark">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-primary">
-          Administration Dashboard
-        </h1>
+        <h1 className="text-2xl font-bold text-primary">Dashboard</h1>
         <div className="text-right">
           <p className="text-sm text-primary">Academic Year: 2024-2025</p>
           <p className="text-sm text-primary">Spring Semester</p>

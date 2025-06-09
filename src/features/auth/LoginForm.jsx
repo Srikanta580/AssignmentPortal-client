@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import roleIcons from "../../components/icons/roleIcons";
-import { loginSuccess } from "./authSlice";
+import { login } from "./authAPI";
 import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
@@ -16,10 +16,12 @@ const LoginForm = () => {
   const roleTitle =
     formattedRole.charAt(0).toUpperCase() + formattedRole.slice(1);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     console.log(`Logging in as ${roleTitle} with ID: ${userId}`);
-    dispatch(loginSuccess({ role: formattedRole }));
+    await dispatch(
+      login({ email: userId, password, role: formattedRole.toUpperCase() })
+    );
     navigate(`/dashboard/${formattedRole}`);
   };
 

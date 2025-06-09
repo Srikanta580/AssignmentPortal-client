@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { useSelector } from "react-redux";
-import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import LoginForm from "../features/auth/LoginForm";
 import RegisterForm from "../features/auth/RegisterForm";
@@ -12,18 +11,21 @@ import StudentRoutes from "./StudentRoutes";
 import CodeAnalyzer from "../pages/CodeAnalyzer";
 import FormPreview from "../pages/admin/forms/FormPreview";
 import FormSubmissionPage from "../pages/FormSubmissionPage";
-import Test from "../pages/test"; // Import the test page
+import LandingPage from "../pages/LandingPage";
+import OrbitAuth from "../pages/OrbitAuth";
+// import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
-  const user = useSelector((state) => state.auth.user); // Get logged-in user
+  const { role } = useSelector((state) => state.auth); // Get logged-in user
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/auth" element={<OrbitAuth />} />
         <Route path="/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
-        <Route path="/test" element={<Test/>} />
+        {/* <Route path="/test" element={<Test/>} /> */}
         <Route
           path="/dashboard"
           element={
@@ -32,13 +34,13 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         >
-          {user?.role === "admin" && (
+          {role === "admin" && (
             <Route path="admin/*" element={<AdminRoutes />} />
           )}
-          {user?.role === "faculty" && (
+          {role === "faculty" && (
             <Route path="faculty/*" element={<FacultyRoutes />} />
           )}
-          {user?.role === "student" && (
+          {role === "student" && (
             <Route path="student/*" element={<StudentRoutes />} />
           )}
           <Route path="*" element={<h1>Unauthorized or Page Not Found</h1>} />
