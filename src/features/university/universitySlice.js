@@ -4,6 +4,7 @@ import {
   submitUniversityVerification,
   setupUniversityAdmin,
   addUniversityAdmin,
+  getUniversityBySlug,
 } from "./universityAPI";
 
 const universitySlice = createSlice({
@@ -12,6 +13,8 @@ const universitySlice = createSlice({
     loading: false,
     error: null,
     message: null,
+    id: null,
+    name: "",
   },
   reducers: {
     clearStatus: (state) => {
@@ -45,6 +48,18 @@ const universitySlice = createSlice({
       })
       .addCase(addUniversityAdmin.fulfilled, (state, action) => {
         state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(getUniversityBySlug.fulfilled, (state, action) => {
+        state.loading = false;
+        state.id = action.payload.id;
+        state.name = action.payload.name;
+        state.success = action.payload.success;
+        state.message = action.payload.message;
+      })
+      .addCase(getUniversityBySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.success = action.payload.success;
         state.message = action.payload.message;
       });
   },

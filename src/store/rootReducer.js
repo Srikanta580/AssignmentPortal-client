@@ -7,6 +7,7 @@ import calendarReducer from "../features/calendar/calendarSlice";
 import classAssignmentReducer from "../features/admin/classAssignmentSlice";
 import formReducer from "../features/admin/formSlice";
 import adminReducer from "../features/admin/adminSlice";
+import universityReducer from "../features/university/universitySlice";
 
 const persistConfig = {
   key: "root", // Key for storage
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   calendar: calendarReducer,
   class: classAssignmentReducer,
   forms: formReducer,
+  university: universityReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

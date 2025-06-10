@@ -70,13 +70,26 @@ export const addUniversityAdmin = createAsyncThunk(
   "university/addAdmin",
   async (adminData, thunkAPI) => {
     try {
-      const response = await apiClient.post(
-        "/v1/university/add-admin",
-        adminData
-      );
+      const response = await apiClient.post("/university/add-admin", adminData);
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data || "Add admin failed");
+    }
+  }
+);
+
+export const getUniversityBySlug = createAsyncThunk(
+  "university/getUniversityBySlug",
+  async (slug, thunkAPI) => {
+    try {
+      const response = await apiClient.get(`/university/${slug}`);
+      return { ...response.data, success: true };
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        success: false,
+        message: "University fetch failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
     }
   }
 );

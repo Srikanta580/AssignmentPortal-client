@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import roleIcons from "../components/icons/roleIcons";
 import Logo from "../components/atoms/Logo";
+import { useEffect } from "react";
+import { getUniversityBySlug } from "../features/university/universityAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const RoleButton = ({ role, icon, route, isActive }) => {
   return (
@@ -35,6 +39,30 @@ const roles = [
 ];
 
 const LoginPage = () => {
+  const { "university-slug": universitySlug } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const university = useSelector((state) => state.university);
+  console.log(universitySlug);
+
+  useEffect(() => {
+    const fetchUniversity = async () => {
+      try {
+        const response = await dispatch(
+          getUniversityBySlug(universitySlug)
+        ).unwrap();
+        if (!response.success) {
+          navigate("/404"); // Custom 404 page route
+        }
+      } catch (err) {
+        console.error("University fetch error:", err);
+        navigate("/404"); // Redirect on 404 or any API error
+      }
+    };
+
+    fetchUniversity();
+  }, [dispatch, universitySlug, navigate]);
+
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-50">
       <div className="absolute top-8 left-10">
@@ -46,7 +74,7 @@ const LoginPage = () => {
       <div className="flex flex-col items-center gap-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Techno Main SaltLake
+            {university.name}
           </h1>
           <p className="text-lg text-gray-600">Select Your Role</p>
         </div>

@@ -371,12 +371,13 @@ export default function UniversityRegistrationForm({
             </motion.div>
           </AnimatePresence>
 
+          {/* Navigation Buttons */}
           {currentStep < 3 && (
             <div className="flex justify-end">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`btn ${btnprimary} mt-4`}
+                className="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg hover:shadow-md cursor-pointer"
               >
                 {isSubmitting ? "Submitting..." : "Continue"}
               </button>

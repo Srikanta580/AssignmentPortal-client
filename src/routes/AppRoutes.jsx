@@ -27,14 +27,15 @@ const AppRoutes = () => {
         <Route path="/orbit-admin" element={<OrbitAdminDashboard />} />
         <Route path="/auth" element={<OrbitAuth />} />
         <Route
-          path="/:university-orbit-id/admin"
-          element={<UniversityAdminDashboard />}
+          path="/:university/admin"
+          element={
+            <ProtectedRoute allowedRoles={["univadmin"]}>
+              <UniversityAdminDashboard />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/:university-orbit-id/login" element={<LoginPage />} />
-        <Route
-          path="/:university-orbit-id/login/:role"
-          element={<LoginForm />}
-        />
+        <Route path="/:university-slug/login" element={<LoginPage />} />
+        <Route path="/:university-slug/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
         {/* <Route path="/test" element={<Test/>} /> */}
         <Route
@@ -59,6 +60,7 @@ const AppRoutes = () => {
         <Route path="/codeanalyzer" element={<CodeAnalyzer />} />
         <Route path="/form-preview" element={<FormPreview />} />
         <Route path="/form/:formId" element={<FormSubmissionPage />} />
+        <Route path="/404" element={<NotFoundPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
