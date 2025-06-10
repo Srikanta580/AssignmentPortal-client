@@ -7,6 +7,9 @@ import {
   FiCheckCircle,
   FiXCircle,
 } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../features/auth/authAPI";
+import { useNavigate } from "react-router-dom";
 
 const UniversityAdminDashboard = () => {
   // Mock data - departments and access status
@@ -18,6 +21,14 @@ const UniversityAdminDashboard = () => {
     { name: "Arts & Humanities", access: false, lastActive: "Never" },
     { name: "Law", access: true, lastActive: "30 minutes ago" },
   ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const university = useSelector((state) => state.auth.user.university);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/auth");
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -28,7 +39,9 @@ const UniversityAdminDashboard = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center">
               <FiHome className="text-white" />
             </div>
-            <span className="text-xl font-semibold">University Portal</span>
+            <span className="text-xl font-semibold">
+              {university.name} Portal
+            </span>
           </div>
         </div>
 
@@ -50,7 +63,10 @@ const UniversityAdminDashboard = () => {
         </nav>
 
         <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200">
-          <button className="flex items-center text-gray-600 hover:text-gray-900">
+          <button
+            className="flex items-center text-gray-600 hover:text-gray-900"
+            onClick={handleLogout}
+          >
             <FiLogOut className="mr-3" />
             Log Out
           </button>

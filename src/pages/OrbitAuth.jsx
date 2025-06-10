@@ -12,10 +12,46 @@ import {
   FiArrowLeft,
 } from "react-icons/fi";
 import Logo from "../components/atoms/Logo";
+import UniversityRegistrationForm from "../components/forms/UniversityRegistrationForm";
+import { useDispatch } from "react-redux";
+import { login } from "../features/auth/authAPI";
+import { useNavigate } from "react-router-dom";
 
 const OrbitAuth = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loginFormData, setLoginFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
   const [isRegisteringUniversity, setIsRegisteringUniversity] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setLoginFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await dispatch(
+      login({
+        email: loginFormData.email,
+        password: loginFormData.password,
+        role: "UNIVADMIN",
+      })
+    ).unwrap();
+    console.log(response);
+    const route = response.user.university.name
+      .split(" ")
+      .join(" ", "-")
+      .toLowerCase();
+    navigate(`/${route}/admin`);
+  };
 
   // Main login page
   if (!isRegisteringUniversity) {
@@ -67,7 +103,7 @@ const OrbitAuth = () => {
               <div className="flex-1 border-t border-gray-200"></div>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   University Email
@@ -78,6 +114,9 @@ const OrbitAuth = () => {
                   </div>
                   <input
                     type="email"
+                    name="email"
+                    value={loginFormData.email}
+                    onChange={handleChange}
                     className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                     placeholder="admin@university.edu"
                   />
@@ -94,6 +133,9 @@ const OrbitAuth = () => {
                   </div>
                   <input
                     type="password"
+                    name="password"
+                    value={loginFormData.password}
+                    onChange={handleChange}
                     className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                     placeholder="••••••••"
                   />
@@ -274,7 +316,7 @@ const OrbitAuth = () => {
           </div>
 
           {/* Form Steps */}
-          <AnimatePresence mode="wait">
+          {/* <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
               initial={{ opacity: 0, x: 20 }}
@@ -493,7 +535,10 @@ const OrbitAuth = () => {
                 </div>
               )}
             </motion.div>
-          </AnimatePresence>
+          </AnimatePresence> */}
+          <UniversityRegistrationForm
+            setIsRegisteringUniversity={setIsRegisteringUniversity}
+          />
 
           {/* Navigation Buttons */}
           {currentStep < 4 && (
