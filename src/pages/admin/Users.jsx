@@ -27,9 +27,11 @@ const fieldConfig = {
   Student: [
     { name: "firstName", label: "First Name", type: "text", icon: "user" },
     { name: "lastName", label: "Last Name", type: "text", icon: "user-plus" },
+    {name: "gender", label: "Gender", type: "text", icon: "gender" },
     { name: "rollNo", label: "Roll No.", type: "text", icon: "hash" },
     { name: "admissionYear", label: "Admission Year", type: "text", icon: "calendar" },
     { name: "semester", label: "Semester", type: "text", icon: "book" },
+    {name: "section", label: "Section", type: "text", icon: "section" },
     { name: "email", label: "Email", type: "email", icon: "mail" },
     { name: "password", label: "Password", type: "password", icon: "lock" },
     { name: "phone", label: "Phone", type: "tel", icon: "phone" },
@@ -78,17 +80,18 @@ const UsersPage = () => {
     currentFacultyPage,
     totalFacultyPages,
   } = useSelector((state) => state?.admin);
-
+  const { id } = useSelector((state) => state?.university);
+  const { user } = useSelector((state) => state?.auth);
   const handleSemesterFilterChange = (e) => {
     setSemesterFilter(e.target.value);
   };
 
   useEffect(() => {
     if (activeTab === "Student") {
-      dispatch(fetchStudents({ page: 0, semester: semesterFilter }));
+      dispatch(fetchStudents({ universityId: id, departmentId: user?.department?.id, page: 0, semester: semesterFilter }));
       console.log("Fetching students...");
     } else if (activeTab === "Faculty") {
-      dispatch(fetchFaculties({ page: 0 }));
+      dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page: 0 }));
       console.log("Fetching faculties...");
     }
   }, [dispatch, activeTab, semesterFilter]);
@@ -125,8 +128,8 @@ const UsersPage = () => {
           <button
             onClick={() =>
               activeTab === "Student"
-                ? dispatch(fetchStudents({ page: currentPage - 1, semester: semesterFilter }))
-                : dispatch(fetchFaculties({ page: currentPage - 1 }))
+                ? dispatch(fetchStudents({ universityId: id, departmentId: user.departmentId, page: currentPage - 1, semester: semesterFilter }))
+                : dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page: currentPage - 1 }))
             }
             className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
           >
@@ -139,8 +142,8 @@ const UsersPage = () => {
             <button
               onClick={() =>
                 activeTab === "Student"
-                  ? dispatch(fetchStudents({ page, semester: semesterFilter }))
-                  : dispatch(fetchFaculties({ page }))
+                  ? dispatch(fetchStudents({ universityId: id, departmentId: user.departmentId, page, semester: semesterFilter }))
+                  : dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page }))
               }
               className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
             >
@@ -157,12 +160,12 @@ const UsersPage = () => {
             key={page}
             onClick={() =>
               activeTab === "Student"
-                ? dispatch(fetchStudents({ page, semester: semesterFilter }))
-                : dispatch(fetchFaculties({ page }))
+                ? dispatch(fetchStudents({ universityId: id, departmentId: user.departmentId, page, semester: semesterFilter }))
+                : dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page }))
             }
             className={`px-3 py-1 rounded cursor-pointer ${currentPage === page
-                ? "bg-primary text-white"
-                : "bg-light text-primary"
+              ? "bg-primary text-white"
+              : "bg-light text-primary"
               }`}
           >
             {page + 1}
@@ -177,8 +180,8 @@ const UsersPage = () => {
             <button
               onClick={() =>
                 activeTab === "Student"
-                  ? dispatch(fetchStudents({ page: totalPages - 1, semester: semesterFilter }))
-                  : dispatch(fetchFaculties({ page: totalPages - 1 }))
+                  ? dispatch(fetchStudents({ universityId: id, departmentId: user.departmentId, page: totalPages - 1, semester: semesterFilter }))
+                  : dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page: totalPages - 1 }))
               }
               className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
             >
@@ -191,8 +194,8 @@ const UsersPage = () => {
           <button
             onClick={() =>
               activeTab === "Student"
-                ? dispatch(fetchStudents({ page: currentPage + 1, semester: semesterFilter }))
-                : dispatch(fetchFaculties({ page: currentPage + 1 }))
+                ? dispatch(fetchStudents({ universityId: id, departmentId: user.departmentId, page: currentPage + 1, semester: semesterFilter }))
+                : dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page: currentPage + 1 }))
             }
             className="px-3 py-1 rounded cursor-pointer bg-light text-primary"
           >
@@ -217,9 +220,9 @@ const UsersPage = () => {
     try {
       let resultAction;
       if (formType === "Student") {
-        resultAction = await dispatch(addStudent(formData));
+        resultAction = await dispatch(addStudent({...formData, universityId: id, departmentId: user?.department?.id }));
       } else if (formType === "Faculty") {
-        resultAction = await dispatch(addFaculty(formData));
+        resultAction = await dispatch(addFaculty({...formData, universityId: id, departmentId: user?.department?.id }));
       }
       if (resultAction?.type.endsWith("/fulfilled")) {
         console.log(`${formType} added successfully:`, resultAction.payload);

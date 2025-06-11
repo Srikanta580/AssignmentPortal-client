@@ -111,6 +111,27 @@ const IconMap = {
       <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
     </svg>
   ),
+  gender: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path d="M10 2a4 4 0 110 8 4 4 0 010-8zm-6 14a6 6 0 1112 0H4z" />
+    </svg>
+  ),
+  section: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path d="M17.707 10.293l-7-7A1 1 0 009.586 3H4a1 1 0 00-1 1v5.586a1 1 0 00.293.707l7 7a1 1 0 001.414 0l6-6a1 1 0 000-1.414zM6 7a1 1 0 110-2 1 1 0 010 2z" />
+    </svg>
+  ),
+
 };
 
 export default IconMap;

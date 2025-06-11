@@ -17,6 +17,7 @@ const authSlice = createSlice({
     builder
       // LOGIN
       .addCase(login.fulfilled, (state, action) => {
+        console.log("Login successful:", action.payload);
         state.user = action.payload.user;
         state.role = action.payload.role;
         state.isAuthenticated = true;
