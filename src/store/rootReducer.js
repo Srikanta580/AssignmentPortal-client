@@ -12,7 +12,7 @@ import universityReducer from "../features/university/universitySlice";
 const persistConfig = {
   key: "root", // Key for storage
   storage, // Where to store data (localStorage)
-  whitelist: ["auth", "admin", "forms"], // Persist only auth (not products)
+  whitelist: ["auth", "admin", "forms", "university"], // Persist only auth (not products)
 };
 
 const rootReducer = combineReducers({
