@@ -290,3 +290,79 @@ export const addNotice = createAsyncThunk(
     }
   }
 );
+
+// Faculty Excel Upload
+export const uploadFacultyExcel = createAsyncThunk(
+  "admin/uploadFacultyExcel",
+  async (file, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await apiClient.post("/fileInput/uploadFacultyExcel", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Faculty Excel upload failed"
+      );
+    }
+  }
+);
+
+// Faculty CSV Upload
+export const uploadFacultyCsv = createAsyncThunk(
+  "admin/uploadFacultyCsv",
+  async (file, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await apiClient.post("/fileInput/uploadFacultyCsv", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Faculty CSV upload failed"
+      );
+    }
+  }
+);
+
+// Student Excel Upload
+export const uploadStudentExcel = createAsyncThunk(
+  "admin/uploadStudentExcel",
+  async (file, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await apiClient.post("/fileInput/uploadStudentExcel", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Student Excel upload failed"
+      );
+    }
+  }
+);
+
+// Student CSV Upload
+export const uploadStudentCsv = createAsyncThunk(
+  "admin/uploadStudentCsv",
+  async (file, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await apiClient.post("/fileInput/uploadStudentCsv", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data || "Student CSV upload failed"
+      );
+    }
+  }
+);

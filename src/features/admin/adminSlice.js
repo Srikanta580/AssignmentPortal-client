@@ -16,6 +16,10 @@ import {
   deleteSubject,
   fetchNotices,
   addNotice,
+  uploadFacultyExcel,
+  uploadFacultyCsv,
+  uploadStudentExcel,
+  uploadStudentCsv,
 } from "./adminAPI";
 
 const initialState = {
@@ -165,6 +169,28 @@ const adminSlice = createSlice({
     addCommonCases(addNotice);
     builder.addCase(addNotice.fulfilled, (state, { payload }) => {
       state.notices.push(payload);
+    });
+
+    // FILE UPLOADS
+    addCommonCases(uploadFacultyExcel);
+    builder.addCase(uploadFacultyExcel.fulfilled, (state, { payload }) => {
+      state.status = "succeeded";
+      // Optionally, you can refresh faculty list here if needed
+    });
+
+    addCommonCases(uploadFacultyCsv);
+    builder.addCase(uploadFacultyCsv.fulfilled, (state, { payload }) => {
+      state.status = "succeeded";
+    });
+
+    addCommonCases(uploadStudentExcel);
+    builder.addCase(uploadStudentExcel.fulfilled, (state, { payload }) => {
+      state.status = "succeeded";
+    });
+
+    addCommonCases(uploadStudentCsv);
+    builder.addCase(uploadStudentCsv.fulfilled, (state, { payload }) => {
+      state.status = "succeeded";
     });
   },
 });
