@@ -45,8 +45,7 @@ const OrbitAuth = () => {
         role: "UNIVADMIN",
       })
     ).unwrap();
-    console.log(response);
-    const route = response.user.university.name
+    const route = response.user.universityName
       .split(" ")
       .join(" ", "-")
       .toLowerCase();

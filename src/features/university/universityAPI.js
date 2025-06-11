@@ -93,3 +93,38 @@ export const getUniversityBySlug = createAsyncThunk(
     }
   }
 );
+
+export const addDepartmentalAdmin = createAsyncThunk(
+  "university/addDepartmentalAdmin",
+  async (adminData, thunkAPI) => {
+    try {
+      const response = await apiClient.post(`/university/add-admin`, adminData);
+      return { ...response.data, success: true };
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        success: false,
+        message: "Admin add failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const addDepartment = createAsyncThunk(
+  "university/addDepartment",
+  async (deptData, thunkAPI) => {
+    try {
+      const response = await apiClient.post(
+        `/university/add-department`,
+        deptData
+      );
+      return { ...response.data, success: true };
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        success: false,
+        message: "Dept. add failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);

@@ -4,9 +4,10 @@ import {
   FiEye,
   FiEdit3,
   FiTrash2,
+  FiPlus,
 } from "react-icons/fi";
 
-const DepartmentTable = ({ departments, onToggleAccess }) => {
+const DepartmentTable = ({ departments, handleAddAdmin }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="grid grid-cols-12 bg-gray-50 px-6 py-3 border-b border-gray-200 text-sm font-medium text-gray-700">
@@ -25,16 +26,11 @@ const DepartmentTable = ({ departments, onToggleAccess }) => {
         >
           <div className="col-span-3">
             <div className="font-medium text-gray-800">{dept.name}</div>
-            <div className="text-sm text-gray-500">
-              {dept.code} • {dept.head}
-            </div>
+            <div className="text-sm text-gray-500">{dept.code}</div>
           </div>
           <div className="col-span-2">
-            <button
-              onClick={() => onToggleAccess(dept.id)}
-              className="inline-flex items-center"
-            >
-              {dept.access ? (
+            <button className="inline-flex items-center">
+              {dept.totalStudents > 0 ? (
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                   <FiCheckCircle className="mr-1" />
                   Active
@@ -48,22 +44,21 @@ const DepartmentTable = ({ departments, onToggleAccess }) => {
             </button>
           </div>
           <div className="col-span-2 text-gray-600">
-            {dept.adminCount} admins
+            {dept.admins?.length || 0}{" "}
+            {dept.admins?.length > 1 ? "admins" : "admin"}
           </div>
           <div className="col-span-2 text-gray-600">
-            {dept.studentCount} students
+            {dept.totalStudents || 0}{" "}
+            {dept.totalStudents > 1 ? "students" : "student"}
           </div>
           <div className="col-span-2 text-gray-500">{dept.lastActive}</div>
           <div className="col-span-1">
             <div className="flex space-x-2">
-              <button className="text-gray-400 hover:text-cyan-600">
-                <FiEye />
-              </button>
-              <button className="text-gray-400 hover:text-cyan-600">
-                <FiEdit3 />
-              </button>
-              <button className="text-gray-400 hover:text-red-600">
-                <FiTrash2 />
+              <button
+                onClick={() => handleAddAdmin(dept.id)}
+                className="flex gap-x-2 items-center text-gray-400 hover:text-cyan-600"
+              >
+                <FiPlus /> Admin
               </button>
             </div>
           </div>

@@ -5,7 +5,10 @@ import {
   setupUniversityAdmin,
   addUniversityAdmin,
   getUniversityBySlug,
+  addDepartmentalAdmin,
+  addDepartment,
 } from "./universityAPI";
+import { login } from "../auth/authAPI";
 
 const universitySlice = createSlice({
   name: "university",
@@ -36,8 +39,6 @@ const universitySlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      // Repeat same for the others
       .addCase(submitUniversityVerification.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message;
@@ -61,6 +62,41 @@ const universitySlice = createSlice({
         state.loading = false;
         state.success = action.payload.success;
         state.message = action.payload.message;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.message = null;
+        action.payload.role.toLowerCase() === "univadmin" &&
+          Object.assign(state, action.payload.university);
+      })
+      .addCase(addDepartmentalAdmin.fulfilled, (state, action) => {
+        const newAdmin = action.payload;
+        const deptId = newAdmin.department?.id;
+
+        // Find department in university.departments
+        const targetDept = state.departments?.find(
+          (dept) => dept.id === deptId
+        );
+
+        if (targetDept) {
+          // Add admin to that department’s admin list
+          targetDept.admins.push({
+            id: newAdmin.id.toString(), // if needed
+            firstName: newAdmin.firstName,
+            lastName: newAdmin.lastName,
+            email: newAdmin.email,
+          });
+        }
+      })
+      .addCase(addDepartment.fulfilled, (state, action) => {
+        state.departments
+          ? state.departments.push({
+              code: action.payload.departmentCode,
+              name: action.payload.departmentName,
+              id: action.payload.id,
+            })
+          : (state.departments = [action.payload]);
       });
   },
 });

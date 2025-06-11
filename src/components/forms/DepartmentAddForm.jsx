@@ -1,7 +1,23 @@
 import { FiX } from "react-icons/fi";
 import Button from "../ui/Button";
+import { useState } from "react";
 
 const DepartmentAddForm = ({ onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    departmentName: "",
+    departmentCode: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    onSubmit(formData); // Pass form data up
+  };
   return (
     <div className="bg-white rounded-xl w-full max-w-md">
       <div className="bg-primary text-white px-6 py-4 rounded-t-lg">
@@ -15,6 +31,9 @@ const DepartmentAddForm = ({ onClose, onSubmit }) => {
           </label>
           <input
             type="text"
+            name="departmentName"
+            onChange={handleChange}
+            value={formData.departmentName}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
           />
         </div>
@@ -24,6 +43,9 @@ const DepartmentAddForm = ({ onClose, onSubmit }) => {
           </label>
           <input
             type="text"
+            name="departmentCode"
+            onChange={handleChange}
+            value={formData.departmentCode}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
           />
         </div>
@@ -34,7 +56,7 @@ const DepartmentAddForm = ({ onClose, onSubmit }) => {
         <Button variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={onSubmit}>Add Department</Button>
+        <Button onClick={handleSubmit}>Add Department</Button>
       </div>
     </div>
   );

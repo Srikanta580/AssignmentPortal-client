@@ -7,6 +7,7 @@ import {
   FiBarChart2,
   FiSettings,
   FiLogOut,
+  FiBarChart,
 } from "react-icons/fi";
 import { logoutUser } from "../../features/auth/authAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +16,7 @@ const Sidebar = () => {
   const { university } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const universityData = useSelector((state) => state.auth.user.university);
+  const universityData = useSelector((state) => state.university);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -25,11 +26,8 @@ const Sidebar = () => {
     <div className="w-64 bg-white shadow-md flex flex-col">
       <div className="p-6">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center">
-            <FiHome className="text-white" />
-          </div>
           <span className="text-xl font-semibold">
-            {universityData.name} Portal
+            {universityData.name} Admin Portal
           </span>
         </div>
       </div>
@@ -59,7 +57,7 @@ const Sidebar = () => {
             }`
           }
         >
-          <FiUsers className="mr-3" />
+          <FiShield className="mr-3" />
           Administrators
         </NavLink>
         <NavLink
@@ -72,7 +70,7 @@ const Sidebar = () => {
             }`
           }
         >
-          <FiUsers className="mr-3" />
+          <FiBarChart className="mr-3" />
           Analytics
         </NavLink>
         <NavLink
@@ -85,7 +83,7 @@ const Sidebar = () => {
             }`
           }
         >
-          <FiUsers className="mr-3" />
+          <FiSettings className="mr-3" />
           Settings
         </NavLink>
         {/* Other nav links similarly */}

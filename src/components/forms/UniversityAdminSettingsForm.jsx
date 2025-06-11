@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Button from "../ui/Button";
+import { useSelector } from "react-redux";
 
 const SettingsForm = ({ initialValues, onSubmit }) => {
+  const universityData = useSelector((state) => state.university);
   const [values, setValues] = useState(initialValues);
 
   const handleChange = (e) => {
@@ -21,12 +23,23 @@ const SettingsForm = ({ initialValues, onSubmit }) => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
+              Orbit ID
+            </label>
+            <input
+              type="text"
+              name="orbitId"
+              value={universityData.orbitId}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               University Name
             </label>
             <input
               type="text"
               name="universityName"
-              value={values.universityName}
+              value={universityData.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
             />
@@ -38,28 +51,22 @@ const SettingsForm = ({ initialValues, onSubmit }) => {
             <input
               type="email"
               name="contactEmail"
-              value={values.contactEmail}
+              value={universityData.email}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Time Zone
+              Website Link
             </label>
-            <select
-              name="timezone"
-              value={values.timezone}
+            <input
+              type="text"
+              name="website"
+              value={universityData.website}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-            >
-              <option value="America/New_York">America/New_York (UTC-5)</option>
-              <option value="America/Chicago">America/Chicago (UTC-6)</option>
-              <option value="America/Denver">America/Denver (UTC-7)</option>
-              <option value="America/Los_Angeles">
-                America/Los_Angeles (UTC-8)
-              </option>
-            </select>
+            />
           </div>
         </div>
       </div>

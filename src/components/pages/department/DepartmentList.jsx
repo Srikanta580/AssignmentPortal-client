@@ -3,27 +3,14 @@ import { FiDownload, FiPlus } from "react-icons/fi";
 import DepartmentTable from "./DepartmentTable";
 import Button from "../../ui/Button";
 import SearchFilter from "../../ui/SearchFilter";
+import { useSelector } from "react-redux";
 
-const DepartmentList = ({ onAddDepartment }) => {
+const DepartmentList = ({ onAddDepartment, handleAddAdmin }) => {
+  const universityData = useSelector((state) => state.university);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
 
-  // Mock data - would normally come from API
-  const [departments, setDepartments] = useState([
-    {
-      id: 1,
-      name: "Computer Science",
-      access: true,
-      lastActive: "2 hours ago",
-      adminCount: 3,
-      studentCount: 245,
-      code: "CS",
-      head: "Dr. Sarah Johnson",
-    },
-    // ... other departments
-  ]);
-
-  const filteredDepartments = departments.filter((dept) => {
+  const filteredDepartments = universityData.departments.filter((dept) => {
     const matchesSearch = dept.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -33,14 +20,6 @@ const DepartmentList = ({ onAddDepartment }) => {
       (filterStatus === "inactive" && !dept.access);
     return matchesSearch && matchesFilter;
   });
-
-  const toggleDepartmentAccess = (id) => {
-    setDepartments(
-      departments.map((dept) =>
-        dept.id === id ? { ...dept, access: !dept.access } : dept
-      )
-    );
-  };
 
   return (
     <>
@@ -73,11 +52,12 @@ const DepartmentList = ({ onAddDepartment }) => {
 
       <DepartmentTable
         departments={filteredDepartments}
-        onToggleAccess={toggleDepartmentAccess}
+        handleAddAdmin={handleAddAdmin}
       />
 
       <div className="mt-6 text-sm text-gray-500">
-        Showing {filteredDepartments.length} of {departments.length} departments
+        Showing {filteredDepartments.length} of{" "}
+        {universityData.departments.length} departments
       </div>
     </>
   );

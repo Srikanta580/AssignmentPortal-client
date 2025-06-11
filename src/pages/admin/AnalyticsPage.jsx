@@ -1,31 +1,50 @@
 import { FiUsers, FiCheckCircle, FiShield, FiActivity } from "react-icons/fi";
 import StatCard from "../../components/ui/StatCard";
 import ActivityList from "../../components/pages/department/ActivityList";
+import { useSelector } from "react-redux";
 
 const AnalyticsPage = () => {
-  // Mock data - would normally come from API
+  const universityData = useSelector((state) => state.university);
+  const departments = universityData?.departments || [];
+
+  const totalDepartments = departments.length;
+
+  const activeDepartments = departments.filter(
+    (dept) => dept.totalStudents > 0
+  ).length;
+
+  const totalAdmins = departments.reduce(
+    (sum, dept) => sum + (dept.admins?.length || 0),
+    0
+  );
+
+  const totalStudents = departments.reduce(
+    (sum, dept) => sum + (dept.totalStudents || 0),
+    0
+  );
+
   const stats = [
     {
       title: "Total Departments",
-      value: 6,
+      value: totalDepartments,
       icon: <FiUsers />,
       color: "blue",
     },
     {
       title: "Active Departments",
-      value: 4,
+      value: activeDepartments,
       icon: <FiCheckCircle />,
       color: "green",
     },
     {
       title: "Total Administrators",
-      value: 8,
+      value: totalAdmins,
       icon: <FiShield />,
       color: "purple",
     },
     {
       title: "Total Students",
-      value: 1203,
+      value: totalStudents,
       icon: <FiActivity />,
       color: "orange",
     },
