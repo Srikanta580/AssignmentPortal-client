@@ -18,7 +18,17 @@ export const login = createAsyncThunk(
       localStorage.setItem("refreshToken", response.data.refreshToken);
 
       return {
-        user: response.data.user,
+        user:
+          role.toLowerCase() === "univadmin"
+            ? {
+                name: response.data.user.name,
+                email: response.data.user.university.email,
+                universityName: response.data.user.university.name,
+              }
+            : response.data.user,
+        university: role.toLowerCase() === "univadmin" && {
+          ...response.data.user.university,
+        },
         role: role.toLowerCase(),
       };
     } catch (err) {

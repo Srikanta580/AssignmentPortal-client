@@ -8,13 +8,14 @@ import RegisterForm from "../features/auth/RegisterForm";
 import AdminRoutes from "./AdminRoutes";
 import FacultyRoutes from "./FacultyRoutes";
 import StudentRoutes from "./StudentRoutes";
+import UniversityAdminRoutes from "./UniversityAdminRoutes";
 import CodeAnalyzer from "../pages/CodeAnalyzer";
 import FormPreview from "../pages/admin/forms/FormPreview";
 import FormSubmissionPage from "../pages/FormSubmissionPage";
 import LandingPage from "../pages/LandingPage";
 import OrbitAuth from "../pages/OrbitAuth";
 import OrbitAdminDashboard from "../pages/orbit_super_admin/Dashboard";
-import UniversityAdminDashboard from "../pages/admin/UniversityAdminDashboard";
+import UniversityAdminDashboardLayout from "../components/layouts/UniversityAdminDashboardLayout";
 import NotFoundPage from "../pages/NotFoundPage";
 // import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
@@ -27,13 +28,15 @@ const AppRoutes = () => {
         <Route path="/orbit-admin" element={<OrbitAdminDashboard />} />
         <Route path="/auth" element={<OrbitAuth />} />
         <Route
-          path="/:university/admin"
+          path="/:university"
           element={
             <ProtectedRoute allowedRoles={["univadmin"]}>
-              <UniversityAdminDashboard />
+              <UniversityAdminDashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="admin/*" element={<UniversityAdminRoutes />} />
+        </Route>
         <Route path="/:university-slug/login" element={<LoginPage />} />
         <Route path="/:university-slug/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
