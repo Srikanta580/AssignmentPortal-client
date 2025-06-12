@@ -15,7 +15,6 @@ import {
 import { useSelector } from "react-redux";
 
 const ClassesPage = () => {
-  const [activeTab, setActiveTab] = useState("current");
   const [expandedClass, setExpandedClass] = useState(null);
 
   // Sample data - would come from Redux store in real app
@@ -65,30 +64,6 @@ const ClassesPage = () => {
           { id: 1, name: "Week 1: Introduction to AI", type: "pdf" },
           { id: 2, name: "Week 2: Search Algorithms", type: "ppt" },
         ],
-      },
-    ],
-    past: [
-      {
-        id: 4,
-        subjectCode: "CS303",
-        subjectName: "Database Systems",
-        semester: "3",
-        department: "Computer Science",
-        classTime: "Mon, Wed 1:00-2:30 PM",
-        location: "Building A, Room 105",
-        term: "Fall 2024",
-        studentsCount: 40,
-      },
-      {
-        id: 5,
-        subjectCode: "CS404",
-        subjectName: "Operating Systems",
-        semester: "4",
-        department: "Computer Science",
-        classTime: "Tue, Thu 11:00-12:30 PM",
-        location: "Building B, Room 210",
-        term: "Fall 2024",
-        studentsCount: 35,
       },
     ],
   };
@@ -168,42 +143,16 @@ const ClassesPage = () => {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex mb-6 bg-light rounded-lg p-1">
-        <button
-          className={`flex-1 py-2 rounded-md ${
-            activeTab === "current" ? "bg-white shadow-sm" : ""
-          }`}
-          onClick={() => setActiveTab("current")}
-        >
-          <BookOpen className="w-4 h-4 inline-block mr-2" />
-          Current Classes
-        </button>
-        <button
-          className={`flex-1 py-2 rounded-md ${
-            activeTab === "past" ? "bg-white shadow-sm" : ""
-          }`}
-          onClick={() => setActiveTab("past")}
-        >
-          <Bookmark className="w-4 h-4 inline-block mr-2" />
-          Past Classes
-        </button>
-      </div>
-
       {/* Classes List */}
       <div className="grid-one-col">
         <div className="card">
           <div className="card-header">
-            <h2 className="card-title">
-              {activeTab === "current"
-                ? "Current Semester Classes"
-                : "Past Classes"}
-            </h2>
+            <h2 className="card-title">Current Semester Classes</h2>
             <BookOpen className="w-5 h-5 text-primary" />
           </div>
 
           <div className="card-list">
-            {facultyClasses[activeTab].map((cls) => (
+            {facultyClasses.current.map((cls) => (
               <div
                 key={cls.id}
                 className="border rounded-lg mb-3 overflow-hidden"
@@ -267,46 +216,42 @@ const ClassesPage = () => {
                         )}
                       </div>
 
-                      {activeTab === "current" && (
-                        <div>
-                          <h4 className="font-medium mb-3">Course Materials</h4>
-                          {cls.materials.map((material) => (
-                            <div
-                              key={material.id}
-                              className="flex items-center justify-between p-2 bg-light rounded-md mb-2"
-                            >
-                              <div className="flex items-center">
-                                <FileText className="w-4 h-4 mr-2 text-primary" />
-                                <span className="text-sm">{material.name}</span>
-                              </div>
-                              <span className="text-xs bg-secondary-100 text-secondary-500 px-2 py-1 rounded-md uppercase">
-                                {material.type}
-                              </span>
+                      <div>
+                        <h4 className="font-medium mb-3">Course Materials</h4>
+                        {cls.materials.map((material) => (
+                          <div
+                            key={material.id}
+                            className="flex items-center justify-between p-2 bg-light rounded-md mb-2"
+                          >
+                            <div className="flex items-center">
+                              <FileText className="w-4 h-4 mr-2 text-primary" />
+                              <span className="text-sm">{material.name}</span>
                             </div>
-                          ))}
-
-                          <div className="mt-4">
-                            <button className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2">
-                              <Upload className="w-4 h-4 mr-2" />
-                              Upload Material
-                            </button>
+                            <span className="text-xs bg-secondary-100 text-secondary-500 px-2 py-1 rounded-md uppercase">
+                              {material.type}
+                            </span>
                           </div>
+                        ))}
+
+                        <div className="mt-4">
+                          <button className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2">
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload Material
+                          </button>
                         </div>
-                      )}
+                      </div>
                     </div>
 
-                    {activeTab === "current" && (
-                      <div className="mt-4 flex justify-end space-x-3">
-                        <button className="border border-primary text-primary px-3 py-2 rounded-md text-sm flex items-center">
-                          <Users className="w-4 h-4 mr-2" />
-                          View Students
-                        </button>
-                        <button className="bg-secondary text-white px-3 py-2 rounded-md text-sm flex items-center">
-                          <UserPlus className="w-4 h-4 mr-2" />
-                          Manage Attendance
-                        </button>
-                      </div>
-                    )}
+                    <div className="mt-4 flex justify-end space-x-3">
+                      <button className="border border-primary text-primary px-3 py-2 rounded-md text-sm flex items-center">
+                        <Users className="w-4 h-4 mr-2" />
+                        View Students
+                      </button>
+                      <button className="bg-secondary text-white px-3 py-2 rounded-md text-sm flex items-center">
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Manage Attendance
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
