@@ -17,14 +17,17 @@ const ClassesPage = () => {
     currentClassPage = 0,
     totalClassPages = 1,
   } = useSelector((state) => state?.admin);
+    const { id } = useSelector((state) => state?.university);
+    const { user } = useSelector((state) => state?.auth);
+    const departmentId = user?.department?.id;
 
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    dispatch(fetchAllFaculties());
-    dispatch(fetchSubjects());
+    dispatch(fetchAllFaculties({departmentId, universityId: id}));
+    dispatch(fetchSubjects({departmentId, universityId: id}));
     dispatch(fetchClasses());
   }, [dispatch]);
 
@@ -63,7 +66,7 @@ const ClassesPage = () => {
     };
 
     try {
-      const resultAction = await dispatch(assignClass(payload));
+      const resultAction = await dispatch(assignClass({...payload, departmentId, universityId: id}));
       if (resultAction?.type.endsWith("/fulfilled")) {
         console.log("Class assigned successfully!");
         closeModal();

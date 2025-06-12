@@ -119,9 +119,9 @@ export const deleteFaculty = createAsyncThunk(
 
 export const fetchAllFaculties = createAsyncThunk(
   "admin/fetchAllFaculties",
-  async (_, thunkAPI) => {
+  async ({departmentId, universityId }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/getAllFaculties`);
+      const res = await apiClient.get(`/admin/getAllFaculties?departmentId=${departmentId}&universityId=${universityId}`);
       return res.data.faculties; // assuming backend returns { faculties: [...] }
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -177,9 +177,9 @@ export const assignClassToFaculty = createAsyncThunk(
 // 3. SUBJECT MANAGEMENT
 export const fetchSubjects = createAsyncThunk(
   "admin/fetchSubjects",
-  async (_, thunkAPI) => {
+  async ({departmentId, universityId}, thunkAPI) => {
     try {
-      const res = await apiClient.get("/admin/getSubjects");
+      const res = await apiClient.get(`/admin/getSubjects?departmentId=${departmentId}&universityId=${universityId}`);
       // console.log("Fetched subjects:", res.data); // Log the fetched data
       return res.data.subjects || []; // Extract the subjects array
     } catch (err) {
