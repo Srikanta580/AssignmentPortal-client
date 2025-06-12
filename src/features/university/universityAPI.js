@@ -83,6 +83,7 @@ export const getUniversityBySlug = createAsyncThunk(
   async (slug, thunkAPI) => {
     try {
       const response = await apiClient.get(`/university/${slug}`);
+      console.log(response.data);
       return { ...response.data, success: true };
     } catch (err) {
       const errorPayload = err.response?.data || {

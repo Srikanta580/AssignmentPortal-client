@@ -18,8 +18,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const universityData = useSelector((state) => state.university);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
+  const handleLogout = async () => {
+    const res = await dispatch(logoutUser());
+    console.log(res);
     navigate("/auth");
   };
   return (

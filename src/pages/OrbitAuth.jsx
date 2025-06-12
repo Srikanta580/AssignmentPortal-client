@@ -27,6 +27,8 @@ const OrbitAuth = () => {
   });
   const [isRegisteringUniversity, setIsRegisteringUniversity] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [loginError, setLoginError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,18 +40,28 @@ const OrbitAuth = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await dispatch(
-      login({
-        email: loginFormData.email,
-        password: loginFormData.password,
-        role: "UNIVADMIN",
-      })
-    ).unwrap();
-    const route = response.user.universityName
-      .split(" ")
-      .join(" ", "-")
-      .toLowerCase();
-    navigate(`/${route}/admin`);
+    setLoginError(null); // Clear previous error
+    setIsSubmitting(true);
+    try {
+      const response = await dispatch(
+        login({
+          email: loginFormData.email,
+          password: loginFormData.password,
+          role: "UNIVADMIN",
+        })
+      ).unwrap();
+
+      const route = response.user.universityName
+        .split(" ")
+        .join("-", "-")
+        .toLowerCase();
+      navigate(`/${route}/admin`);
+    } catch (error) {
+      // This assumes your backend sends a `.message` in the JSON response
+      setLoginError(error?.message || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Main login page
@@ -114,6 +126,7 @@ const OrbitAuth = () => {
                   <input
                     type="email"
                     name="email"
+                    required
                     value={loginFormData.email}
                     onChange={handleChange}
                     className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
@@ -133,6 +146,7 @@ const OrbitAuth = () => {
                   <input
                     type="password"
                     name="password"
+                    required
                     value={loginFormData.password}
                     onChange={handleChange}
                     className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
@@ -162,11 +176,26 @@ const OrbitAuth = () => {
                 </a>
               </div>
 
+              {loginError && (
+                <div className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded">
+                  {loginError}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white py-3 rounded-lg font-medium shadow-sm hover:shadow-md transition-all"
+                disabled={
+                  isSubmitting ||
+                  loginFormData.email === "" ||
+                  loginFormData.password === ""
+                }
+                className={`w-full py-3 rounded-lg font-medium shadow-sm transition-all ${
+                  loginFormData.email === "" || loginFormData.password === ""
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-gradient-to-r from-teal-500 to-cyan-600 text-white hover:shadow-md"
+                }`}
               >
-                Log In
+                {isSubmitting ? "Logging in..." : "Log In"}
               </button>
             </form>
 

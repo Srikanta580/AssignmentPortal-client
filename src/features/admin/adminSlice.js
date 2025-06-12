@@ -67,13 +67,14 @@ const adminSlice = createSlice({
           state.error = action.payload;
         });
     };
+
+    //LOGOUT
     addCommonCases(logoutUser);
     builder.addCase(logoutUser.fulfilled, (state) => {
       Object.assign(state, initialState);
     });
     // STUDENTS
     addCommonCases(fetchStudents);
-
     builder.addCase(fetchStudents.fulfilled, (state, { payload }) => {
       const { students, currentStudentPage, totalStudentPages } = payload;
 

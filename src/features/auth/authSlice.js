@@ -32,6 +32,7 @@ const authSlice = createSlice({
 
       // LOGOUT
       .addCase(logoutUser.fulfilled, (state) => {
+        console.log("logout successful:");
         state.user = null;
         state.role = null;
         state.isAuthenticated = false;

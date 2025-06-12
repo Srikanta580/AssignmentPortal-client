@@ -43,7 +43,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const university = useSelector((state) => state.university);
-  console.log(universitySlug);
+  console.log(university);
 
   useEffect(() => {
     const fetchUniversity = async () => {

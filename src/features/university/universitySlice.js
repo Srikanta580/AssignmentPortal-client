@@ -8,17 +8,24 @@ import {
   addDepartmentalAdmin,
   addDepartment,
 } from "./universityAPI";
-import { login } from "../auth/authAPI";
+import { login, logoutUser } from "../auth/authAPI";
+
+const initialState = {
+  loading: false,
+  error: null,
+  message: null,
+  id: null,
+  name: "",
+  departments: [],
+  slug: "",
+  email: "",
+  website: "",
+  orbitId: "",
+};
 
 const universitySlice = createSlice({
   name: "university",
-  initialState: {
-    loading: false,
-    error: null,
-    message: null,
-    id: null,
-    name: "",
-  },
+  initialState,
   reducers: {
     clearStatus: (state) => {
       state.error = null;
@@ -55,6 +62,7 @@ const universitySlice = createSlice({
         state.loading = false;
         state.id = action.payload.id;
         state.name = action.payload.name;
+        state.slug = action.payload.slug;
         state.success = action.payload.success;
         state.message = action.payload.message;
       })
@@ -69,6 +77,14 @@ const universitySlice = createSlice({
         state.message = null;
         action.payload.role.toLowerCase() === "univadmin" &&
           Object.assign(state, action.payload.university);
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        Object.assign(state, {
+          ...initialState,
+          id: state.id,
+          name: state.name,
+          slug: state.slug,
+        });
       })
       .addCase(addDepartmentalAdmin.fulfilled, (state, action) => {
         const newAdmin = action.payload;
