@@ -26,10 +26,12 @@ const ClassesPage = () => {
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    dispatch(fetchAllFaculties({departmentId, universityId: id}));
-    dispatch(fetchSubjects({departmentId, universityId: id}));
-    dispatch(fetchClasses());
-  }, [dispatch]);
+    if (departmentId && id) {
+      dispatch(fetchAllFaculties({ departmentId, universityId: id }));
+      dispatch(fetchSubjects({ departmentId, universityId: id }));
+      dispatch(fetchClasses({ departmentId, universityId: id, page: 0 }));
+    }
+  }, [dispatch, departmentId, id]);
 
   const openModal = () => {
     setFormData({});
@@ -59,25 +61,15 @@ const ClassesPage = () => {
       return;
     }
 
-    const payload = {
-      ...formData,
-      facultyId: Number(facultyId),
-      semester: Number(semester),
-    };
-
     try {
-      const resultAction = await dispatch(assignClass({...payload, departmentId, universityId: id}));
+      const resultAction = await dispatch(assignClass({...formData, departmentId, universityId: id}));
       if (resultAction?.type.endsWith("/fulfilled")) {
-        console.log("Class assigned successfully!");
+        console.log("Class assigned successfully!", resultAction.payload);
         closeModal();
       } else {
         // Show error from API or fallback message
-        setFormError(
-          resultAction?.payload?.message ||
-          resultAction?.payload ||
-          "Failed to assign class. Please try again."
-        );
-        console.log("Error assigning class:", resultAction.payload);
+        console.error("Assign class failed:", resultAction.payload);
+        setFormError( `Error:${resultAction.payload}`);
       }
     } catch (error) {
       setFormError("Unexpected error occurred. Please try again.");
@@ -136,7 +128,7 @@ const ClassesPage = () => {
         {pagesToShow.map((page) => (
           <button
             key={page}
-            onClick={() => dispatch(fetchClasses({ page }))}
+            onClick={() => dispatch(fetchClasses({ departmentId, universityId: id, page }))}
             className={`px-3 py-1 rounded cursor-pointer ${
               currentPage === page
                 ? "bg-primary text-white"
@@ -267,7 +259,7 @@ const ClassesPage = () => {
                   <select
                     name="semester"
                     value={formData.semester || ""}
-                    onChange={handleInputChange}
+                    onChange={e => handleInputChange({ ...e, target: { ...e.target, value: Number(e.target.value) } })}
                     className="w-full p-2 border rounded-md"
                   >
                     <option value="">Select Semester</option>

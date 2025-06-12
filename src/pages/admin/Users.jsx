@@ -94,7 +94,7 @@ const UsersPage = () => {
       dispatch(fetchFaculties({ universityId: id, departmentId: user?.department?.id, page: 0 }));
       console.log("Fetching faculties...");
     }
-  }, [dispatch, activeTab, semesterFilter]);
+  }, [dispatch, activeTab, semesterFilter, id, user?.department?.id]);
 
 
   const renderPagination = (currentPage, totalPages) => {
