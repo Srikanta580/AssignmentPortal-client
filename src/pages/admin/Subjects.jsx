@@ -6,7 +6,9 @@ import { fetchSubjects, addSubject, deleteSubject } from "../../features/admin/a
 const SubjectsPage = () => {
   const dispatch = useDispatch();
   const { subjects } = useSelector((state) => state?.admin);
-
+      const { id } = useSelector((state) => state?.university);
+      const { user } = useSelector((state) => state?.auth);
+      const departmentId = user?.department?.id;
   const [newSubject, setNewSubject] = useState({
     subjectCode: "",
     subjectName: "",
@@ -17,7 +19,7 @@ const SubjectsPage = () => {
   const [formError, setFormError] = useState(""); // <-- Add error state
 
   useEffect(() => {
-    dispatch(fetchSubjects());
+    dispatch(fetchSubjects({departmentId, universityId: id}));
   }, [dispatch]);
 
   const handleInputChange = (e) => {
@@ -33,7 +35,7 @@ const SubjectsPage = () => {
     }
 
     try {
-      const resultAction = await dispatch(addSubject(newSubject));
+      const resultAction = await dispatch(addSubject({...newSubject, departmentId, universityId: id}));
       if (resultAction.type.endsWith("/fulfilled")) {
         console.log("Subject added successfully:", resultAction.payload);
         setNewSubject({ subjectCode: "", subjectName: "", semester: "" });
@@ -75,9 +77,9 @@ const SubjectsPage = () => {
         <table className="min-w-full table-auto">
           <thead className="bg-light">
             <tr>
-              {["subjectCode", "subjectName", "Semester", "Actions"].map((col) => (
+              {["Subject Code", "Subject Name", "Semester", "Actions"].map((col) => (
                 <th key={col} className="px-4 py-2 text-left text-dark">
-                  {col}
+                  <span className="font-medium">{col}</span>
                 </th>
               ))}
             </tr>

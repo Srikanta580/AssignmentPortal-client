@@ -98,6 +98,8 @@ const UsersPage = () => {
 
 
   const renderPagination = (currentPage, totalPages) => {
+    if (totalPages <= 1) return null; // Hide pagination if only one page
+
     const maxPageNumbers = 3; // You can adjust this based on how many numbers you want to show
 
     const generatePageNumbers = () => {

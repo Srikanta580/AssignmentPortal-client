@@ -87,6 +87,8 @@ const ClassesPage = () => {
 
   // Pagination for Classes
   const renderPagination = (currentPage, totalPages) => {
+    if (totalPages <= 1) return null; // Hide pagination if only one page
+
     const maxPageNumbers = 3;
     const generatePageNumbers = () => {
       let start = Math.max(0, currentPage - Math.floor(maxPageNumbers / 2));
