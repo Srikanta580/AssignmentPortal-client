@@ -21,6 +21,7 @@ import {
   uploadStudentExcel,
   uploadStudentCsv,
 } from "./adminAPI";
+import { logoutUser } from "../auth/authAPI";
 
 const initialState = {
   students: [],
@@ -66,7 +67,10 @@ const adminSlice = createSlice({
           state.error = action.payload;
         });
     };
-
+    addCommonCases(logoutUser);
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      Object.assign(state, initialState);
+    });
     // STUDENTS
     addCommonCases(fetchStudents);
 
