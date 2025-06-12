@@ -301,7 +301,6 @@ const UsersPage = () => {
                 {[
                   "First Name",
                   "Last Name",
-                  "Password",
                   "Email",
                   "Phone",
                   "Actions",
@@ -322,7 +321,6 @@ const UsersPage = () => {
                 >
                   <td className="px-4 py-2">{faculty.firstName}</td>
                   <td className="px-4 py-2">{faculty.lastName}</td>
-                  <td className="px-4 py-2">{faculty.password}</td>
                   <td className="px-4 py-2">{faculty.email}</td>
                   <td className="px-4 py-2">{faculty.phone}</td>
                   <td className="px-4 py-2">
@@ -396,7 +394,6 @@ const UsersPage = () => {
                   "Admission Year",
                   "Semester",
                   "Email",
-                  "Password",
                   "Phone",
                   "Actions",
                 ].map((col) => (
@@ -420,7 +417,6 @@ const UsersPage = () => {
                   <td className="px-4 py-2">{student.admissionYear}</td>
                   <td className="px-4 py-2">{student.semester}</td>
                   <td className="px-4 py-2">{student.email}</td>
-                  <td className="px-4 py-2">{student.password}</td>
                   <td className="px-4 py-2">{student.phone}</td>
                   <td className="px-4 py-2">
                     <button
@@ -586,13 +582,84 @@ const UsersPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {fieldConfig[formType].map((field) => {
                   const Icon = IconMap[field.icon];
+                  // Dropdown for gender
+                  if (formType === "Student" && field.name === "gender") {
+                    return (
+                      <div key={field.name} className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                          <Icon />
+                        </div>
+                        <select
+                          id={field.name}
+                          name={field.name}
+                          value={formData[field.name] || ""}
+                          onChange={handleInputChange}
+                          onFocus={() => setFocusedField(field.name)}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name ? "border-primary shadow-md" : "border-gray-300"} focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        >
+                          <option value="">Select Gender</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                    );
+                  }
+                  // Dropdown for section
+                  if (formType === "Student" && field.name === "section") {
+                    return (
+                      <div key={field.name} className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                          <Icon />
+                        </div>
+                        <select
+                          id={field.name}
+                          name={field.name}
+                          value={formData[field.name] || ""}
+                          onChange={handleInputChange}
+                          onFocus={() => setFocusedField(field.name)}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name ? "border-primary shadow-md" : "border-gray-300"} focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        >
+                          <option value="">Select Section</option>
+                          <option value="A">Section-A</option>
+                          <option value="B">Section-B</option>
+                          <option value="C">Section-C</option>
+                          <option value="D">Section-D</option>
+                        </select>
+                      </div>
+                    );
+                  }
+                  // Dropdown for semester (1 to 8)
+                  if (formType === "Student" && field.name === "semester") {
+                    return (
+                      <div key={field.name} className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                          <Icon />
+                        </div>
+                        <select
+                          id={field.name}
+                          name={field.name}
+                          value={formData[field.name] || ""}
+                          onChange={handleInputChange}
+                          onFocus={() => setFocusedField(field.name)}
+                          onBlur={() => setFocusedField(null)}
+                          className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name ? "border-primary shadow-md" : "border-gray-300"} focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        >
+                          <option value="">Select Semester</option>
+                          {[...Array(8)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>Semester {i + 1}</option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  }
+                  // Default input for other fieldsSection-
                   return (
                     <div
                       key={field.name}
-                      className={`relative transition-all duration-300 ${focusedField === field.name
-                        ? "transform -translate-y-1"
-                        : ""
-                        }`}
+                      className={`relative transition-all duration-300 ${focusedField === field.name ? "transform -translate-y-1" : ""}`}
                     >
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                         <Icon />
@@ -606,10 +673,7 @@ const UsersPage = () => {
                         onFocus={() => setFocusedField(field.name)}
                         onBlur={() => setFocusedField(null)}
                         placeholder={field.label}
-                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name
-                          ? "border-primary shadow-md"
-                          : "border-gray-300"
-                          } focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
+                        className={`w-full pl-10 pr-4 py-3 rounded-lg border ${focusedField === field.name ? "border-primary shadow-md" : "border-gray-300"} focus:outline-none focus:ring-1 focus:ring-primary transition-all`}
                       />
                     </div>
                   );
