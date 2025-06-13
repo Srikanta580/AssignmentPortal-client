@@ -146,6 +146,7 @@ const adminSlice = createSlice({
 
       state.status = "succeeded";
     });
+
     addCommonCases(assignClass);
     builder.addCase(assignClass.fulfilled, (state, { payload }) => {
       state.classes.push(payload);

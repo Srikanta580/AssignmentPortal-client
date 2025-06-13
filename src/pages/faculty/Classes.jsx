@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookOpen,
   Calendar,
@@ -12,11 +12,20 @@ import {
   Upload,
   UserPlus,
 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClassesByFaculty } from "../../features/faculty/facultyAPI";
 
 const ClassesPage = () => {
   const [expandedClass, setExpandedClass] = useState(null);
+  const dispatch = useDispatch();
+  const{classes = [] } = useSelector((state) => state?.faculty);
+  const {id} = useSelector((state) => state?.auth?.user);
 
+
+  useEffect(() => {const res =dispatch(fetchClassesByFaculty({facultyId: id}));
+    // console.log("Fetching classes for faculty ID:", id);
+    // console.log("Response:", res);
+  }, [dispatch, id]);
   // Sample data - would come from Redux store in real app
   const facultyClasses = {
     current: [
@@ -152,7 +161,7 @@ const ClassesPage = () => {
           </div>
 
           <div className="card-list">
-            {facultyClasses.current.map((cls) => (
+            {classes.map((cls) => (
               <div
                 key={cls.id}
                 className="border rounded-lg mb-3 overflow-hidden"
@@ -163,11 +172,11 @@ const ClassesPage = () => {
                 >
                   <div>
                     <h3 className="font-medium text-dark">
-                      <span className="font-bold">{cls.subjectCode}:</span>{" "}
-                      {cls.subjectName}
+                      <span className="font-bold">{cls.subject.subjectCode}:</span>{" "}
+                      {cls.subject.subjectName}
                     </h3>
                     <p className="text-sm text-primary">
-                      Semester: {cls.semester} | {cls.classTime}
+                      Semester: {cls.subject.semester} | Section: {cls.section}
                     </p>
                   </div>
                   <div>
@@ -186,39 +195,47 @@ const ClassesPage = () => {
                         <h4 className="font-medium mb-3">Class Details</h4>
                         <p className="text-sm text-primary flex items-center mb-2">
                           <BookOpen className="w-4 h-4 mr-2" />
-                          Subject: {cls.subjectCode}: {cls.subjectName}
+                          Subject Code: {cls.subject.subjectCode}
+                        </p>
+                        <p className="text-sm text-primary flex items-center mb-2">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Subject Name: {cls.subject.subjectName}
                         </p>
                         <p className="text-sm text-primary flex items-center mb-2">
                           <Calendar className="w-4 h-4 mr-2" />
-                          Semester: {cls.semester} {cls.term && `(${cls.term})`}
+                          Semester: {cls.subject.semester} {cls.term && `(${cls.term})`}
                         </p>
                         <p className="text-sm text-primary flex items-center mb-2">
+                          <Calendar className="w-4 h-4 mr-2" />
+                          Section: {cls.section} {cls.term && `(${cls.term})`}
+                        </p>
+                        {/* <p className="text-sm text-primary flex items-center mb-2">
                           <Building className="w-4 h-4 mr-2" />
                           Department: {cls.department}
-                        </p>
+                        </p> */}
                         <p className="text-sm text-primary flex items-center mb-2">
                           <Clock className="w-4 h-4 mr-2" />
-                          Schedule: {cls.classTime}
+                          Schedule: {cls.timing}
                         </p>
                         <p className="text-sm text-primary flex items-center mb-2">
                           <Building className="w-4 h-4 mr-2" />
-                          Location: {cls.location}
+                          Location: Room no {cls.location}
                         </p>
-                        <p className="text-sm text-primary flex items-center mb-2">
+                        {/* <p className="text-sm text-primary flex items-center mb-2">
                           <Users className="w-4 h-4 mr-2" />
                           Students: {cls.studentsCount}
-                        </p>
-                        {cls.nextClass && (
+                        </p> */}
+                        {/* {cls.nextClass && (
                           <p className="text-sm text-primary flex items-center mb-2">
                             <Clock className="w-4 h-4 mr-2" />
                             Next Class: {cls.nextClass}
                           </p>
-                        )}
+                        )} */}
                       </div>
 
                       <div>
                         <h4 className="font-medium mb-3">Course Materials</h4>
-                        {cls.materials.map((material) => (
+                        {/* {cls.materials.map((material) => (
                           <div
                             key={material.id}
                             className="flex items-center justify-between p-2 bg-light rounded-md mb-2"
@@ -231,7 +248,7 @@ const ClassesPage = () => {
                               {material.type}
                             </span>
                           </div>
-                        ))}
+                        ))} */}
 
                         <div className="mt-4">
                           <button className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2">
