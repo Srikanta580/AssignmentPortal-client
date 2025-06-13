@@ -5,7 +5,7 @@ import AdminsPage from "../pages/admin/AdminsPage";
 import AnalyticsPage from "../pages/admin/AnalyticsPage";
 import SettingsPage from "../pages/admin/UniversityAdminSettingsPage";
 
-const DepartmentAdminRoutes = () => {
+const UniversityAdminRoutes = () => {
   return (
     <Routes>
       <Route index element={<DepartmentsPage />} />
@@ -16,4 +16,4 @@ const DepartmentAdminRoutes = () => {
   );
 };
 
-export default DepartmentAdminRoutes;
+export default UniversityAdminRoutes;

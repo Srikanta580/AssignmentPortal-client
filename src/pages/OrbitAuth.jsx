@@ -15,7 +15,7 @@ import Logo from "../components/atoms/Logo";
 import UniversityRegistrationForm from "../components/forms/UniversityRegistrationForm";
 import { useDispatch } from "react-redux";
 import { login } from "../features/auth/authAPI";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const OrbitAuth = () => {
   const dispatch = useDispatch();
@@ -75,9 +75,9 @@ const OrbitAuth = () => {
             animate={{ opacity: 1, x: 0 }}
             className="w-full max-w-md"
           >
-            <div className="flex items-center mb-8">
+            <Link to="/" className="flex items-center mb-8">
               <Logo size="small" />
-            </div>
+            </Link>
 
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Welcome back
