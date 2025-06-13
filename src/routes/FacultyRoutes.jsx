@@ -7,6 +7,8 @@ import ClassesPage from "../pages/faculty/Classes";
 import NoticesPage from "../pages/faculty/Notices";
 import CalendarPage from "../pages/faculty/Calendar";
 import ProfilePage from "../pages/faculty/Profile";
+import Attendance from "../pages/faculty/Attendance";
+import AttendanceList from "../pages/faculty/AttendanceList";
 
 const FacultyRoutes = () => (
   <Routes>
@@ -16,6 +18,8 @@ const FacultyRoutes = () => (
       <Route path=":type" element={<AssignmentPage />} />
     </Route>
     <Route path="classes" element={<ClassesPage />} />
+    <Route path="attendance" element={<Attendance />} />
+    <Route path="attendance-list" element={<AttendanceList />} />
     <Route path="calendar" element={<CalendarPage />} />
     <Route path="notices" element={<NoticesPage />} />
     <Route path="profile" element={<ProfilePage />} />
