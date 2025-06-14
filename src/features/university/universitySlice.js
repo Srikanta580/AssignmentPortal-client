@@ -9,6 +9,8 @@ import {
   addDepartment,
   getAllUniversities,
   approveUniversity,
+  createSubscription,
+  confirmSubscription,
 } from "./universityAPI";
 import { login, logoutUser } from "../auth/authAPI";
 
@@ -135,10 +137,25 @@ const universitySlice = createSlice({
         state.message = action.payload.message;
       })
 
+      .addCase(createSubscription.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(createSubscription.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.message = action.payload.message;
+      })
+
+      .addCase(confirmSubscription.fulfilled, (state) => {
+        state.success = true;
+        state.isSubscriptionRequired = false;
+      })
+
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.message = null;
+        state.isSubscriptionRequired = action.payload.isSubscriptionRequired;
         action.payload.role.toLowerCase() === "univadmin" &&
           Object.assign(state, action.payload.university);
       })

@@ -21,6 +21,8 @@ import OrbitUniversityLoginPage from "../pages/OrbitUniversityLogin";
 import OrbitUniversityRegisterPage from "../pages/OrbitUniversityReg";
 import PaymentResultPage from "../pages/PaymentResultPage";
 import PricingPage from "../pages/PricingPage";
+import ContactSalesPage from "../pages/ContactSalesPage";
+import FreeTierSuccessPage from "../pages/FreeTierSuccess";
 // import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
   const { role } = useSelector((state) => state.auth); // Get logged-in user
@@ -48,8 +50,31 @@ const AppRoutes = () => {
         >
           <Route path="admin/*" element={<UniversityAdminRoutes />} />
         </Route>
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/payment-result" element={<PaymentResultPage />} />
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute allowedRoles={["univadmin"]}>
+              <PricingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment-result"
+          element={
+            <ProtectedRoute allowedRoles={["univadmin"]}>
+              <PaymentResultPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/free-tier-success"
+          element={
+            <ProtectedRoute allowedRoles={["univadmin"]}>
+              <FreeTierSuccessPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/contact-sales" element={<ContactSalesPage />} />
         <Route path="/:university-slug/login" element={<LoginPage />} />
         <Route path="/:university-slug/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />

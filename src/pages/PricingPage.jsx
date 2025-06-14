@@ -11,8 +11,9 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
-import axios from "axios";
-import apiClient from "../services/apiClient";
+import { useDispatch, useSelector } from "react-redux";
+import Logo from "../components/atoms/Logo";
+import { createSubscription } from "../features/university/universityAPI";
 
 const plans = [
   {
@@ -34,6 +35,7 @@ const plans = [
     cta: "Try for Free",
     bestFor: "Testing, small colleges",
     highlighted: false,
+    color: "green",
   },
   {
     name: "Shared-DB Plan",
@@ -59,6 +61,7 @@ const plans = [
     cta: "Start Free Trial",
     bestFor: "Small/medium universities",
     highlighted: false,
+    color: "cyan",
   },
   {
     name: "Dedicated Schema",
@@ -81,6 +84,7 @@ const plans = [
     cta: "Get Started",
     bestFor: "Growing institutions",
     highlighted: true,
+    color: "teal",
   },
   {
     name: "Dedicated Database",
@@ -104,24 +108,37 @@ const plans = [
     cta: "Contact Sales",
     bestFor: "Large universities & enterprises",
     highlighted: false,
+    color: "purple",
   },
 ];
 
 const PricingPage = () => {
+  const universityId = useSelector((state) => state.university.id);
+  const dispatch = useDispatch();
+
   const handleCheckout = async (plan) => {
-    if (plan.priceInfo.unitAmount === null || plan.priceInfo.unitAmount === 0) {
-      alert("This plan is free or custom — no Stripe checkout needed.");
+    if (plan.priceInfo.unitAmount === null) {
+      // Redirect to contact sales page for custom pricing
+      window.location.href = "/contact-sales";
+      return;
+    }
+
+    if (plan.priceInfo.unitAmount === 0) {
+      // Redirect to free tier success page
+      window.location.href = "/free-tier-success";
       return;
     }
 
     try {
-      const res = await apiClient.post("/subscription/create", {
-        amount: plan.priceInfo.unitAmount,
-        currency: plan.priceInfo.currency,
-        planName: plan.name,
-        universityId: 53,
-      });
-      window.location.href = res.data.checkoutUrl;
+      const res = await dispatch(
+        createSubscription({
+          amount: plan.priceInfo.unitAmount,
+          currency: plan.priceInfo.currency,
+          planName: plan.name,
+          universityId,
+        })
+      ).unwrap();
+      window.location.href = res.checkoutUrl;
     } catch (err) {
       console.error("Stripe checkout error:", err);
       alert("Failed to initiate checkout. Please try again.");
@@ -129,56 +146,149 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-8 text-gray-800">
-          Choose Your Plan
-        </h2>
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto">
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-6">
+            <div className="flex items-center justify-center">
+              <Logo />
+            </div>
+          </div>
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Pricing Plans for Universities
+          </motion.h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Choose the perfect plan for your university. All plans include our
+            core LMS features with flexible options to scale.
+          </p>
+        </div>
+
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan, index) => (
             <motion.div
-              whileHover={{ scale: 1.03 }}
               key={index}
-              className={`rounded-2xl shadow-lg p-6 border bg-white flex flex-col justify-between ${
-                plan.highlighted ? "border-blue-500" : "border-gray-200"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ scale: 1.03 }}
+              className={`relative rounded-2xl shadow-xl p-8 border bg-white flex flex-col justify-between transition-all duration-300 ${
+                plan.highlighted
+                  ? "border-blue-500 ring-4 ring-blue-100 transform -translate-y-2"
+                  : "border-gray-200"
               }`}
             >
+              {plan.highlighted && (
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-sm font-bold px-4 py-1.5 rounded-full">
+                  MOST POPULAR
+                </div>
+              )}
+
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  {plan.icon}
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    {plan.name}
-                  </h3>
+                  <div className={`p-2 rounded-lg bg-${plan.color}-100`}>
+                    {plan.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">
+                      {plan.name}
+                    </h3>
+                    <span className="text-sm font-medium text-gray-500">
+                      {plan.tier}
+                    </span>
+                  </div>
                 </div>
-                <p className="text-gray-500 mb-2 italic">{plan.bestFor}</p>
-                <p className="text-3xl font-bold text-gray-900 mb-4">
-                  {plan.price}
-                </p>
-                <p className="text-gray-600 mb-4">{plan.description}</p>
-                <ul className="space-y-2 mb-6">
-                  {plan.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center gap-2 text-gray-600"
-                    >
-                      {feature.icon}
-                      <span>{feature.text}</span>
-                    </li>
-                  ))}
-                </ul>
+
+                <div className="mb-6">
+                  <p className="text-gray-600 italic mb-2">{plan.bestFor}</p>
+                  <p className="text-3xl font-extrabold text-gray-900 mb-1">
+                    {plan.price}
+                  </p>
+                  <p className="text-gray-600">{plan.description}</p>
+                </div>
+
+                <div className="border-t border-gray-100 pt-6 mb-6">
+                  <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                    Features
+                  </h4>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-3 text-gray-600"
+                      >
+                        <div className="mt-0.5 text-blue-500">
+                          {feature.icon}
+                        </div>
+                        <span>{feature.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <button
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleCheckout(plan)}
-                className={`w-full py-2 mt-2 text-white rounded-xl font-medium transition duration-200 ${
+                className={`w-full py-3 px-4 mt-4 text-white font-semibold rounded-xl transition duration-200 ${
                   plan.highlighted
-                    ? "bg-blue-600 hover:bg-blue-700"
-                    : "bg-gray-800 hover:bg-gray-900"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg shadow-blue-500/30"
+                    : "bg-gradient-to-r from-gray-700 to-gray-900"
                 }`}
               >
                 {plan.cta}
-              </button>
+              </motion.button>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-16 text-center max-w-3xl mx-auto">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">
+            Frequently Asked Questions
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+            <div className="bg-white p-5 rounded-xl shadow-sm">
+              <h4 className="font-semibold text-gray-900 mb-2">
+                Can I switch plans later?
+              </h4>
+              <p className="text-gray-600">
+                Yes, you can upgrade or downgrade your plan at any time. Your
+                billing will be prorated accordingly.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm">
+              <h4 className="font-semibold text-gray-900 mb-2">
+                Is there a setup fee?
+              </h4>
+              <p className="text-gray-600">
+                No setup fees for any plans. Enterprise plans may have custom
+                implementation fees based on requirements.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm">
+              <h4 className="font-semibold text-gray-900 mb-2">
+                What payment methods do you accept?
+              </h4>
+              <p className="text-gray-600">
+                We accept all major credit cards. For enterprise plans, we also
+                support bank transfers and invoices.
+              </p>
+            </div>
+            <div className="bg-white p-5 rounded-xl shadow-sm">
+              <h4 className="font-semibold text-gray-900 mb-2">
+                Can I cancel anytime?
+              </h4>
+              <p className="text-gray-600">
+                Yes, you can cancel your subscription at any time. There are no
+                cancellation fees.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

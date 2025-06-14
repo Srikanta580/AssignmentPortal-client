@@ -17,6 +17,8 @@ export const login = createAsyncThunk(
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
 
+      console.log(response.data);
+
       return {
         user:
           role.toLowerCase() === "univadmin"
@@ -29,6 +31,7 @@ export const login = createAsyncThunk(
         university: role.toLowerCase() === "univadmin" && {
           ...response.data.user.university,
         },
+        isSubscriptionRequired: response.data.subscriptionRequired,
         role: role.toLowerCase(),
       };
     } catch (err) {

@@ -153,3 +153,40 @@ export const approveUniversity = createAsyncThunk(
     }
   }
 );
+
+export const createSubscription = createAsyncThunk(
+  "university/createSubscription",
+  async (subscriptionData, thunkAPI) => {
+    try {
+      const response = await apiClient.post(
+        `/subscription/create`,
+        subscriptionData
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "Subscription failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const confirmSubscription = createAsyncThunk(
+  "university/confirmSubscription",
+  async (sessionId, thunkAPI) => {
+    try {
+      const response = await apiClient.post(
+        `/subscription/confirm?sessionId=${sessionId}`
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "Subscription process not completed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
