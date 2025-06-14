@@ -23,6 +23,7 @@ import PaymentResultPage from "../pages/PaymentResultPage";
 import PricingPage from "../pages/PricingPage";
 import ContactSalesPage from "../pages/ContactSalesPage";
 import FreeTierSuccessPage from "../pages/FreeTierSuccess";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 // import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
   const { role } = useSelector((state) => state.auth); // Get logged-in user
@@ -100,7 +101,16 @@ const AppRoutes = () => {
         </Route>
         <Route path="/codeanalyzer" element={<CodeAnalyzer />} />
         <Route path="/form-preview" element={<FormPreview />} />
-        <Route path="/form/:formId" element={<FormSubmissionPage />} />
+        <Route
+          path="/form/:formId"
+          element={
+            <GoogleOAuthProvider
+              clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+            >
+              <FormSubmissionPage />
+            </GoogleOAuthProvider>
+          }
+        />
         <Route path="/404" element={<NotFoundPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

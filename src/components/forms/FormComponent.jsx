@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-function FormComponent({ form, onSubmit }) {
+function FormComponent({ form, onSubmit, disabled }) {
+  const [formData, setFormData] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Check if at least one field is filled
+  useEffect(() => {
+    const hasAtLeastOneAnswer = form.questions.some((_, idx) => {
+      const value = formData[`question-${idx}`] || formData[`yesno-${idx}`];
+      return value !== undefined && value !== "";
+    });
+    setIsFormValid(hasAtLeastOneAnswer);
+  }, [formData, form.questions]);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isFormValid) {
+      onSubmit(e);
+    }
+  };
+
   return (
     <form
       className={`max-w-2xl mx-auto my-8 p-6 ${
@@ -25,7 +52,8 @@ function FormComponent({ form, onSubmit }) {
             : "1px solid rgb(229, 231, 235)",
         borderRadius: form.borderRadius,
       }}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
+      disabled={disabled}
     >
       {/* Background pattern for glassmorphism */}
       {form.formStyle === "glassmorphism" && (
@@ -89,42 +117,61 @@ function FormComponent({ form, onSubmit }) {
             {item.type === "text" && (
               <input
                 type="text"
+                name={`question-${idx}`}
                 className="w-full border p-2 rounded"
                 placeholder="Your answer"
+                onChange={handleInputChange}
               />
             )}
             {item.type === "email" && (
               <input
                 type="email"
+                name={`question-${idx}`}
                 className="w-full border p-2 rounded"
                 placeholder="Your email"
+                onChange={handleInputChange}
               />
             )}
             {item.type === "textarea" && (
               <textarea
+                name={`question-${idx}`}
                 className="w-full border p-2 rounded"
                 placeholder="Your response"
+                onChange={handleInputChange}
               />
             )}
             {item.type === "yes_no" && (
               <div className="flex items-center gap-4">
                 <label className="flex items-center gap-2">
-                  <input type="radio" name={`yesno-${idx}`} value="Yes" />
+                  <input
+                    type="radio"
+                    name={`yesno-${idx}`}
+                    value="Yes"
+                    onChange={handleInputChange}
+                  />
                   Yes
                 </label>
                 <label className="flex items-center gap-2">
-                  <input type="radio" name={`yesno-${idx}`} value="No" />
+                  <input
+                    type="radio"
+                    name={`yesno-${idx}`}
+                    value="No"
+                    onChange={handleInputChange}
+                  />
                   No
                 </label>
               </div>
             )}
             {item.type === "checkbox" && (
               <div className="flex items-center gap-2">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name={`question-${idx}`}
+                  onChange={handleInputChange}
+                />
                 <span>{item.label}</span>
               </div>
             )}
-            {/* Add more types as needed */}
           </div>
         ))}
       </div>
@@ -132,15 +179,23 @@ function FormComponent({ form, onSubmit }) {
       {/* Submit Button */}
       <div className="pt-4 mt-6 border-t border-gray-200 text-right">
         <button
-          className="py-2 px-4 text-white"
+          className={`py-2 px-4 text-black ${
+            !isFormValid ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           style={{
             backgroundColor: form.accentColor,
             borderRadius: form.borderRadius,
           }}
           type="submit"
+          disabled={!isFormValid || disabled}
         >
           Submit
         </button>
+        {!isFormValid && (
+          <p className="text-sm text-gray-500 mt-2 text-left">
+            Please fill at least one field to submit the form.
+          </p>
+        )}
       </div>
     </form>
   );
