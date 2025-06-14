@@ -20,18 +20,8 @@ export const submitUniversityBasicInfo = createAsyncThunk(
 
 export const submitUniversityVerification = createAsyncThunk(
   "university/submitVerification",
-  async ({ dto, document }, thunkAPI) => {
+  async ({ formData }, thunkAPI) => {
     try {
-      const formData = new FormData();
-      formData.append("document", document);
-      // Append other DTO fields as needed
-      for (const key in dto) {
-        formData.append(key, dto[key]);
-      }
-
-      console.log(document);
-      console.log(dto);
-
       const response = await apiClient.post(
         "/auth/register-university/verification",
         formData,
