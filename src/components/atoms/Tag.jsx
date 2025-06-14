@@ -20,3 +20,11 @@ export const ComingSoonTag = ({ className }) => (
 export const DeprecatedTag = ({ className }) => (
   <Tag className={`bg-red-500 text-white ${className}`}>Deprecated</Tag>
 );
+
+export const ProTag = ({ className }) => (
+  <Tag
+    className={`bg-gradient-to-r from-fuchsia-500 via-pink-500 to-rose-500 text-white ${className}`}
+  >
+    Pro
+  </Tag>
+);

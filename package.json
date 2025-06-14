@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@googleapis/forms": "^3.0.1",
     "@monaco-editor/react": "^4.7.0",
+    "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/cli": "^4.0.15",
     "@tailwindcss/vite": "^4.1.2",

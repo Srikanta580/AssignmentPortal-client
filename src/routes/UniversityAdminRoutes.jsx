@@ -1,11 +1,24 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import DashboardLayout from "../components/layouts/UniversityAdminDashboardLayout";
 import DepartmentsPage from "../pages/admin/DepartmentPage";
 import AdminsPage from "../pages/admin/AdminsPage";
 import AnalyticsPage from "../pages/admin/AnalyticsPage";
 import SettingsPage from "../pages/admin/UniversityAdminSettingsPage";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const DepartmentAdminRoutes = () => {
+const UniversityAdminRoutes = () => {
+  const navigate = useNavigate();
+  const isSubscriptionRequired = useSelector(
+    (state) => state.university.isSubscriptionRequired
+  );
+
+  useEffect(() => {
+    if (isSubscriptionRequired) {
+      navigate("/pricing");
+    }
+  }, [isSubscriptionRequired, navigate]);
+
   return (
     <Routes>
       <Route index element={<DepartmentsPage />} />
@@ -16,4 +29,4 @@ const DepartmentAdminRoutes = () => {
   );
 };
 
-export default DepartmentAdminRoutes;
+export default UniversityAdminRoutes;

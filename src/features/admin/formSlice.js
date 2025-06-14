@@ -2,13 +2,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchForms, generateForm, saveForm } from "./adminAPI";
 import apiClient from "../../services/apiClient";
 
+// In formSlice.js (or wherever you store responses)
 export const fetchFormResponses = createAsyncThunk(
-  "forms/fetchResponses",
-  async (formId) => {
-    return [
-      { id: "r1", answers: ["Good", "Yes", "No"] },
-      { id: "r2", answers: ["Average", "No", "Yes"] },
-    ];
+  "forms/fetchFormResponses",
+  async (formId, thunkAPI) => {
+    try {
+      const res = await apiClient.get(`/form/${formId}/submissions`);
+      // Parse answersJson into JS objects
+      const parsed = res.data.map((submission) => ({
+        ...submission,
+        parsedAnswers: JSON.parse(submission.answersJson),
+      }));
+      console.log(parsed);
+      return { formId, responses: parsed };
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data || "Error");
+    }
   }
 );
 
@@ -47,7 +56,7 @@ const formsSlice = createSlice({
     form: initialState,
     submissionForm: initialState,
     forms: [],
-    responses: {},
+    responses: [],
     loading: false,
     error: null,
   },
@@ -140,6 +149,11 @@ const formsSlice = createSlice({
         createdAt: payload.createdAt,
         ...parsedData,
       };
+    });
+    addCommonCases(fetchFormResponses);
+    builder.addCase(fetchFormResponses.fulfilled, (state, action) => {
+      state.loading = false;
+      state.responses = action.payload.responses;
     });
   },
 });

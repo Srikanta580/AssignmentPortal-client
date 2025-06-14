@@ -20,18 +20,8 @@ export const submitUniversityBasicInfo = createAsyncThunk(
 
 export const submitUniversityVerification = createAsyncThunk(
   "university/submitVerification",
-  async ({ dto, document }, thunkAPI) => {
+  async ({ formData }, thunkAPI) => {
     try {
-      const formData = new FormData();
-      formData.append("document", document);
-      // Append other DTO fields as needed
-      for (const key in dto) {
-        formData.append(key, dto[key]);
-      }
-
-      console.log(document);
-      console.log(dto);
-
       const response = await apiClient.post(
         "/auth/register-university/verification",
         formData,
@@ -124,6 +114,77 @@ export const addDepartment = createAsyncThunk(
       const errorPayload = err.response?.data || {
         success: false,
         message: "Dept. add failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const getAllUniversities = createAsyncThunk(
+  "university/getAllUniversities",
+  async (status, thunkAPI) => {
+    try {
+      const response = await apiClient.get(
+        `/university${status ? `?status=${status}` : ""}`
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "University fetch failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const approveUniversity = createAsyncThunk(
+  "university/approveUniversity",
+  async (uniId, thunkAPI) => {
+    try {
+      const response = await apiClient.post(`/university/${uniId}/approve`);
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "University Approval failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const createSubscription = createAsyncThunk(
+  "university/createSubscription",
+  async (subscriptionData, thunkAPI) => {
+    try {
+      const response = await apiClient.post(
+        `/subscription/create`,
+        subscriptionData
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "Subscription failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const confirmSubscription = createAsyncThunk(
+  "university/confirmSubscription",
+  async (sessionId, thunkAPI) => {
+    try {
+      const response = await apiClient.post(
+        `/subscription/confirm?sessionId=${sessionId}`
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "Subscription process not completed",
       };
       return thunkAPI.rejectWithValue(errorPayload);
     }

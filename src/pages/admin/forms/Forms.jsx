@@ -32,11 +32,15 @@ const FormsPage = () => {
 
       {loading ? (
         <div>Loading forms...</div>
-      ) : (
+      ) : forms.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {forms.map((form) => (
             <FormCard key={form.id} form={form} />
           ))}
+        </div>
+      ) : (
+        <div className="flex justify-center items-center h-56">
+          <h1 className="text-gray-300 text-2xl">No forms found</h1>
         </div>
       )}
     </div>
