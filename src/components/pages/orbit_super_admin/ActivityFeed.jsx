@@ -76,9 +76,7 @@ const ActivityFeed = () => {
           </li>
         ))}
       </ul>
-      <button className="btn outline-btn view-all-btn">
-        View All Activity
-      </button>
+      <button className="secondary-btn">View All Activity</button>
     </div>
   );
 };

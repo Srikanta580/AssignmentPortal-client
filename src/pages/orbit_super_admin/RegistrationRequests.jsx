@@ -3,7 +3,7 @@ import React from "react";
 import { FaCheck, FaTimes, FaInfoCircle, FaClock } from "react-icons/fa";
 import RequestCard from "../../components/pages/orbit_super_admin/RequestCard";
 
-const RegistrationRequests = ({ requests, onApprove }) => {
+const RegistrationRequests = ({ requests, onApprove, isInProgress }) => {
   const pendingRequests = requests.filter((req) => req.status === "pending");
 
   return (
@@ -11,7 +11,7 @@ const RegistrationRequests = ({ requests, onApprove }) => {
       <div className="page-header">
         <h1 className="page-title">University Registration Requests</h1>
         <div className="header-actions">
-          <button className="btn export-btn">Export to CSV</button>
+          <button className="primary-btn">Export to CSV</button>
         </div>
       </div>
 
@@ -42,6 +42,7 @@ const RegistrationRequests = ({ requests, onApprove }) => {
               key={request.id}
               request={request}
               onApprove={() => onApprove(request.id)}
+              isInProgress={isInProgress}
             />
           ))
         ) : (

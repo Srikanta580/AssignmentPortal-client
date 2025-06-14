@@ -34,8 +34,12 @@ const UniversityTable = ({ universities }) => {
               </td>
               <td>{university.contactEmail}</td>
               <td>
-                <span className={`plan-badge ${university.plan.toLowerCase()}`}>
-                  {university.plan}
+                <span
+                  className={`plan-badge ${
+                    university?.plan?.toLowerCase() || "free"
+                  }`}
+                >
+                  {university.plan || "Free"}
                 </span>
               </td>
               <td>

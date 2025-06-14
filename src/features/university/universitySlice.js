@@ -7,6 +7,8 @@ import {
   getUniversityBySlug,
   addDepartmentalAdmin,
   addDepartment,
+  getAllUniversities,
+  approveUniversity,
 } from "./universityAPI";
 import { login, logoutUser } from "../auth/authAPI";
 
@@ -14,6 +16,9 @@ const initialState = {
   loading: false,
   error: null,
   message: null,
+  allUniversities: [],
+  pendingRequests: [],
+  recentRequests: [],
   id: null,
   name: "",
   departments: [],
@@ -31,6 +36,9 @@ const universitySlice = createSlice({
       state.error = null;
       state.message = null;
     },
+    clearUniversities: (state) => {
+      state.allUniversities = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -46,10 +54,12 @@ const universitySlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
       .addCase(submitUniversityVerification.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message;
       })
+
       .addCase(setupUniversityAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message;
@@ -58,6 +68,7 @@ const universitySlice = createSlice({
         state.loading = false;
         state.message = action.payload.message;
       })
+
       .addCase(getUniversityBySlug.fulfilled, (state, action) => {
         state.loading = false;
         state.id = action.payload.id;
@@ -71,6 +82,59 @@ const universitySlice = createSlice({
         state.success = action.payload.success;
         state.message = action.payload.message;
       })
+
+      .addCase(getAllUniversities.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllUniversities.fulfilled, (state, action) => {
+        state.allUniversities = action.payload;
+        const pending = action.payload.filter((u) => u.status === "pending");
+        state.pendingRequests = pending;
+        state.recentRequests = [...pending]
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 5);
+
+        state.loading = false;
+        state.success = true;
+        state.message = "Universities loaded successfully";
+      })
+      .addCase(getAllUniversities.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.message = action.payload.message;
+      })
+
+      .addCase(approveUniversity.fulfilled, (state, action) => {
+        const approvedUniversityId = action.meta.arg; // This is the ID you dispatched
+
+        // Remove the approved university from pendingRequests
+        state.pendingRequests = state.pendingRequests.filter(
+          (uni) => uni.id !== approvedUniversityId
+        );
+
+        // Remove the approved university from recentRequests
+        state.recentRequests = state.recentRequests.filter(
+          (uni) => uni.id !== approvedUniversityId
+        );
+
+        // Change the state to "complete" from "pending"
+        state.allUniversities = state.allUniversities.filter((uni) =>
+          uni.id === approvedUniversityId
+            ? (uni.status = "complete")
+            : uni.status
+        );
+
+        state.loading = false;
+        state.error = null;
+        state.success = true;
+        state.message = "Approved Successfully";
+      })
+      .addCase(approveUniversity.rejected, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.message = action.payload.message;
+      })
+
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
@@ -117,5 +181,5 @@ const universitySlice = createSlice({
   },
 });
 
-export const { clearStatus } = universitySlice.actions;
+export const { clearStatus, clearUniversities } = universitySlice.actions;
 export default universitySlice.reducer;

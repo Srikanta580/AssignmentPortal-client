@@ -119,3 +119,37 @@ export const addDepartment = createAsyncThunk(
     }
   }
 );
+
+export const getAllUniversities = createAsyncThunk(
+  "university/getAllUniversities",
+  async (status, thunkAPI) => {
+    try {
+      const response = await apiClient.get(
+        `/university${status ? `?status=${status}` : ""}`
+      );
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "University fetch failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);
+
+export const approveUniversity = createAsyncThunk(
+  "university/approveUniversity",
+  async (uniId, thunkAPI) => {
+    try {
+      const response = await apiClient.post(`/university/${uniId}/approve`);
+      console.log("Res : ", response.data);
+      return response.data;
+    } catch (err) {
+      const errorPayload = err.response?.data || {
+        message: "University Approval failed",
+      };
+      return thunkAPI.rejectWithValue(errorPayload);
+    }
+  }
+);

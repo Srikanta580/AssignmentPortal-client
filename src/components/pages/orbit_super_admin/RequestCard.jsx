@@ -1,5 +1,5 @@
 // src/components/RequestCard.js
-import React from "react";
+import React, { useState } from "react";
 import {
   FaUniversity,
   FaEnvelope,
@@ -10,14 +10,15 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-const RequestCard = ({ request, onApprove, onReject }) => {
+const RequestCard = ({ request, onApprove, onReject, isInProgress }) => {
+  const [approved, setApproved] = useState(false);
   return (
     <div className="request-card">
       <div className="request-header">
         <div className="university-icon">
           <FaUniversity />
         </div>
-        <h3>{request.universityName}</h3>
+        <h3>{request.name}</h3>
         <span className={`status-badge ${request.status}`}>
           {request.status}
         </span>
@@ -52,17 +53,23 @@ const RequestCard = ({ request, onApprove, onReject }) => {
       {request.status === "pending" && (
         <div className="request-actions">
           <button
-            className="btn approve-btn"
+            className={`btn approve-btn ${
+              isInProgress && "cursor-not-allowed"
+            }`}
+            disabled={isInProgress}
             onClick={() => onApprove(request.id)}
           >
-            <FaCheck /> Approve
+            <FaCheck />{" "}
+            {isInProgress ? "Approving" : approved ? "Approved" : "Approve"}
           </button>
-          <button
-            className="btn reject-btn"
-            onClick={() => onReject(request.id)}
-          >
-            <FaTimes /> Reject
-          </button>
+          {!approved && (
+            <button
+              className="btn reject-btn"
+              onClick={() => onReject(request.id)}
+            >
+              <FaTimes /> Reject
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -4,11 +4,21 @@ import Universities from "../pages/orbit_super_admin/Universities";
 import PlanManagement from "../pages/orbit_super_admin/PlanManagement";
 import { useEffect, useState } from "react";
 import RegistrationRequests from "../pages/orbit_super_admin/RegistrationRequests";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  approveUniversity,
+  getAllUniversities,
+} from "../features/university/universityAPI";
 
 const OrbitSuperAdminRoutes = () => {
-  const [requests, setRequests] = useState([]);
-  const [universities, setUniversities] = useState([]);
+  const dispatch = useDispatch();
+  const { allUniversities, recentRequests, pendingRequests } = useSelector(
+    (state) => state.university
+  );
+
+  console.log("pending", pendingRequests);
   const [plans, setPlans] = useState([]);
+  const [isInProgress, setInProgress] = useState(false);
   const [notification, setNotification] = useState({
     show: false,
     message: "",
@@ -16,56 +26,53 @@ const OrbitSuperAdminRoutes = () => {
   });
 
   useEffect(() => {
-    // Fetch initial data
     const fetchData = async () => {
       try {
-        // const reqs = await getRegistrationRequests();
-        // setRequests(reqs);
-        // const unis = await getUniversities();
-        // setUniversities(unis);
-        // const planData = await getPlanModules();
-        // setPlans(planData);
+        await dispatch(getAllUniversities(null)).unwrap();
       } catch (error) {
-        showNotification("Error loading data: " + error.message, "error");
+        alert("Error loading data: " + error.message);
       }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const handleApproveRequest = async (id) => {
     try {
-      //   const updatedReq = await approveRequest(id);
-      //   setRequests(requests.map(req => req.id === id ? updatedReq : req));
-      showNotification("University approved successfully!", "success");
+      setInProgress(true);
+      await dispatch(approveUniversity(id)).unwrap();
     } catch (error) {
-      showNotification("Error approving request: " + error.message, "error");
+      alert("Error approving request: " + error.message, "error");
+    } finally {
+      setInProgress(false);
     }
-  };
-
-  const showNotification = (message, type) => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => setNotification({ ...notification, show: false }), 3000);
   };
 
   return (
     <Routes>
       <Route
         index
-        element={<Dashboard requests={requests} universities={universities} />}
+        element={
+          <Dashboard
+            requests={pendingRequests}
+            universities={allUniversities}
+            recentRequests={recentRequests}
+          />
+        }
       />
       <Route
         path="requests"
         element={
           <RegistrationRequests
-            requests={requests}
+            requests={pendingRequests}
             onApprove={handleApproveRequest}
+            isInProgress={isInProgress}
           />
         }
       />
       <Route
         path="universities"
-        element={<Universities universities={universities} />}
+        element={<Universities universities={allUniversities} />}
       />
       <Route
         path="plans"

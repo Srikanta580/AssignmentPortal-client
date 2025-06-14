@@ -52,6 +52,7 @@ const OrbitUniversityLoginPage = () => {
         .toLowerCase();
       navigate(`/${route}/admin`);
     } catch (error) {
+      console.log(error);
       setLoginError(error?.message || "Login failed. Please try again.");
     } finally {
       setIsSubmitting(false);

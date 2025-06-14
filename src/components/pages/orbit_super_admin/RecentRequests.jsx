@@ -35,9 +35,7 @@ const RecentRequests = ({ requests }) => {
         </div>
       )}
 
-      <button className="btn outline-btn view-all-btn">
-        View All Requests
-      </button>
+      <button className="secondary-btn">View All Requests</button>
     </div>
   );
 };

@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import Logo from "../../components/atoms/Logo";
 
-const Sidebar = () => {
+const Sidebar = ({ pendingCount }) => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -40,7 +40,7 @@ const Sidebar = () => {
         >
           <FaClipboardList className="nav-icon" />
           <span>Registration Requests</span>
-          <span className="badge">12</span>
+          <span className="badge">{pendingCount}</span>
         </NavLink>
 
         <NavLink

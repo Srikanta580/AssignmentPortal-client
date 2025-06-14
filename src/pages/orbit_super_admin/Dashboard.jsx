@@ -10,12 +10,10 @@ import StatCard from "../../components/ui/StatCard";
 import ActivityFeed from "../../components/pages/orbit_super_admin/ActivityFeed";
 import RecentRequests from "../../components/pages/orbit_super_admin/RecentRequests";
 
-const Dashboard = ({ requests, universities }) => {
-  const pendingRequests = requests?.filter(
-    (req) => req.status === "pending"
-  ).length;
-  const approvedUniversities = universities?.filter(
-    (uni) => uni.status === "active"
+const Dashboard = ({ recentRequests, requests, universities }) => {
+  // console.log(requests);
+  const approvedUniversities = universities.filter(
+    (uni) => uni.status === "complete"
   ).length;
 
   return (
@@ -26,7 +24,7 @@ const Dashboard = ({ requests, universities }) => {
         <StatCard
           icon={<FaClipboardList />}
           title="Pending Requests"
-          value={pendingRequests}
+          value={requests.length}
           color="var(--color-secondary)"
         />
         <StatCard
@@ -51,7 +49,7 @@ const Dashboard = ({ requests, universities }) => {
 
       <div className="dashboard-content">
         <div className="dashboard-column">
-          <RecentRequests requests={requests?.slice(0, 5)} />
+          <RecentRequests requests={recentRequests} />
         </div>
 
         <div className="dashboard-column">
