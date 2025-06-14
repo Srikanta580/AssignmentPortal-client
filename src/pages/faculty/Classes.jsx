@@ -27,55 +27,55 @@ const ClassesPage = () => {
     // console.log("Response:", res);
   }, [dispatch, id]);
   // Sample data - would come from Redux store in real app
-  const facultyClasses = {
-    current: [
-      {
-        id: 1,
-        subjectCode: "CS101",
-        subjectName: "Introduction to Programming",
-        semester: "1",
-        department: "Computer Science",
-        classTime: "Mon, Wed 10:00-11:30 AM",
-        location: "Building A, Room 101",
-        studentsCount: 45,
-        nextClass: "Monday, Apr 29, 2025 - 10:00 AM",
-        materials: [
-          { id: 1, name: "Week 1: Introduction to Variables", type: "pdf" },
-          { id: 2, name: "Week 2: Control Flow", type: "ppt" },
-        ],
-      },
-      {
-        id: 2,
-        subjectCode: "CS202",
-        subjectName: "Data Structures",
-        semester: "2",
-        department: "Computer Science",
-        classTime: "Tue, Thu 2:00-3:30 PM",
-        location: "Building B, Room 205",
-        studentsCount: 38,
-        nextClass: "Tuesday, Apr 29, 2025 - 2:00 PM",
-        materials: [
-          { id: 1, name: "Week 1: Arrays and Linked Lists", type: "pdf" },
-          { id: 2, name: "Week 2: Stacks and Queues", type: "ppt" },
-        ],
-      },
-      {
-        id: 3,
-        subjectCode: "CS480",
-        subjectName: "Artificial Intelligence",
-        semester: "4",
-        department: "Computer Science",
-        classTime: "Fri 9:00-12:00 PM",
-        location: "Building C, Room 310",
-        studentsCount: 32,
-        nextClass: "Friday, May 2, 2025 - 9:00 AM",
-        materials: [
-          { id: 1, name: "Week 1: Introduction to AI", type: "pdf" },
-          { id: 2, name: "Week 2: Search Algorithms", type: "ppt" },
-        ],
-      },
-    ],
-  };
+  // const facultyClasses = {
+  //   current: [
+  //     {
+  //       id: 1,
+  //       subjectCode: "CS101",
+  //       subjectName: "Introduction to Programming",
+  //       semester: "1",
+  //       department: "Computer Science",
+  //       classTime: "Mon, Wed 10:00-11:30 AM",
+  //       location: "Building A, Room 101",
+  //       studentsCount: 45,
+  //       nextClass: "Monday, Apr 29, 2025 - 10:00 AM",
+  //       materials: [
+  //         { id: 1, name: "Week 1: Introduction to Variables", type: "pdf" },
+  //         { id: 2, name: "Week 2: Control Flow", type: "ppt" },
+  //       ],
+  //     },
+  //     {
+  //       id: 2,
+  //       subjectCode: "CS202",
+  //       subjectName: "Data Structures",
+  //       semester: "2",
+  //       department: "Computer Science",
+  //       classTime: "Tue, Thu 2:00-3:30 PM",
+  //       location: "Building B, Room 205",
+  //       studentsCount: 38,
+  //       nextClass: "Tuesday, Apr 29, 2025 - 2:00 PM",
+  //       materials: [
+  //         { id: 1, name: "Week 1: Arrays and Linked Lists", type: "pdf" },
+  //         { id: 2, name: "Week 2: Stacks and Queues", type: "ppt" },
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       subjectCode: "CS480",
+  //       subjectName: "Artificial Intelligence",
+  //       semester: "4",
+  //       department: "Computer Science",
+  //       classTime: "Fri 9:00-12:00 PM",
+  //       location: "Building C, Room 310",
+  //       studentsCount: 32,
+  //       nextClass: "Friday, May 2, 2025 - 9:00 AM",
+  //       materials: [
+  //         { id: 1, name: "Week 1: Introduction to AI", type: "pdf" },
+  //         { id: 2, name: "Week 2: Search Algorithms", type: "ppt" },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const toggleExpandClass = (id) => {
     if (expandedClass === id) {
@@ -86,26 +86,26 @@ const ClassesPage = () => {
   };
 
   // Stats for current semester
-  const currentClassesCount = facultyClasses.current.length;
-  const totalStudents = facultyClasses.current.reduce(
-    (sum, cls) => sum + cls.studentsCount,
-    0
-  );
-  const averageClassSize = Math.round(totalStudents / currentClassesCount);
+  // const currentClassesCount = facultyClasses.current.length;
+  // const totalStudents = facultyClasses.current.reduce(
+  //   (sum, cls) => sum + cls.studentsCount,
+  //   0
+  // );
+  // const averageClassSize = Math.round(totalStudents / currentClassesCount);
 
   // Next class to teach
-  const nextClassesWithDates = facultyClasses.current.map((cls) => {
-    const [_, date, time] = cls.nextClass.split(" - ");
-    // Convert to Date object for comparison
-    return {
-      ...cls,
-      nextClassDate: new Date(`${date} ${time}`),
-    };
-  });
+  // const nextClassesWithDates = facultyClasses.current.map((cls) => {
+  //   const [_, date, time] = cls.nextClass.split(" - ");
+  //   // Convert to Date object for comparison
+  //   return {
+  //     ...cls,
+  //     nextClassDate: new Date(`${date} ${time}`),
+  //   };
+  // });
 
-  // Sort by date and get the soonest
-  nextClassesWithDates.sort((a, b) => a.nextClassDate - b.nextClassDate);
-  const nextClass = nextClassesWithDates[0];
+  // // Sort by date and get the soonest
+  // nextClassesWithDates.sort((a, b) => a.nextClassDate - b.nextClassDate);
+  // const nextClass = nextClassesWithDates[0];
 
   return (
     <div className="w-full mx-auto text-dark">
@@ -118,12 +118,12 @@ const ClassesPage = () => {
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="card">
           <div className="inline-flex p-3 rounded-full bg-primary-100 text-primary-500 mb-4">
             <BookOpen className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">{currentClassesCount}</h2>
+          <h2 className="text-2xl font-bold">3</h2>
           <p className="text-primary">Current Classes</p>
         </div>
 
@@ -131,23 +131,15 @@ const ClassesPage = () => {
           <div className="inline-flex p-3 rounded-full bg-secondary-100 text-secondary-500 mb-4">
             <Users className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">{totalStudents}</h2>
+          <h2 className="text-2xl font-bold">45</h2>
           <p className="text-primary">Total Students</p>
-        </div>
-
-        <div className="card">
-          <div className="inline-flex p-3 rounded-full bg-accent-100 text-accent-500 mb-4">
-            <Users className="w-6 h-6" />
-          </div>
-          <h2 className="text-2xl font-bold">{averageClassSize}</h2>
-          <p className="text-primary">Avg. Class Size</p>
         </div>
 
         <div className="card">
           <div className="inline-flex p-3 rounded-full bg-accent-100 text-accent-500 mb-4">
             <Clock className="w-6 h-6" />
           </div>
-          <h2 className="text-lg font-bold">{nextClass.nextClass}</h2>
+          <h2 className="text-lg font-bold">Mon 10:40</h2>
           <p className="text-primary">Next Class</p>
         </div>
       </div>
@@ -235,20 +227,6 @@ const ClassesPage = () => {
 
                       <div>
                         <h4 className="font-medium mb-3">Course Materials</h4>
-                        {/* {cls.materials.map((material) => (
-                          <div
-                            key={material.id}
-                            className="flex items-center justify-between p-2 bg-light rounded-md mb-2"
-                          >
-                            <div className="flex items-center">
-                              <FileText className="w-4 h-4 mr-2 text-primary" />
-                              <span className="text-sm">{material.name}</span>
-                            </div>
-                            <span className="text-xs bg-secondary-100 text-secondary-500 px-2 py-1 rounded-md uppercase">
-                              {material.type}
-                            </span>
-                          </div>
-                        ))} */}
 
                         <div className="mt-4">
                           <button className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2">

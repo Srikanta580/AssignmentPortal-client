@@ -5,7 +5,7 @@ const tabs = [
   { key: "class", label: "Class Assignments" },
   { key: "ca1", label: "CA1 – Continuous Assessment 1" },
   { key: "ca2", label: "CA2 – Continuous Assessment 2" },
-  { key: "ca3", label: "CA3 – Continuous Assessment 3 Papers" },
+  { key: "ca3", label: "CA3 – Continuous Assessment 3" },
 ];
 
 export default function AssignmentLayout() {
