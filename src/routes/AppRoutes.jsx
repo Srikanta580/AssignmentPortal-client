@@ -19,6 +19,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 import OrbitSuperAdminLayout from "../components/layouts/OrbitSuperAdminLayout";
 import OrbitUniversityLoginPage from "../pages/OrbitUniversityLogin";
 import OrbitUniversityRegisterPage from "../pages/OrbitUniversityReg";
+import PaymentResultPage from "../pages/PaymentResultPage";
+import PricingPage from "../pages/PricingPage";
 // import Test from "../pages/test"; // Import the test page
 const AppRoutes = () => {
   const { role } = useSelector((state) => state.auth); // Get logged-in user
@@ -46,6 +48,8 @@ const AppRoutes = () => {
         >
           <Route path="admin/*" element={<UniversityAdminRoutes />} />
         </Route>
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/payment-result" element={<PaymentResultPage />} />
         <Route path="/:university-slug/login" element={<LoginPage />} />
         <Route path="/:university-slug/login/:role" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
