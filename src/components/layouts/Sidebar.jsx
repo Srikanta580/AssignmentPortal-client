@@ -23,93 +23,102 @@ import Logo from "../atoms/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../features/auth/authAPI";
 import { resetForm } from "../../features/admin/formSlice";
-import { BetaTag, ComingSoonTag } from "../atoms/Tag";
+import { BetaTag, ComingSoonTag, ProTag } from "../atoms/Tag";
 
 const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { role,user } = useSelector((state) => state.auth);
+  const { role, user } = useSelector((state) => state.auth);
 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const navigation = {
-  student: [
-    { name: "Home", icon: Home, href: "/dashboard/student" },
-    {
-      name: "Assignments",
-      icon: FileText,
-      href: "/dashboard/student/assignments",
-    },
-    {
-      name: "Notes",
-      icon: NotebookTabs,
-      href: "/dashboard/student/notes",
-    },
-    {
-      name: "Calendar",
-      icon: Calendar,
-      href: "/dashboard/student/calendar",
-      isBeta: true,
-    },
-    {
-      name: "Minor Project",
-      icon: Code,
-      href: "/dashboard/student/minor-project",
-      isVisible: user?.semester == 5,
-    },
-    {
-      name: "Major Project",
-      icon: Code,
-      href: "/dashboard/student/major-project",
-      isVisible: user?.semester == 6,
-    },
-    { name: "Profile", icon: User, href: "/dashboard/student/profile" },
-  ],
-  faculty: [
-    { name: "Home", icon: Home, href: "/dashboard/faculty" },
-    {
-      name: "My Classes",
-      icon: GraduationCap,
-      href: "/dashboard/faculty/classes",
-    },
-    {
-      name: "Assignments",
-      icon: FileText,
-      href: "/dashboard/faculty/assignments",
-    },
-    {
-      name: "Calendar",
-      icon: Calendar,
-      href: "/dashboard/faculty/calendar",
-      isBeta: true,
-    },
-    {
-      name: "Notices",
-      icon: MessageSquare,
-      href: "/dashboard/faculty/notices",
-    },
-    { name: "Profile", icon: User, href: "/dashboard/faculty/profile" },
-  ],
-  admin: [
-    { name: "Home", icon: Home, href: "/dashboard/admin" },
-    { name: "Users", icon: Users, href: "/dashboard/admin/users" },
-    { name: "Forms", icon: FolderMinus, href: "/dashboard/admin/forms" },
-    { name: "Classes", icon: GraduationCap, href: "/dashboard/admin/classes" },
-    { name: "Subjects", icon: BookOpen, href: "/dashboard/admin/subjects" },
-    {
-      name: "Analytics",
-      icon: BarChart2,
-      href: "/dashboard/admin/analytics",
-      isUpcoming: true,
-    },
-    {
-      name: "Notifications",
-      icon: Bell,
-      href: "/dashboard/admin/notifications",
-    },
-    { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
-  ],
-};
+    student: [
+      { name: "Home", icon: Home, href: "/dashboard/student" },
+      {
+        name: "Assignments",
+        icon: FileText,
+        href: "/dashboard/student/assignments",
+      },
+      {
+        name: "Notes",
+        icon: NotebookTabs,
+        href: "/dashboard/student/notes",
+      },
+      {
+        name: "Calendar",
+        icon: Calendar,
+        href: "/dashboard/student/calendar",
+        isBeta: true,
+      },
+      {
+        name: "Minor Project",
+        icon: Code,
+        href: "/dashboard/student/minor-project",
+        isVisible: user?.semester == 5,
+      },
+      {
+        name: "Major Project",
+        icon: Code,
+        href: "/dashboard/student/major-project",
+        isVisible: user?.semester == 6,
+      },
+      { name: "Profile", icon: User, href: "/dashboard/student/profile" },
+    ],
+    faculty: [
+      { name: "Home", icon: Home, href: "/dashboard/faculty" },
+      {
+        name: "My Classes",
+        icon: GraduationCap,
+        href: "/dashboard/faculty/classes",
+      },
+      {
+        name: "Assignments",
+        icon: FileText,
+        href: "/dashboard/faculty/assignments",
+      },
+      {
+        name: "Calendar",
+        icon: Calendar,
+        href: "/dashboard/faculty/calendar",
+        isBeta: true,
+      },
+      {
+        name: "Notices",
+        icon: MessageSquare,
+        href: "/dashboard/faculty/notices",
+      },
+      { name: "Profile", icon: User, href: "/dashboard/faculty/profile" },
+    ],
+    admin: [
+      { name: "Home", icon: Home, href: "/dashboard/admin" },
+      { name: "Users", icon: Users, href: "/dashboard/admin/users" },
+      {
+        name: "Forms",
+        icon: FolderMinus,
+        href: "/dashboard/admin/forms",
+        isPro: true,
+      },
+      {
+        name: "Classes",
+        icon: GraduationCap,
+        href: "/dashboard/admin/classes",
+      },
+      { name: "Subjects", icon: BookOpen, href: "/dashboard/admin/subjects" },
+      {
+        name: "Analytics",
+        icon: BarChart2,
+        href: "/dashboard/admin/analytics",
+        isUpcoming: true,
+      },
+      {
+        name: "Notifications",
+        icon: Bell,
+        href: "/dashboard/admin/notifications",
+      },
+      { name: "Settings", icon: Settings, href: "/dashboard/admin/settings" },
+    ],
+  };
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -154,28 +163,32 @@ const Sidebar = () => {
 
       <nav className="flex-1 pt-4 pb-4 overflow-y-auto">
         <ul>
-          {currentNavigation.map((item) => (
-            item.isVisible !== false && <li key={item.name} className="px-2 py-1">
-              <NavLink
-                to={item.href}
-                end={
-                  item.href === "/dashboard/student" ||
-                  item.href === "/dashboard/admin" ||
-                  item.href === "/dashboard/faculty"
-                }
-                className={({ isActive }) => `
+          {currentNavigation.map(
+            (item) =>
+              item.isVisible !== false && (
+                <li key={item.name} className="px-2 py-1">
+                  <NavLink
+                    to={item.href}
+                    end={
+                      item.href === "/dashboard/student" ||
+                      item.href === "/dashboard/admin" ||
+                      item.href === "/dashboard/faculty"
+                    }
+                    className={({ isActive }) => `
                   flex items-center px-3 py-2 rounded-md
                   hover:bg-secondary hover:text-light
                   ${isActive ? "bg-secondary text-light" : "text-light"}
                 `}
-              >
-                <item.icon className="w-5 h-5 mr-3" />
-                <span>{item.name}</span>
-                {item.isBeta && <BetaTag className="ml-2" />}
-                {item.isUpcoming && <ComingSoonTag className="ml-2" />}
-              </NavLink>
-            </li>
-          ))}
+                  >
+                    <item.icon className="w-5 h-5 mr-3" />
+                    <span>{item.name}</span>
+                    {item.isBeta && <BetaTag className="ml-2" />}
+                    {item.isUpcoming && <ComingSoonTag className="ml-2" />}
+                    {item.isPro && <ProTag className="ml-2" />}
+                  </NavLink>
+                </li>
+              )
+          )}
         </ul>
       </nav>
 
