@@ -5,10 +5,11 @@ import apiClient from "../../services/apiClient";
 // LOGIN
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password, role }, thunkAPI) => {
+  async ({ userId, password, role }, thunkAPI) => {
     try {
+      console.log(userId);
       const response = await apiClient.post("/auth/login", {
-        email,
+        userId,
         password,
         role,
       });

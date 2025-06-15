@@ -43,7 +43,7 @@ const LoginForm = () => {
     setIsSubmitting(true);
     try {
       const res = await dispatch(
-        login({ email: userId, password, role: formattedRole.toUpperCase() })
+        login({ userId, password, role: formattedRole.toUpperCase() })
       ).unwrap();
       notify();
       setTimeout(() => {
