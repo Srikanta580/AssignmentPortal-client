@@ -40,7 +40,7 @@ const OrbitUniversityLoginPage = () => {
     try {
       const response = await dispatch(
         login({
-          email: loginFormData.email,
+          userId: loginFormData.email,
           password: loginFormData.password,
           role: "UNIVADMIN",
         })
