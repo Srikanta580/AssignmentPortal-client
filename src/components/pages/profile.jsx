@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   User,
   Mail,
@@ -131,7 +132,7 @@ const facultyData = {
 };
 
 export const StudentProfile = () => {
-  const [student, setStudent] = useState(studentData);
+  const student = useSelector((state) => state.auth.user);
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -167,7 +168,7 @@ export const StudentProfile = () => {
         <div className="flex flex-col md:flex-row items-start gap-6">
           <div className="relative">
             <img
-              src={student.profileImage}
+              src={student.profileImage || ""}
               alt={student.name}
               className="w-32 h-32 rounded-full object-cover border-4 border-primary/20"
             />
@@ -179,9 +180,11 @@ export const StudentProfile = () => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-dark">{student.name}</h1>
+                <h1 className="text-3xl font-bold text-dark">
+                  {student.firstName} {student.lastName}
+                </h1>
                 <p className="text-secondary font-medium">
-                  {student.major} - {student.year}
+                  BCA - {student.admissionYear}
                 </p>
                 <p className="text-gray-600">Student ID: {student.id}</p>
               </div>
@@ -196,14 +199,14 @@ export const StudentProfile = () => {
                 <Phone size={16} />
                 <span>{student.phone}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              {/* <div className="flex items-center gap-2 text-gray-600">
                 <MapPin size={16} />
                 <span>{student.address}</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
                 <BookOpen size={16} />
                 <span>GPA: {student.gpa}</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -218,11 +221,11 @@ export const StudentProfile = () => {
               <Clock size={20} className="text-primary" />
               Pending Assignments
             </h2>
-            <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">
+            {/* <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">
               {student.pendingAssignments.length}
-            </span>
+            </span> */}
           </div>
-          <div className="card-list">
+          {/* <div className="card-list">
             {student.pendingAssignments.map((assignment) => (
               <div key={assignment.id} className="card-item-start">
                 <div className="flex-1">
@@ -241,7 +244,7 @@ export const StudentProfile = () => {
                 </span>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Saved Notes */}
@@ -253,7 +256,7 @@ export const StudentProfile = () => {
             </h2>
             <button className="card-btn">Add New</button>
           </div>
-          <div className="card-list">
+          {/* <div className="card-list">
             {student.savedNotes.map((note) => (
               <div key={note.id} className="card-item">
                 <div>
@@ -266,7 +269,7 @@ export const StudentProfile = () => {
                 <button className="card-btn">View</button>
               </div>
             ))}
-          </div>
+          </div>*/}
         </div>
 
         {/* Projects */}
@@ -278,7 +281,7 @@ export const StudentProfile = () => {
             </h2>
             <button className="card-btn">New Project</button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {student.projects.map((project) => (
               <div
                 key={project.id}
@@ -302,7 +305,7 @@ export const StudentProfile = () => {
                 </button>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

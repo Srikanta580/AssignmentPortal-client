@@ -49,7 +49,7 @@ const Sidebar = () => {
         name: "Calendar",
         icon: Calendar,
         href: "/dashboard/student/calendar",
-        isBeta: true,
+        isUpcoming: true,
       },
       {
         name: "Minor Project",
@@ -81,7 +81,7 @@ const Sidebar = () => {
         name: "Calendar",
         icon: Calendar,
         href: "/dashboard/faculty/calendar",
-        isBeta: true,
+        isUpcoming: true,
       },
       {
         name: "Notices",
