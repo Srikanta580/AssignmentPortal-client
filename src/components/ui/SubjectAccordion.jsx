@@ -1,23 +1,15 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ChevronDown, ChevronUp, PlusCircle } from "lucide-react";
 import {
-  ChevronDown,
-  ChevronUp,
-  PlusCircle,
-} from "lucide-react";
-import { addAssignment, fetchAssignmentsBySubjectCode } from "../../features/faculty/facultyAPI";
+  addAssignment,
+  fetchAssignmentsBySubjectCode,
+} from "../../features/faculty/facultyAPI";
 import { AiOutlineFileText } from "react-icons/ai";
 import { selectAssignmentsBySubject } from "../../features/faculty/facultySelectors";
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import '@react-pdf-viewer/core/lib/styles/index.css';
+// import "@react-pdf-viewer/core/lib/styles/index.css";
 
-const ASSIGNMENT_TYPES = [
-  "Class Assignment",
-  "CA1",
-  "CA2",
-  "CA3",
-  "CA4"
-];
+const ASSIGNMENT_TYPES = ["Class Assignment", "CA1", "CA2", "CA3", "CA4"];
 
 export default function SubjectAccordion({ subject, isActive, onToggle }) {
   const [showForm, setShowForm] = useState(false);
@@ -44,7 +36,9 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
 
   useEffect(() => {
     if (isActive && subject?.subjectCode) {
-      dispatch(fetchAssignmentsBySubjectCode({ subjectCode: subject.subjectCode }));
+      dispatch(
+        fetchAssignmentsBySubjectCode({ subjectCode: subject.subjectCode })
+      );
     }
   }, [dispatch, isActive, subject?.subjectCode]);
 
@@ -93,7 +87,12 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.type || !formData.title || !formData.description || !formData.dueDate) {
+    if (
+      !formData.type ||
+      !formData.title ||
+      !formData.description ||
+      !formData.dueDate
+    ) {
       setFormError("All fields are required.");
       return;
     }
@@ -106,11 +105,13 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
     setFileError("");
     setSuccessMessage(""); // Clear previous success message
 
-    const resultAction = await dispatch(addAssignment({
-      ...formData,
-      subjectCode: subject.subjectCode,
-      file: selectedFile
-    }));
+    const resultAction = await dispatch(
+      addAssignment({
+        ...formData,
+        subjectCode: subject.subjectCode,
+        file: selectedFile,
+      })
+    );
     setLoading(false);
 
     if (addAssignment.fulfilled.match(resultAction)) {
@@ -127,12 +128,14 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
       setTimeout(() => setSuccessMessage(""), 5000);
 
       // Fetch updated assignments list
-      dispatch(fetchAssignmentsBySubjectCode({ subjectCode: subject.subjectCode }));
+      dispatch(
+        fetchAssignmentsBySubjectCode({ subjectCode: subject.subjectCode })
+      );
     } else {
       setFormError(
         resultAction.payload?.message ||
-        resultAction.error?.message ||
-        "Failed to add assignment."
+          resultAction.error?.message ||
+          "Failed to add assignment."
       );
     }
   };
@@ -172,9 +175,14 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
           </div>
 
           {showForm && (
-            <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 rounded-lg shadow-sm mb-4">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4 bg-white p-4 rounded-lg shadow-sm mb-4"
+            >
               <div>
-                <label className="block mb-1 font-medium">Assignment Type</label>
+                <label className="block mb-1 font-medium">
+                  Assignment Type
+                </label>
                 <select
                   name="type"
                   value={formData.type}
@@ -184,7 +192,9 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
                 >
                   <option value="">Select Type</option>
                   {ASSIGNMENT_TYPES.map((type) => (
-                    <option key={type} value={type}>{type}</option>
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -276,22 +286,37 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
               <h4 className="font-semibold mb-2 text-primary">Assignments</h4>
               <ul className="space-y-3">
                 {assignments.map((a) => (
-                  <li key={a.id || a._id} className="p-3 bg-white rounded shadow flex flex-col md:flex-row md:items-center md:justify-between">
+                  <li
+                    key={a.id || a._id}
+                    className="p-3 bg-white rounded shadow flex flex-col md:flex-row md:items-center md:justify-between"
+                  >
                     <div>
                       <div className="font-medium">
-                        {a.title} <span className="text-xs text-gray-500">({a.type})</span>
+                        {a.title}{" "}
+                        <span className="text-xs text-gray-500">
+                          ({a.type})
+                        </span>
                       </div>
-                      <div className="text-sm text-gray-600">{a.description}</div>
+                      <div className="text-sm text-gray-600">
+                        {a.description}
+                      </div>
                       <div className="text-xs text-gray-500">
-                        Due Date: {(() => {
+                        Due Date:{" "}
+                        {(() => {
                           const d = new Date(a.dueDate);
-                          const day = String(d.getDate()).padStart(2, '0');
-                          const month = String(d.getMonth() + 1).padStart(2, '0');
+                          const day = String(d.getDate()).padStart(2, "0");
+                          const month = String(d.getMonth() + 1).padStart(
+                            2,
+                            "0"
+                          );
                           const year = d.getFullYear();
                           return `${day}-${month}-${year}`;
                         })()}
                       </div>
-                      <div className="text-sm text-gray-600"> Total Submissions: {a.submissions?.length}</div>
+                      <div className="text-sm text-gray-600">
+                        {" "}
+                        Total Submissions: {a.submissions?.length}
+                      </div>
                     </div>
                     <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
                       <button
@@ -327,7 +352,7 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
               style={{
                 border: "none",
                 cursor: "pointer",
-                borderRadius: "0"
+                borderRadius: "0",
               }}
             >
               &times;

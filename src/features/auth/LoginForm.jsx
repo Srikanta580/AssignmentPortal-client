@@ -3,11 +3,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import roleIcons from "../../components/icons/roleIcons";
 import { login } from "./authAPI";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const { role } = useParams();
   const dispatch = useDispatch();
+
+  const notify = () =>
+    toast.success("✅ Logged in successfully!", {
+      position: "top-center",
+      autoClose: 1000, // 2 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "colored",
+    });
 
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -32,17 +45,21 @@ const LoginForm = () => {
       const res = await dispatch(
         login({ email: userId, password, role: formattedRole.toUpperCase() })
       ).unwrap();
-      navigate(`/dashboard/${formattedRole}`);
+      notify();
+      setTimeout(() => {
+        navigate(`/dashboard/${formattedRole}`);
+        setIsSubmitting(false);
+      }, 2000); // wait for toast
     } catch (err) {
       console.log(err);
       setErrorMsg("Invalid credentials. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dark to-secondary">
+      <ToastContainer />
       <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full">
         <div className="flex flex-col items-center">
           {roleIcons[formattedRole] || roleIcons["user"]}
