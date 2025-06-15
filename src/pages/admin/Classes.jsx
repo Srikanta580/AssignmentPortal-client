@@ -259,7 +259,7 @@ const ClassesPage = () => {
                   <select
                     name="semester"
                     value={formData.semester || ""}
-                    onChange={e => handleInputChange({ ...e, target: { ...e.target, value: Number(e.target.value) } })}
+                    onChange={handleInputChange}
                     className="w-full p-2 border rounded-md"
                   >
                     <option value="">Select Semester</option>
