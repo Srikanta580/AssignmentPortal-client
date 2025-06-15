@@ -1,6 +1,8 @@
 import { BarChart2, BookOpen, Calendar, Clock, FileText } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const StudentDashboard = () => {
+  const user = useSelector((state) => state.auth.user.student);
   // Sample data
   const courses = [
     { id: 1, code: "CS101", name: "Introduction to Programming", progress: 65 },
@@ -37,7 +39,9 @@ const StudentDashboard = () => {
 
       {/* Welcome Card */}
       <div className="bg-gradient-to-r from-secondary to-primary text-white rounded-2xl p-6 shadow-lg">
-        <h2 className="text-xl font-semibold mb-2">Welcome back, Alex!</h2>
+        <h2 className="text-xl font-semibold mb-2">
+          Welcome back, {user.firstName} {user.lastName}!
+        </h2>
         <p>
           You have 3 assignments due this week and 2 upcoming exams. Keep up the
           good work!

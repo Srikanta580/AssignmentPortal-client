@@ -132,7 +132,7 @@ const facultyData = {
 };
 
 export const StudentProfile = () => {
-  const student = useSelector((state) => state.auth.user);
+  const student = useSelector((state) => state.auth.user.student);
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -313,7 +313,7 @@ export const StudentProfile = () => {
 };
 
 export const FacultyProfile = () => {
-  const [faculty, setFaculty] = useState(facultyData);
+  const faculty = useSelector((state) => state.auth.user);
 
   return (
     <div className="w-full">
@@ -324,7 +324,7 @@ export const FacultyProfile = () => {
           <div className="relative">
             <img
               src={faculty.profileImage}
-              alt={faculty.name}
+              alt={faculty.firstName}
               className="w-32 h-32 rounded-full object-cover border-4 border-primary/20"
             />
             <button className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full hover:bg-primary/80 transition">
@@ -335,7 +335,9 @@ export const FacultyProfile = () => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-dark">{faculty.name}</h1>
+                <h1 className="text-3xl font-bold text-dark">
+                  {faculty.firstName} {faculty.lasstName}
+                </h1>
                 <p className="text-secondary font-medium">{faculty.position}</p>
                 <p className="text-gray-600">{faculty.department} Department</p>
               </div>
@@ -349,14 +351,6 @@ export const FacultyProfile = () => {
               <div className="flex items-center gap-2 text-gray-600">
                 <Phone size={16} />
                 <span>{faculty.phone}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <MapPin size={16} />
-                <span>{faculty.office}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <Clock size={16} />
-                <span>Office Hours: {faculty.officeHours}</span>
               </div>
             </div>
           </div>
@@ -373,11 +367,11 @@ export const FacultyProfile = () => {
               Current Courses
             </h2>
             <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm font-medium">
-              {faculty.courses.length}
+              {faculty.courses?.length}
             </span>
           </div>
           <div className="card-list">
-            {faculty.courses.map((course) => (
+            {faculty.courses?.map((course) => (
               <div key={course.id} className="card-item">
                 <div>
                   <h3 className="font-medium text-dark">{course.name}</h3>
@@ -402,7 +396,7 @@ export const FacultyProfile = () => {
             <button className="card-btn">Add Research</button>
           </div>
           <div className="card-list">
-            {faculty.research.map((research) => (
+            {faculty.research?.map((research) => (
               <div key={research.id} className="card-item-start">
                 <div className="flex-1">
                   <h3 className="font-medium text-dark">{research.title}</h3>

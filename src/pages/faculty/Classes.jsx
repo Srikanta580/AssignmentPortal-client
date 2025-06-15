@@ -14,15 +14,17 @@ import {
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchClassesByFaculty } from "../../features/faculty/facultyAPI";
+import { Link } from "react-router-dom";
+import { BetaTag, ComingSoonTag } from "../../components/atoms/Tag";
 
 const ClassesPage = () => {
   const [expandedClass, setExpandedClass] = useState(null);
   const dispatch = useDispatch();
-  const{classes = [] } = useSelector((state) => state?.faculty);
-  const {id} = useSelector((state) => state?.auth?.user);
+  const { classes = [] } = useSelector((state) => state?.faculty);
+  const { id } = useSelector((state) => state?.auth?.user);
 
-
-  useEffect(() => {const res =dispatch(fetchClassesByFaculty({facultyId: id}));
+  useEffect(() => {
+    const res = dispatch(fetchClassesByFaculty({ facultyId: id }));
     // console.log("Fetching classes for faculty ID:", id);
     // console.log("Response:", res);
   }, [dispatch, id]);
@@ -164,7 +166,9 @@ const ClassesPage = () => {
                 >
                   <div>
                     <h3 className="font-medium text-dark">
-                      <span className="font-bold">{cls.subject.subjectCode}:</span>{" "}
+                      <span className="font-bold">
+                        {cls.subject.subjectCode}:
+                      </span>{" "}
                       {cls.subject.subjectName}
                     </h3>
                     <p className="text-sm text-primary">
@@ -195,7 +199,8 @@ const ClassesPage = () => {
                         </p>
                         <p className="text-sm text-primary flex items-center mb-2">
                           <Calendar className="w-4 h-4 mr-2" />
-                          Semester: {cls.subject.semester} {cls.term && `(${cls.term})`}
+                          Semester: {cls.subject.semester}{" "}
+                          {cls.term && `(${cls.term})`}
                         </p>
                         <p className="text-sm text-primary flex items-center mb-2">
                           <Calendar className="w-4 h-4 mr-2" />
@@ -229,23 +234,35 @@ const ClassesPage = () => {
                         <h4 className="font-medium mb-3">Course Materials</h4>
 
                         <div className="mt-4">
-                          <button className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2">
+                          <button
+                            className="bg-primary text-white px-3 py-2 rounded-md text-sm flex items-center mr-2 cursor-not-allowed"
+                            disabled
+                          >
                             <Upload className="w-4 h-4 mr-2" />
                             Upload Material
+                            <ComingSoonTag className="ml-2" />
                           </button>
                         </div>
                       </div>
                     </div>
 
                     <div className="mt-4 flex justify-end space-x-3">
-                      <button className="border border-primary text-primary px-3 py-2 rounded-md text-sm flex items-center">
+                      <button
+                        className="border border-primary text-primary px-3 py-2 rounded-md text-sm flex items-center cursor-not-allowed"
+                        disabled
+                      >
                         <Users className="w-4 h-4 mr-2" />
                         View Students
+                        <ComingSoonTag className="ml-2" />
                       </button>
-                      <button className="bg-secondary text-white px-3 py-2 rounded-md text-sm flex items-center">
+                      <Link
+                        to="../attendance"
+                        className="bg-secondary text-white px-3 py-2 rounded-md text-sm flex items-center"
+                      >
                         <UserPlus className="w-4 h-4 mr-2" />
                         Manage Attendance
-                      </button>
+                        <BetaTag className="ml-2" />
+                      </Link>
                     </div>
                   </div>
                 )}
