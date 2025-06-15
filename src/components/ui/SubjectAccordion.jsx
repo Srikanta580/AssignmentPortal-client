@@ -293,12 +293,21 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
                       </div>
                       <div className="text-sm text-gray-600"> Total Submissions: {a.submissions?.length}</div>
                     </div>
-                    <button
-                      onClick={() => setOpenPdfUrl(a.assignmentUrl)}
-                      className="mt-2 md:mt-0 inline-block px-3 py-1 bg-primary text-white rounded text-xs"
-                    >
-                      View PDF
-                    </button>
+                    <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+                      <button
+                        onClick={() => setOpenPdfUrl(a.assignmentUrl)}
+                        className="inline-block px-3 py-1 bg-primary text-white rounded text-xs"
+                      >
+                        View PDF
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-block px-3 py-1 bg-gray-400 text-white rounded text-xs cursor-not-allowed"
+                        disabled
+                      >
+                        View Submissions
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
