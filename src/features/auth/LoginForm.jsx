@@ -13,13 +13,12 @@ const LoginForm = () => {
   const notify = () =>
     toast.success("✅ Logged in successfully!", {
       position: "top-center",
-      autoClose: 1000, // 2 seconds
-      hideProgressBar: false,
+      autoClose: 500, // 2 seconds
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: false,
-      progress: undefined,
-      theme: "colored",
+      theme: "dark",
     });
 
   const [userId, setUserId] = useState("");
@@ -49,7 +48,7 @@ const LoginForm = () => {
       setTimeout(() => {
         navigate(`/dashboard/${formattedRole}`);
         setIsSubmitting(false);
-      }, 2000); // wait for toast
+      }, 500); // wait for toast
     } catch (err) {
       console.log(err);
       setErrorMsg("Invalid credentials. Please try again.");
