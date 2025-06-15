@@ -60,8 +60,6 @@ const UsersPage = () => {
     setShowModal(true);
   };
   const closeModal = () => setShowModal(false);
-  // const studentObserver = useRef();
-  // const facultyObserver = useRef();
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {

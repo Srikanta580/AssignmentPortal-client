@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@googleapis/forms": "^3.0.1",
+    "@fontsource/lato": "^5.2.6",
+    "@fontsource/poppins": "^5.2.6",
     "@monaco-editor/react": "^4.7.0",
     "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.6.1",

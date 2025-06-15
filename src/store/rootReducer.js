@@ -9,12 +9,13 @@ import formReducer from "../features/admin/formSlice";
 import adminReducer from "../features/admin/adminSlice";
 import universityReducer from "../features/university/universitySlice";
 import facultyReducer from "../features/faculty/facultySlice";
+import studentReducer from "../features/student/studentSlice";
 import { University } from "lucide-react";
 
 const persistConfig = {
   key: "root", // Key for storage
   storage, // Where to store data (localStorage)
-  whitelist: ["auth", "admin", "forms", "university", "faculty" ], // Persist only auth (not products)
+  whitelist: ["auth", "admin", "forms", "university"], // Persist only auth (not products)
 };
 
 const rootReducer = combineReducers({
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   forms: formReducer,
   university: universityReducer,
   faculty: facultyReducer,
+  student: studentReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
