@@ -7,6 +7,8 @@ import {
 } from "../../features/faculty/facultyAPI";
 import { AiOutlineFileText } from "react-icons/ai";
 import { selectAssignmentsBySubject } from "../../features/faculty/facultySelectors";
+import AssignmentSubmissionsPage from "../../pages/faculty/AssignmentSubmissionsPage"; // adjust path as needed
+import { Link } from "react-router-dom";
 // import "@react-pdf-viewer/core/lib/styles/index.css";
 
 const ASSIGNMENT_TYPES = ["Class Assignment", "CA1", "CA2", "CA3", "CA4"];
@@ -325,13 +327,12 @@ export default function SubjectAccordion({ subject, isActive, onToggle }) {
                       >
                         View PDF
                       </button>
-                      <button
-                        type="button"
-                        className="inline-block px-3 py-1 bg-gray-400 text-white rounded text-xs cursor-not-allowed"
-                        disabled
+                      <Link
+                        to={`/dashboard/faculty/assignments/${a.id || a._id}/submissions`}
+                        className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition"
                       >
                         View Submissions
-                      </button>
+                      </Link>
                     </div>
                   </li>
                 ))}
