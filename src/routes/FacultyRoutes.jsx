@@ -18,7 +18,10 @@ const FacultyRoutes = () => (
       <Route path=":type" element={<AssignmentPage />} />
     </Route>
     <Route path="classes" element={<ClassesPage />} />
-    <Route path="attendance" element={<Attendance />} />
+    <Route
+      path="classes/:classId/sem/:semId/attendance"
+      element={<Attendance />}
+    />
     <Route path="attendance-list" element={<AttendanceList />} />
     <Route path="calendar" element={<CalendarPage />} />
     <Route path="notices" element={<NoticesPage />} />

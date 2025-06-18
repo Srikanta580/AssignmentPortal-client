@@ -4,9 +4,11 @@ import apiClient from "../../services/apiClient";
 // 1. STUDENT CRUD
 export const fetchStudents = createAsyncThunk(
   "admin/fetchStudentsData",
-  async ({ page = 0, semester = 0, universityId, departmentId}, thunkAPI) => {
+  async ({ page = 0, semester = 0, universityId, departmentId }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/getStudents?page=${page}&semester=${semester}&universityId=${universityId}&departmentId=${departmentId}`);
+      const res = await apiClient.get(
+        `/admin/getStudents?page=${page}&semester=${semester}&universityId=${universityId}&departmentId=${departmentId}`
+      );
       // console.log("Fetched students:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
@@ -62,9 +64,11 @@ export const deleteStudent = createAsyncThunk(
 // 1. FACULTY CRUD
 export const fetchFaculties = createAsyncThunk(
   "admin/fetchFaculties",
-  async ({ page , universityId, departmentId }, thunkAPI) => {
+  async ({ page, universityId, departmentId }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/getFaculties?page=${page}&universityId=${universityId}&departmentId=${departmentId}&universityId=${universityId}`);
+      const res = await apiClient.get(
+        `/admin/getFaculties?page=${page}&universityId=${universityId}&departmentId=${departmentId}&universityId=${universityId}`
+      );
       // console.log("Fetched faculties:", res.data); // Log the fetched data
       return res.data;
     } catch (err) {
@@ -119,9 +123,11 @@ export const deleteFaculty = createAsyncThunk(
 
 export const fetchAllFaculties = createAsyncThunk(
   "admin/fetchAllFaculties",
-  async ({departmentId, universityId }, thunkAPI) => {
+  async ({ departmentId, universityId }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/getAllFaculties?departmentId=${departmentId}&universityId=${universityId}`);
+      const res = await apiClient.get(
+        `/admin/getAllFaculties?departmentId=${departmentId}&universityId=${universityId}`
+      );
       return res.data.faculties; // assuming backend returns { faculties: [...] }
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -134,9 +140,11 @@ export const fetchAllFaculties = createAsyncThunk(
 // 2. CLASS MANAGEMENT
 export const fetchClasses = createAsyncThunk(
   "admin/fetchClasses",
-  async ({ departmentId, universityId, page}, thunkAPI) => {
+  async ({ departmentId, universityId, page }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/class/getAllClasses?page=${page}&departmentId=${departmentId}&universityId=${universityId}`);
+      const res = await apiClient.get(
+        `/admin/class/getAllClasses?page=${page}&departmentId=${departmentId}&universityId=${universityId}`
+      );
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -150,6 +158,7 @@ export const assignClass = createAsyncThunk(
   "admin/assignClass",
   async (classData, thunkAPI) => {
     try {
+      console.log(classData);
       const res = await apiClient.post("/admin/class/assignClass", classData);
       return res.data;
     } catch (err) {
@@ -161,9 +170,11 @@ export const assignClass = createAsyncThunk(
 // 3. SUBJECT MANAGEMENT
 export const fetchSubjects = createAsyncThunk(
   "admin/fetchSubjects",
-  async ({departmentId, universityId}, thunkAPI) => {
+  async ({ departmentId, universityId }, thunkAPI) => {
     try {
-      const res = await apiClient.get(`/admin/getSubjects?departmentId=${departmentId}&universityId=${universityId}`);
+      const res = await apiClient.get(
+        `/admin/getSubjects?departmentId=${departmentId}&universityId=${universityId}`
+      );
       // console.log("Fetched subjects:", res.data); // Log the fetched data
       return res.data.subjects || []; // Extract the subjects array
     } catch (err) {
@@ -282,9 +293,13 @@ export const uploadFacultyExcel = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await apiClient.post("/fileInput/uploadFacultyExcel", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await apiClient.post(
+        "/fileInput/uploadFacultyExcel",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -301,9 +316,13 @@ export const uploadFacultyCsv = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await apiClient.post("/fileInput/uploadFacultyCsv", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await apiClient.post(
+        "/fileInput/uploadFacultyCsv",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -320,9 +339,13 @@ export const uploadStudentExcel = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await apiClient.post("/fileInput/uploadStudentExcel", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await apiClient.post(
+        "/fileInput/uploadStudentExcel",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -339,9 +362,13 @@ export const uploadStudentCsv = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await apiClient.post("/fileInput/uploadStudentCsv", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await apiClient.post(
+        "/fileInput/uploadStudentCsv",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(

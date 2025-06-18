@@ -24,60 +24,8 @@ const ClassesPage = () => {
   const { id } = useSelector((state) => state?.auth?.user);
 
   useEffect(() => {
-    const res = dispatch(fetchClassesByFaculty({ facultyId: id }));
-    // console.log("Fetching classes for faculty ID:", id);
-    // console.log("Response:", res);
+    dispatch(fetchClassesByFaculty({ facultyId: id }));
   }, [dispatch, id]);
-  // Sample data - would come from Redux store in real app
-  // const facultyClasses = {
-  //   current: [
-  //     {
-  //       id: 1,
-  //       subjectCode: "CS101",
-  //       subjectName: "Introduction to Programming",
-  //       semester: "1",
-  //       department: "Computer Science",
-  //       classTime: "Mon, Wed 10:00-11:30 AM",
-  //       location: "Building A, Room 101",
-  //       studentsCount: 45,
-  //       nextClass: "Monday, Apr 29, 2025 - 10:00 AM",
-  //       materials: [
-  //         { id: 1, name: "Week 1: Introduction to Variables", type: "pdf" },
-  //         { id: 2, name: "Week 2: Control Flow", type: "ppt" },
-  //       ],
-  //     },
-  //     {
-  //       id: 2,
-  //       subjectCode: "CS202",
-  //       subjectName: "Data Structures",
-  //       semester: "2",
-  //       department: "Computer Science",
-  //       classTime: "Tue, Thu 2:00-3:30 PM",
-  //       location: "Building B, Room 205",
-  //       studentsCount: 38,
-  //       nextClass: "Tuesday, Apr 29, 2025 - 2:00 PM",
-  //       materials: [
-  //         { id: 1, name: "Week 1: Arrays and Linked Lists", type: "pdf" },
-  //         { id: 2, name: "Week 2: Stacks and Queues", type: "ppt" },
-  //       ],
-  //     },
-  //     {
-  //       id: 3,
-  //       subjectCode: "CS480",
-  //       subjectName: "Artificial Intelligence",
-  //       semester: "4",
-  //       department: "Computer Science",
-  //       classTime: "Fri 9:00-12:00 PM",
-  //       location: "Building C, Room 310",
-  //       studentsCount: 32,
-  //       nextClass: "Friday, May 2, 2025 - 9:00 AM",
-  //       materials: [
-  //         { id: 1, name: "Week 1: Introduction to AI", type: "pdf" },
-  //         { id: 2, name: "Week 2: Search Algorithms", type: "ppt" },
-  //       ],
-  //     },
-  //   ],
-  // };
 
   const toggleExpandClass = (id) => {
     if (expandedClass === id) {
@@ -125,7 +73,7 @@ const ClassesPage = () => {
           <div className="inline-flex p-3 rounded-full bg-primary-100 text-primary-500 mb-4">
             <BookOpen className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">3</h2>
+          <h2 className="text-2xl font-bold">{classes.length || 0}</h2>
           <p className="text-primary">Current Classes</p>
         </div>
 
@@ -256,7 +204,7 @@ const ClassesPage = () => {
                         <ComingSoonTag className="ml-2" />
                       </button>
                       <Link
-                        to="../attendance"
+                        to={`${cls.id}/sem/${cls.subject.semester}/attendance`}
                         className="bg-secondary text-white px-3 py-2 rounded-md text-sm flex items-center"
                       >
                         <UserPlus className="w-4 h-4 mr-2" />
