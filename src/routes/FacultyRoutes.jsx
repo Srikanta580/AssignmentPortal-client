@@ -9,13 +9,14 @@ import CalendarPage from "../pages/faculty/Calendar";
 import ProfilePage from "../pages/faculty/Profile";
 import Attendance from "../pages/faculty/Attendance";
 import AttendanceList from "../pages/faculty/AttendanceList";
-
+import AssignmentSubmissionsPage from "../pages/faculty/AssignmentSubmissionsPage";
 const FacultyRoutes = () => (
   <Routes>
     <Route index element={<FacultyDashboard />} />
     <Route path="assignments" element={<AssignmentLayout />}>
       <Route index element={<Navigate to="class" replace />} />
       <Route path=":type" element={<AssignmentPage />} />
+      <Route path=":assignmentId/submissions" element={<AssignmentSubmissionsPage />} />
     </Route>
     <Route path="classes" element={<ClassesPage />} />
     <Route
@@ -26,6 +27,7 @@ const FacultyRoutes = () => (
     <Route path="calendar" element={<CalendarPage />} />
     <Route path="notices" element={<NoticesPage />} />
     <Route path="profile" element={<ProfilePage />} />
+    
   </Routes>
 );
 
