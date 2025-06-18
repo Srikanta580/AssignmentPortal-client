@@ -65,7 +65,7 @@ export default function AssignmentSubmissionsPage() {
     }
 
     return (
-        <div className="h-auto w-full bg-gradient-to-br from-white to-gray-50 py-0 border-t border-gray-200">
+        <div className="h-auto w-full bg-gradient-to-br from-white to-gray-50 py-0 border-t border-gray-300">
             <div className="w-full max-w-none border border-gray-200 bg-white rounded-xl shadow-lg overflow-hidden mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 px-8 py-8 bg-primary/90 shadow border-b-gray-300 rounded-t-xl">
