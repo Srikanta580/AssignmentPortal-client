@@ -169,21 +169,33 @@ const universitySlice = createSlice({
       })
       .addCase(addDepartmentalAdmin.fulfilled, (state, action) => {
         const newAdmin = action.payload;
-        const deptId = newAdmin.department?.id;
+        const deptCode = newAdmin.departmentCode;
+
+        console.log(newAdmin);
 
         // Find department in university.departments
         const targetDept = state.departments?.find(
-          (dept) => dept.id === deptId
+          (dept) => dept.code === deptCode
         );
+        console.log(targetDept);
 
         if (targetDept) {
           // Add admin to that department’s admin list
-          targetDept.admins.push({
-            id: newAdmin.id.toString(), // if needed
-            firstName: newAdmin.firstName,
-            lastName: newAdmin.lastName,
-            email: newAdmin.email,
-          });
+          targetDept.admins
+            ? targetDept.admins.push({
+                id: newAdmin.id.toString(),
+                firstName: newAdmin.firstName,
+                lastName: newAdmin.lastName,
+                email: newAdmin.email,
+              })
+            : (targetDept.admins = [
+                {
+                  id: newAdmin.id.toString(),
+                  firstName: newAdmin.firstName,
+                  lastName: newAdmin.lastName,
+                  email: newAdmin.email,
+                },
+              ]);
         }
       })
       .addCase(addDepartment.fulfilled, (state, action) => {

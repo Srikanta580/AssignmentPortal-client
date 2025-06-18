@@ -36,7 +36,7 @@ const Dashboard = ({ recentRequests, requests, universities }) => {
         <StatCard
           icon={<FaCheckCircle />}
           title="Verified Institutions"
-          value="42"
+          value={approvedUniversities}
           color="var(--color-accent)"
         />
         <StatCard

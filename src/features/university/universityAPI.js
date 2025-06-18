@@ -61,6 +61,7 @@ export const addUniversityAdmin = createAsyncThunk(
   async (adminData, thunkAPI) => {
     try {
       const response = await apiClient.post("/university/add-admin", adminData);
+      console.log(response.data);
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data || "Add admin failed");
@@ -90,6 +91,7 @@ export const addDepartmentalAdmin = createAsyncThunk(
   async (adminData, thunkAPI) => {
     try {
       const response = await apiClient.post(`/university/add-admin`, adminData);
+      console.log(response.data);
       return { ...response.data, success: true };
     } catch (err) {
       const errorPayload = err.response?.data || {
